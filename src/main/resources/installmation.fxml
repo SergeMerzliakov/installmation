@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.installmation.InstallmationController">
+   <children>
+      <Button fx:id="closeButton" cancelButton="true" defaultButton="true" layoutX="277.0" layoutY="164.0" mnemonicParsing="false" onAction="#shutdown" text="Close" />
+      <Label layoutX="148.0" layoutY="112.0" prefHeight="17.0" prefWidth="341.0" text="A GUI Installation Generator Tool. This is a stub." />
+   </children>
+</AnchorPane>

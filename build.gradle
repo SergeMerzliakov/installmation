@@ -1,0 +1,64 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "1.3.50"
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+def KOTLIN_VERSION = "1.3.50"
+def JAVA_HOME = System.properties['java.home']
+
+def JFX_VERSION = "13"
+def JFX_INSTALL = '/Library/Java/javafx/13.0'
+
+group 'org.epistatic'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs "${JFX_INSTALL}/lib"
+    }
+}
+
+apply plugin: 'application'
+mainClassName = 'org.installmation.InstallmationApplication'
+
+javafx {
+    version = JFX_VERSION
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "com.google.guava:guava:28.1-jre"
+
+    compile 'org.apache.logging.log4j:log4j-api:2.12.1'
+    compile 'org.apache.logging.log4j:log4j-core:2.12.1'
+
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$KOTLIN_VERSION"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest.attributes('Multi-Release': 'false')
+}
+
+task runApp(type: JavaExec) {
+    group = "Application"
+    description = "Runs Installmation Application"
+    classpath sourceSets.main.runtimeClasspath
+    main = mainClassName
+    doFirst {
+        jvmArgs = [
+                '--module-path', "${JFX_INSTALL}/lib",
+                '--add-modules', 'javafx.fxml,javafx.controls'
+        ]
+    }
+}
+
+
