@@ -15,28 +15,16 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation.model
+package org.installmation.model.binary
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
 import java.io.File
 
+class MacJDK(path: File) : AbstractJDK(path) {
 
-class JPackageExecutableTest {
-
-   companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
-   }
-   
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
-   }
+   override val binaryDirectory = "Contents/Home/bin" 
+   override val javaExecutableName = "java"
+   override val jpackageExecutableName = "jpackage"
+   override val operatingSystem: OperatingSystem = OperatingSystem.OSX
 }

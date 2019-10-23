@@ -2,7 +2,8 @@
 .gradle/
 build/
 out/
-
+# application configuration for local testing
+configuration/
 *.class
 
 # Log file

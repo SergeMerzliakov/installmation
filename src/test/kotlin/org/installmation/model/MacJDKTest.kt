@@ -21,6 +21,7 @@ package org.installmation.model
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.installmation.model.binary.MacJDK
 import org.installmation.testutil.TestFile
 import org.junit.jupiter.api.Test
 import java.io.File

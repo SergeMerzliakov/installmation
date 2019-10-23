@@ -17,26 +17,31 @@
  * under the License.
 **/
 
-package org.installmation.model
+package org.installmation.model.binary
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
 import java.io.File
 
+interface JDK {
 
-class JPackageExecutableTest {
-
-   companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
-   }
+   /*
+    location full path
+    */
+   val path: File
    
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
-   }
+   val operatingSystem: OperatingSystem
+   
+   /**
+    * java executable full path
+    */
+   val javaExecutable: File
+   
+   /**
+    * Returns true of JPackage was found (in JDK 14 or later)
+    */
+   val supportsJPackage:Boolean
+
+   /**
+    * jpackage full path is part of JDK14+ used to build installs
+    */
+   val packageExecutable: File
 }

@@ -15,28 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation.model
+package org.installmation.model.binary
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
 import java.io.File
 
+interface Executable {
+   val id:String
 
-class JPackageExecutableTest {
+   /**
+    * Full path of executable
+    */
+   val executable: File
 
-   companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
-   }
-   
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
-   }
+   /**
+    * version of this executable. Often no easy way to determine this
+    * apart from running from command with option like '-version'
+    */
+   fun getVersion(): String
 }

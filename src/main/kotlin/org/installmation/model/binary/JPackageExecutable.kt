@@ -17,26 +17,23 @@
  * under the License.
 **/
 
-package org.installmation.model
+package org.installmation.model.binary
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
+import org.installmation.model.FlagArgument
 import java.io.File
 
-
-class JPackageExecutableTest {
-
-   companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
-   }
+class JPackageExecutable(executable: File) : AbstractExecutable(executable) {
    
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
+   override val id = "jpackage"
+
+
+   override fun getVersion(): String {
+      parameters.addArgument(FlagArgument("--version"))
+      val output = execute()
+      if (output.isEmpty())
+         throw ExecutableException("No version info output from '${executable}'")
+      if (output.size == 1)
+         return output[0]
+      return output[1]
    }
 }

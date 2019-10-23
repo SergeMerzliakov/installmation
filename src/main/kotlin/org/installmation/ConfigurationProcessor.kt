@@ -17,26 +17,27 @@
  * under the License.
 **/
 
-package org.installmation.model
+package org.installmation
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.installmation.model.binary.JDK
+import org.installmation.model.binary.LinuxJDK
+import org.installmation.model.binary.MacJDK
+import org.installmation.model.binary.WindowsJDK
 import java.io.File
 
+/**
+ * Functionality shared by configuration readers and writers
+ */
+abstract class ConfigurationProcessor(protected val installPath: File) {
 
-class JPackageExecutableTest {
-
-   companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
-   }
-   
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
+   protected fun createGson(): Gson {
+      val builder = GsonBuilder()
+      builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(WindowsJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
+      return builder.setPrettyPrinting().create()
    }
 }

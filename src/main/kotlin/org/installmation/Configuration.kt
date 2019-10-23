@@ -15,28 +15,34 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation.model
+package org.installmation
 
-import io.mockk.every
-import io.mockk.spyk
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import org.installmation.model.binary.JDK
 import java.io.File
 
-
-class JPackageExecutableTest {
+/**
+ * JSON format
+ * Always loaded from the same location
+ */
+class Configuration {
+   // all mapped by a user defined name or label
+   val jdkEntries = mutableMapOf<String, JDK>()
+   val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
+   val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
 
    companion object {
-      const val JDK_14_BUILD49 = "14-jpackage"
+      val log: Logger = LogManager.getLogger(Configuration::class.java)
+
+      /**
+       * Full path, relative to base path
+       */
+      fun configurationFile(basePath: File): File {
+         return File(File(basePath, Constant.CONFIG_DIR), Constant.CONFIG_FILE)
+      }
    }
-   
-   @Test
-   fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
-      every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
-   }
+
 }
