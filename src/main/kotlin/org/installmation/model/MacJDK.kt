@@ -44,6 +44,8 @@ class MacJDK(private val path: File) : JavaJDK {
    override val packageExecutable: File
       get() = getJDKFile(BIN, EXE_PACKAGE)
 
+   
+   
    /**
     * Get File in JDK
     * Throws FileNotFoundException if not found
@@ -54,5 +56,18 @@ class MacJDK(private val path: File) : JavaJDK {
          throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found")
 
       return fullPath
+   }
+
+   override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other !is MacJDK) return false
+
+      if (path != other.path) return false
+
+      return true
+   }
+
+   override fun hashCode(): Int {
+      return path.hashCode()
    }
 }
