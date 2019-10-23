@@ -30,11 +30,6 @@ class MacJDK(private val path: File) : JavaJDK {
       private const val EXE_PACKAGE = "jpackage"
    }
 
-   init {
-      if (!path.exists())
-         throw FileNotFoundException("JDK path '${path.absolutePath}' not found")
-   }
-
    override val javaExecutable: File
       get() = getJDKFile(BIN, EXE_JAVA)
 
@@ -44,8 +39,6 @@ class MacJDK(private val path: File) : JavaJDK {
    override val packageExecutable: File
       get() = getJDKFile(BIN, EXE_PACKAGE)
 
-   
-   
    /**
     * Get File in JDK
     * Throws FileNotFoundException if not found
