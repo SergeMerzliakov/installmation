@@ -46,10 +46,4 @@ class MacJDKTest {
       assertThat(mac.supportsJPackage).isTrue()
       assertThat(mac.packageExecutable).exists()
    }
-
-   @Test
-   fun shouldThrowExceptionForInvalidJDKPath() {
-      val f = File("jdk/does/not/exist")
-      assertThatExceptionOfType(FileNotFoundException::class.java).isThrownBy { MacJDK(f) }
-   }
 }
