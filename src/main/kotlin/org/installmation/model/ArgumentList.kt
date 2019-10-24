@@ -15,15 +15,24 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation
+package org.installmation.model
 
-/**
- * Thrown when a parsed file is corrupted or invalids
- */
-class BadFileException : Exception {
-   constructor() : super()
-   constructor(message: String?) : super(message)
-   constructor(message: String?, cause: Throwable?) : super(message, cause)
+class ArgumentList {
+   private val arguments = mutableMapOf<String, Argument>()
+
+   /**
+    * overwrites previous value
+    */
+   fun addArgument(arg: Argument) {
+      arguments[arg.shortForm] = arg
+   }
+
+   /**
+    * for use in shell script execution
+    */
+   fun toCommand(): List<String> {
+      return arguments.values.map { it.toCommand() }
+   }
 }

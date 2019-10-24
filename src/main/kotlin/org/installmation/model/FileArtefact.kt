@@ -19,20 +19,8 @@
 
 package org.installmation.model
 
-class ParameterList {
-   private val parameters = mutableMapOf<String, Parameter>()
+import java.io.File
 
-   /**
-    * overwrites previous value
-    */
-   fun addParameter(param: Parameter) {
-      parameters[param.shortForm] = param
-   }
-
-   /**
-    * for use in shell script execution
-    */
-   fun toCommand(): List<String> {
-      return parameters.values.map { it.toCommand() }
-   }
+class FileArtefact(val filename: String, var sourceLocation: File) : InstallArtefact {
+   var destination: File? = null
 }

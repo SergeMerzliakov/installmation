@@ -15,20 +15,12 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- **/
+**/
 
 package org.installmation.model
 
-/**
- * Argument to a command line executable
- *  shortForm is something like -h
- *  longForm is something like --help
- */
-interface Argument {
-   var shortForm: String 
-   var longForm: String
-   /**
-    * Used in building shell commands
-    */
-    fun toCommand(): String
+import java.io.File
+
+class DirectoryArtefact(val name:String, var sourceLocation: File): InstallArtefact {
+   var destination:File? = null
 }

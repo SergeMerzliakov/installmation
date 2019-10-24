@@ -1,6 +1,7 @@
-package org.installmation
+package org.installmation.model
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.SerializationUtils
 import org.installmation.model.binary.LinuxJDK
 import org.installmation.model.binary.MacJDK
 import org.installmation.model.binary.WindowsJDK

@@ -17,7 +17,7 @@
  * under the License.
  **/
 
-package org.installmation
+package org.installmation.configuration
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger

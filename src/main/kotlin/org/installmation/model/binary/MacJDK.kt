@@ -26,5 +26,5 @@ class MacJDK(path: File) : AbstractJDK(path) {
    override val binaryDirectory = "Contents/Home/bin" 
    override val javaExecutableName = "java"
    override val jpackageExecutableName = "jpackage"
-   override val operatingSystem: OperatingSystem = OperatingSystem.OSX
+   override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.OSX
 }

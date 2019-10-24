@@ -2,9 +2,7 @@ package org.installmation
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.installmation.model.binary.LinuxJDK
-import org.installmation.model.binary.MacJDK
-import org.installmation.model.binary.WindowsJDK
+import org.installmation.model.binary.JDKSerializer
 
 object SerializationUtils {
 

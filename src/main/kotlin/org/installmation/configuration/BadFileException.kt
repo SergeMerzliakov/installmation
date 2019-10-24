@@ -15,20 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- **/
+**/
 
-package org.installmation.model
+package org.installmation.configuration
 
 /**
- * Argument to a command line executable
- *  shortForm is something like -h
- *  longForm is something like --help
+ * Thrown when a parsed file is corrupted or invalids
  */
-interface Argument {
-   var shortForm: String 
-   var longForm: String
-   /**
-    * Used in building shell commands
-    */
-    fun toCommand(): String
+class BadFileException : Exception {
+   constructor() : super()
+   constructor(message: String?) : super(message)
+   constructor(message: String?, cause: Throwable?) : super(message, cause)
 }

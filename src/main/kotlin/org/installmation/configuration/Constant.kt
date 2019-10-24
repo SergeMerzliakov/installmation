@@ -17,7 +17,7 @@
  * under the License.
  **/
 
-package org.installmation
+package org.installmation.configuration
 
 object Constant {
    const val CONFIG_DIR = "configuration"

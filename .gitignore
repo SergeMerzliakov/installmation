@@ -3,7 +3,7 @@
 build/
 out/
 # application configuration for local testing
-configuration/
+$configuration/
 *.class
 
 # Log file

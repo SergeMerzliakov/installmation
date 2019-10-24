@@ -17,10 +17,10 @@
  * under the License.
  **/
 
-package org.installmation
+package org.installmation.model.binary
 
 import com.google.gson.*
-import org.installmation.model.binary.*
+import org.installmation.configuration.BadFileException
 import java.io.File
 import java.lang.reflect.Type
 
@@ -37,9 +37,9 @@ class JDKSerializer : JsonSerializer<JDK>, JsonDeserializer<JDK> {
    override fun serialize(jdk: JDK?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
       val json = JsonObject()
       when (jdk) {
-         is MacJDK -> json.addProperty(JDK_OS, OperatingSystem.OSX.name)
-         is WindowsJDK -> json.addProperty(JDK_OS, OperatingSystem.Windows.name)
-         is LinuxJDK -> json.addProperty(JDK_OS, OperatingSystem.Linux.name)
+         is MacJDK -> json.addProperty(JDK_OS, OperatingSystem.Type.OSX.name)
+         is WindowsJDK -> json.addProperty(JDK_OS, OperatingSystem.Type.Windows.name)
+         is LinuxJDK -> json.addProperty(JDK_OS, OperatingSystem.Type.Linux.name)
       }
       json.addProperty(JDK_PATH, jdk?.path?.absolutePath)
       return json
@@ -51,18 +51,18 @@ class JDKSerializer : JsonSerializer<JDK>, JsonDeserializer<JDK> {
       if (osString.isNullOrBlank())
          throw BadFileException("Unknown operating system value (null or empty) found deserializing JDK object")
 
-      val os = OperatingSystem.valueOf(osString)
+      val os = OperatingSystem.Type.valueOf(osString)
       val jdkPath = obj.get(JDK_PATH)?.asJsonPrimitive?.asString
       when (os) {
-         OperatingSystem.OSX -> {
+         OperatingSystem.Type.OSX -> {
             val jdk = MacJDK(File(jdkPath))
             return jdk
          }
-         OperatingSystem.Windows -> {
+         OperatingSystem.Type.Windows -> {
             val jdk = WindowsJDK(File(jdkPath))
             return jdk
          }
-         OperatingSystem.Linux -> {
+         OperatingSystem.Type.Linux -> {
             val jdk = LinuxJDK(File(jdkPath))
             return jdk
          }

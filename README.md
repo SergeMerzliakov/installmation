@@ -8,3 +8,12 @@ So I am writing a GUI tool, similar to exe4j, which generates installers for Mac
 I am writing it in Kotlin, as there is no reason to use Java anymore.
 
 
+### Current State of Master Branch ###
+
+Rudimentary GUI mockup which runs with the gradle command.
+ 
+    gradlew runApp
+
+Does not yet do anything.
+
+

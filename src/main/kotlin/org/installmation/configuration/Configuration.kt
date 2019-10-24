@@ -17,31 +17,32 @@
  * under the License.
  **/
 
-package org.installmation
+package org.installmation.configuration
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.model.binary.JDK
 import java.io.File
-import java.io.FileReader
 
-class ConfigurationReader(installPath: File) : ConfigurationProcessor(installPath) {
+/**
+ * JSON format
+ * Always loaded from the same location
+ */
+class Configuration {
+   // all mapped by a user defined name or label
+   val jdkEntries = mutableMapOf<String, JDK>()
+   val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
+   val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
 
    companion object {
-      val log: Logger = LogManager.getLogger(ConfigurationReader::class.java)
-   }
+      val log: Logger = LogManager.getLogger(Configuration::class.java)
 
-   fun load(): Configuration {
-      val configFile = Configuration.configurationFile(installPath)
-      if (!configFile.exists())
-         throw InstallationException("Configuration file not found at '${configFile.canonicalPath}'. May have been deleted or renamed.")
-
-      log.debug("Loading configuration from: ${configFile.canonicalPath}")
-      val reader = FileReader(configFile)
-      val gson = createGson()
-      try {
-         return gson.fromJson<Configuration>(reader, Configuration::class.java)
-      } catch (e: Exception) {
-         throw BadFileException("Configuration file '${configFile.canonicalPath}' could not be read. Problem parsing JSON.", e)
+      /**
+       * Full path, relative to base path
+       */
+      fun configurationFile(basePath: File): File {
+         return File(File(basePath, Constant.CONFIG_DIR), Constant.CONFIG_FILE)
       }
    }
+
 }

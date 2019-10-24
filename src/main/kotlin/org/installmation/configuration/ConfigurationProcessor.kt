@@ -15,34 +15,30 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- **/
+**/
 
-package org.installmation
+package org.installmation.configuration
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.installmation.model.binary.JDKSerializer
 import org.installmation.model.binary.JDK
+import org.installmation.model.binary.LinuxJDK
+import org.installmation.model.binary.MacJDK
+import org.installmation.model.binary.WindowsJDK
 import java.io.File
 
 /**
- * JSON format
- * Always loaded from the same location
+ * Functionality shared by configuration readers and writers
  */
-class Configuration {
-   // all mapped by a user defined name or label
-   val jdkEntries = mutableMapOf<String, JDK>()
-   val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
-   val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
+abstract class ConfigurationProcessor(protected val installPath: File) {
 
-   companion object {
-      val log: Logger = LogManager.getLogger(Configuration::class.java)
-
-      /**
-       * Full path, relative to base path
-       */
-      fun configurationFile(basePath: File): File {
-         return File(File(basePath, Constant.CONFIG_DIR), Constant.CONFIG_FILE)
-      }
+   protected fun createGson(): Gson {
+      val builder = GsonBuilder()
+      builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(WindowsJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
+      return builder.setPrettyPrinting().create()
    }
-
 }

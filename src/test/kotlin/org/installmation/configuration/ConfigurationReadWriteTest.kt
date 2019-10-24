@@ -1,12 +1,3 @@
-package org.installmation
-
-import org.assertj.core.api.Assertions.assertThat
-import org.installmation.model.binary.MacJDK
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.io.File
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,6 +16,14 @@ import java.io.File
  * specific language governing permissions and limitations
  * under the License.
  **/
+package org.installmation.configuration
+
+import org.assertj.core.api.Assertions.assertThat
+import org.installmation.model.binary.MacJDK
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.io.File
 
 class ConfigurationReadWriteTest {
 

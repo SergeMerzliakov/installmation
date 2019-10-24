@@ -26,5 +26,5 @@ class LinuxJDK(path: File) : AbstractJDK(path) {
    override val binaryDirectory = "bin"
    override val javaExecutableName = "java"
    override val jpackageExecutableName = "jpackage"
-   override val operatingSystem: OperatingSystem = OperatingSystem.Linux
+   override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.Linux
 }

@@ -15,29 +15,26 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation
+package org.installmation.model
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import org.installmation.model.binary.JDK
-import org.installmation.model.binary.LinuxJDK
-import org.installmation.model.binary.MacJDK
-import org.installmation.model.binary.WindowsJDK
+import org.installmation.model.binary.JPackageExecutable
 import java.io.File
 
 /**
- * Functionality shared by configuration readers and writers
+ * Contains all the details for an installation project
+ * The simplest model is used - to create a project and 
+ * then set all it's properties.
  */
-abstract class ConfigurationProcessor(protected val installPath: File) {
-
-   protected fun createGson(): Gson {
-      val builder = GsonBuilder()
-      builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(WindowsJDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
-      return builder.setPrettyPrinting().create()
-   }
+class InstallProject {
+   var name: String? = null
+   var version: String? = null
+   var jpackage: JPackageExecutable? = null
+   var modulePath:File? = null
+   var imageStructure: ImageStructure? = null
+   var imageContentDirectory: File? = null  // application content defined by imageStructure
+   var imageBuildDirectory: File? = null  //output
+   
+   val artefacts = mutableMapOf<String, InstallArtefact>()
 }

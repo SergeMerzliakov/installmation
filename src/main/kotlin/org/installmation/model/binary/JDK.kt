@@ -28,7 +28,7 @@ interface JDK {
     */
    val path: File
    
-   val operatingSystem: OperatingSystem
+   val operatingSystem: OperatingSystem.Type
    
    /**
     * java executable full path

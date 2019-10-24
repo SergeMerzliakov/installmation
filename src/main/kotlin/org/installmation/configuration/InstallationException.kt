@@ -17,18 +17,14 @@
  * under the License.
  **/
 
-package org.installmation.model
+package org.installmation.configuration
 
 /**
- * Argument to a command line executable
- *  shortForm is something like -h
- *  longForm is something like --help
+ * Thrown due to error in installmation's installation or setup
  */
-interface Argument {
-   var shortForm: String 
-   var longForm: String
-   /**
-    * Used in building shell commands
-    */
-    fun toCommand(): String
+class InstallationException:Exception {
+
+   constructor() : super()
+   constructor(message: String?) : super(message)
+   constructor(message: String?, cause: Throwable?) : super(message, cause)
 }

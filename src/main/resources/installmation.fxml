@@ -1,13 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.installmation.InstallmationController">
-   <children>
-      <Button fx:id="closeButton" cancelButton="true" defaultButton="true" layoutX="277.0" layoutY="164.0" mnemonicParsing="false" onAction="#shutdown" text="Close" />
-      <Label layoutX="148.0" layoutY="112.0" prefHeight="17.0" prefWidth="341.0" text="A GUI Installation Generator Tool. This is a stub." />
-   </children>
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.installmation.controller.InstallmationController">
+    <children>
+        <MenuBar fx:id="applicationMenuBar" prefHeight="30.0" prefWidth="476.0">
+            <menus>
+                <Menu id="shutdownMenu" fx:id="shutdownMenu" mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="quitMenuItem" accelerator="Shortcut+Q" mnemonicParsing="false" onAction="#shutdown" text="Quit Application" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Project">
+                    <items>
+                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" text="New Project" />
+                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" text="Save Project" />
+                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" text="Open Project" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Library">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="JPackage Library" />
+                        <MenuItem mnemonicParsing="false" text="JavaFX Library" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <ToolBar layoutY="-74.0" maxHeight="46.0" minHeight="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="46.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                        <Button mnemonicParsing="false" styleClass="toolbar-button" text="JDK" />
+                        <Button mnemonicParsing="false" styleClass="toolbar-button" text="JFX" />
+                        <Button mnemonicParsing="false" styleClass="toolbar-button" text="Generate" />
+                    </items>
+                </ToolBar>
+                <SplitPane dividerPositions="0.1" layoutX="128.0" layoutY="63.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0">
+                    <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                            <children>
+                                <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <tabs>
+                                        <Tab text="General Info">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <GridPane layoutX="-47.0" layoutY="73.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="130.0" minWidth="60.0" prefWidth="130.0" />
+                                                                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <Label text="Project Name" />
+                                                                <Label text="Application Version" GridPane.rowIndex="1" />
+                                                                <TextField fx:id="projectNameField" GridPane.columnIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </TextField>
+                                                                <TextField fx:id="applicationVersionField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </TextField>
+                                                                <Label text="Copyright" GridPane.rowIndex="2" />
+                                                                <TextField fx:id="copyrightField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </GridPane>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Java Binaries">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <Label alignment="CENTER" contentDisplay="RIGHT" text="Jpackage" textAlignment="RIGHT" />
+                                                                <Label text="JavaFx" GridPane.rowIndex="1" />
+                                                                <ChoiceBox fx:id="jpackageChoiceBox" maxWidth="1.7976931348623157E308" minHeight="28.0" minWidth="28.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </ChoiceBox>
+                                                                <Button fx:id="configureJPackageButton" mnemonicParsing="false" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
+                                                                    <GridPane.margin>
+                                                                        <Insets right="8.0" />
+                                                                    </GridPane.margin>
+                                                                </Button>
+                                                                <ChoiceBox fx:id="javafxChoiceBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </ChoiceBox>
+                                                                <Button fx:id="configureJFXButton" mnemonicParsing="false" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets right="8.0" />
+                                                                    </GridPane.margin>
+                                                                </Button>
+                                                            </children>
+                                                        </GridPane>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text=" Application Executable">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="22.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <Label text="Main Jar" />
+                                                                <Label text="Main Class" GridPane.rowIndex="1" />
+                                                                <TextField fx:id="mainJarField" GridPane.columnIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </TextField>
+                                                                <TextField fx:id="mainClassField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </GridPane>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Dependencies">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <GridPane layoutX="82.0" layoutY="102.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="120.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <Label contentDisplay="CENTER" text="ClassPath" GridPane.halignment="CENTER" />
+                                                                <ListView fx:id="classPathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="1">
+                                                                    <GridPane.margin>
+                                                                        <Insets left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </ListView>
+                                                                <Label text="Module Paths" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                                                                <ListView fx:id="modulePathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
+                                                                    <GridPane.margin>
+                                                                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                                                                    </GridPane.margin>
+                                                                </ListView>
+                                                            </children>
+                                                        </GridPane>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+            <stylesheets>
+                <URL value="@installmation.css" />
+                <URL value="@bootstrap3.css" />
+            </stylesheets>
+        </AnchorPane>
+    </children>
+</VBox>
