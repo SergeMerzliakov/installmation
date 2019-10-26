@@ -23,7 +23,7 @@ import io.mockk.every
 import io.mockk.spyk
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.model.binary.JPackageExecutable
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.File
 
 

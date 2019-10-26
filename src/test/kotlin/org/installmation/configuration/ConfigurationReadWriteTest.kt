@@ -20,9 +20,9 @@ package org.installmation.configuration
 
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.model.binary.MacJDK
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 import java.io.File
 
 class ConfigurationReadWriteTest {
@@ -30,13 +30,13 @@ class ConfigurationReadWriteTest {
    private val TEST_DIR = "configtest"
    private lateinit var configDir: File 
 
-   @BeforeEach
+   @Before
    fun setup() {
       configDir = File(TEST_DIR)
       configDir.mkdirs()
    }
 
-   @AfterEach
+   @After
    fun cleanup() {
       configDir.deleteRecursively()
    }

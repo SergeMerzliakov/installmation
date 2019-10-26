@@ -5,7 +5,7 @@ import org.installmation.SerializationUtils
 import org.installmation.model.binary.LinuxJDK
 import org.installmation.model.binary.MacJDK
 import org.installmation.model.binary.WindowsJDK
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.File
 
 /**
