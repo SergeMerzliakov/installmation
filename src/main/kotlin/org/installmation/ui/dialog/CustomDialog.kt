@@ -27,9 +27,6 @@ import javafx.stage.Stage
  * Not for standard message or warning dialogs - use JavaFX dialogs for those
  */
 abstract class CustomDialog<T>(ownerStage:Stage, title:String) {
-
-   private var result: T? = null
-
    var stage: Stage = Stage()
 
    init {

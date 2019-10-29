@@ -6,9 +6,10 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.model.binary.OperatingSystem
+import org.installmation.service.ProjectService
 import java.io.File
 
-class InstallmationController {
+class InstallmationController(val projectService: ProjectService) {
    
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationController::class.java)
@@ -44,4 +45,20 @@ class InstallmationController {
       stage.close()
       log.info("Shutting down Installmation Application")
    }
+
+   @FXML
+   fun newProject() {
+      projectService.newProject()
+   }
+
+   @FXML
+   fun openProject() {
+      projectService.openProject()
+   }
+
+   @FXML
+   fun saveProject() {
+      projectService.saveProject()
+   }
+
 }

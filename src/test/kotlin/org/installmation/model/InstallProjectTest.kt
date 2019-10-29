@@ -21,7 +21,7 @@ package org.installmation.model
 
 import org.installmation.model.binary.JPackageExecutable
 import org.installmation.model.binary.MacJDK
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.File
 
 class InstallProjectTest {
