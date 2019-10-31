@@ -19,6 +19,7 @@
 
 package org.installmation.model
 
+import org.installmation.configuration.Constant
 import org.installmation.model.binary.JPackageExecutable
 import java.io.File
 
@@ -28,6 +29,12 @@ import java.io.File
  * then set all it's properties.
  */
 class InstallProject {
+   
+   companion object{
+        fun projectFileName(name: String): String {
+         return "$name.json"
+      }
+   }
    var name: String? = null
    var version: String? = null
    var jpackage: JPackageExecutable? = null
@@ -37,4 +44,10 @@ class InstallProject {
    var imageBuildDirectory: File? = null  //output
    
    val artefacts = mutableMapOf<String, InstallArtefact>()
+
+   fun projectFile(baseDirectory: File = Constant.DEFAULT_BASE_DIR): File {
+      checkNotNull(name)
+      val baseDir = File(baseDirectory, Constant.PROJECT_DIR)
+      return File(baseDir, projectFileName(name!!))
+   }
 }

@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.Constant
 import org.installmation.model.InstallProject
 import org.installmation.model.LoadDataException
 import org.installmation.model.SaveDataException
@@ -35,7 +36,6 @@ import java.io.FileReader
 class ProjectService(val configuration: Configuration) {
 
    companion object {
-      const val PROJECT_DIR = "projects"
       val log: Logger = LogManager.getLogger(ProjectService::class.java)
    }
 
@@ -45,8 +45,8 @@ class ProjectService(val configuration: Configuration) {
       return p
    }
 
-   fun openProject(projectName: String): InstallProject {
-      val projectFileName = createProjectFileName(projectName)
+   fun loadProject(projectName: String): InstallProject {
+      val projectFileName = InstallProject.projectFileName(projectName)
       val baseDir = projectBaseDirectory()
       val matches = baseDir.listFiles { pathName -> pathName.name == projectFileName }
       if (matches == null || matches.isEmpty())
@@ -71,7 +71,7 @@ class ProjectService(val configuration: Configuration) {
          val data = gson.toJson(p, p::class.java)
          val baseDir = projectBaseDirectory()
          baseDir.mkdirs()
-         val projectFile = File(baseDir, createProjectFileName(p.name!!))
+         val projectFile = File(baseDir, InstallProject.projectFileName(p.name!!))
          projectFile.writeText(data)
          log.debug("Saved project ${p.name} to file")
       } catch (e: Exception) {
@@ -79,11 +79,7 @@ class ProjectService(val configuration: Configuration) {
       }
    }
 
-   private fun createProjectFileName(name: String): String {
-      return "$name.json"
-   }
-
    private fun projectBaseDirectory(): File {
-      return File(configuration.baseDirectory, PROJECT_DIR)
+      return File(configuration.baseDirectory, Constant.PROJECT_DIR)
    }
 }

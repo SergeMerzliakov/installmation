@@ -19,11 +19,15 @@
 
 package org.installmation.configuration
 
+import java.io.File
+
 object Constant {
    const val CONFIG_DIR = "configuration"
    const val CONFIG_FILE = "config.json"
    const val WORKSPACE_DIR = "workspace"
    const val WORKSPACE_FILE = "workspace.json"
    const val APP_DIR = ".installmation"
+   const val PROJECT_DIR = "projects"
    val USER_HOME_DIR:String = System.getProperty("user.home")
+   val DEFAULT_BASE_DIR = File(USER_HOME_DIR, APP_DIR)
 }
