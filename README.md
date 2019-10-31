@@ -10,10 +10,16 @@ I am writing it in Kotlin, as there is no reason to use Java anymore.
 
 ### Current State of Master Branch ###
 
-Rudimentary GUI mockup which runs with the gradle command.
+Rudimentary GUI mockup which runs with the gradle command (under Java 11 or later)
  
     gradlew runApp
 
-Does not yet do anything.
+Application starts and does very little.
 
+
+### Prequisites
+
+    1. JDK 11+
+    2. OpenJFX 11+
+    3. gradle 5+
 
