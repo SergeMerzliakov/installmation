@@ -20,11 +20,13 @@
 package org.installmation.service
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.installmation.configuration.Configuration
 import org.installmation.model.InstallProject
 import org.junit.After
 import org.junit.Test
 import java.io.File
+
 
 class ProjectServiceTest {
 
@@ -65,5 +67,12 @@ class ProjectServiceTest {
       // load and check 
       val loaded = service.loadProject(p.name!!)
       assertThat(loaded).isEqualToComparingFieldByField(p)
+   }
+
+   @Test
+   fun shouldNotSaveEmptyProject() {
+      val p = InstallProject()
+      val service = ProjectService(config)
+      assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy { service.saveProject(p) }
    }
 }
