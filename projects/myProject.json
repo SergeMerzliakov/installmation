@@ -1,0 +1,8 @@
+{
+  "name": "myProject",
+  "version": "v1",
+  "modulePath": {
+    "path": "."
+  },
+  "artefacts": {}
+}

@@ -17,36 +17,37 @@
  * under the License.
  **/
 
-package org.installmation.configuration
+package org.installmation.io
 
+import com.google.gson.Gson
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.installmation.model.binary.JDK
 import java.io.File
+import java.nio.charset.StandardCharsets
 
 /**
- * JSON format
- * Always loaded from the same location
+ * Save any application related json data to file
  */
-class Configuration(val baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)) {
+class ApplicationJsonWriter<T>(private val file: File, private val parser: Gson) {
 
    companion object {
-      val log: Logger = LogManager.getLogger(Configuration::class.java)
-
-      /**
-       * Full path, relative to base path
-       */
-      fun configurationFile(baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)): File {
-         return File(File(baseDirectory, Constant.CONFIG_DIR), Constant.CONFIG_FILE)
-      }
+      val log: Logger = LogManager.getLogger(ApplicationJsonWriter::class.java)
    }
 
-   // all mapped by a user defined name or label
-   val jdkEntries = mutableMapOf<String, JDK>()
-   val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
-   val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
+   fun save(data: T) {
+      if (!file.parentFile.exists()) {
+         // first time - may not exist and that's OK
+         file.parentFile.mkdirs()
+         log.info("Creating configuration directory '${file.parentFile.canonicalPath}' for first time")
+      }
 
-   init {
-      log.trace("Configuration base directory set to $baseDirectory")
+      log.debug("Write configuration to: ${file.canonicalPath}")
+
+      try {
+         val jsonContents = parser.toJson(data)
+         file.writeText(jsonContents, StandardCharsets.UTF_8)
+      } catch (e: Exception) {
+         throw RuntimeException("Configuration file '${file.canonicalPath}' could not be saved. Problem converting to JSON.")
+      }
    }
 }

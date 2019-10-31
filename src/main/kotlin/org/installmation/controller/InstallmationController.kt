@@ -5,11 +5,16 @@ import javafx.scene.control.*
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.io.ApplicationJsonWriter
+import org.installmation.configuration.Configuration
+import org.installmation.model.JsonParserFactory
+import org.installmation.model.InstallProject
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.ProjectService
+import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
-class InstallmationController(val projectService: ProjectService) {
+class InstallmationController(private val configuration: Configuration, private val projectService: ProjectService) {
    
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationController::class.java)
@@ -41,6 +46,10 @@ class InstallmationController(val projectService: ProjectService) {
    
    @FXML
    fun shutdown() {
+      // save configuration
+      val reader = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
+      reader.save(configuration)
+      
       val stage = mainJarField.scene.window as Stage
       stage.close()
       log.info("Shutting down Installmation Application")
@@ -48,17 +57,23 @@ class InstallmationController(val projectService: ProjectService) {
 
    @FXML
    fun newProject() {
-      projectService.newProject()
+      // get a name first
+      val applicationStage = mainJarField.scene.window as Stage
+      val sd = SingleValueDialog(applicationStage, "Project Name", "Choose Project Name", "myProject")
+      val result = sd.showAndWait()
+      if (result.ok) {
+         val project = projectService.newProject(result.data)
+         log.debug("Created project ${project.name}")
+      }
    }
 
    @FXML
    fun openProject() {
-      projectService.openProject()
+      projectService.openProject("myProject")
    }
 
    @FXML
    fun saveProject() {
-      projectService.saveProject()
+      projectService.saveProject(InstallProject())
    }
-
 }

@@ -20,7 +20,7 @@
 package org.installmation.model.binary
 
 import com.google.gson.*
-import org.installmation.configuration.BadFileException
+import org.installmation.io.BadFileException
 import java.io.File
 import java.lang.reflect.Type
 

@@ -15,14 +15,14 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-**/
+ **/
 
-package org.installmation.configuration
+package org.installmation.io
 
 /**
- * Thrown when a parsed file is corrupted or invalids
+ * Thrown due to error in installmation's installation or setup
  */
-class BadFileException : Exception {
+class InstallationException:Exception {
    constructor() : super()
    constructor(message: String?) : super(message)
    constructor(message: String?, cause: Throwable?) : super(message, cause)

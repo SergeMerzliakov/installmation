@@ -19,6 +19,9 @@
 package org.installmation.configuration
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.io.ApplicationJsonReader
+import org.installmation.io.ApplicationJsonWriter
+import org.installmation.model.JsonParserFactory
 import org.installmation.model.binary.MacJDK
 import org.junit.After
 import org.junit.Before
@@ -28,7 +31,7 @@ import java.io.File
 class ConfigurationReadWriteTest {
 
    private val TEST_DIR = "configtest"
-   private lateinit var configDir: File 
+   private lateinit var configDir: File
 
    @Before
    fun setup() {
@@ -44,20 +47,21 @@ class ConfigurationReadWriteTest {
    @Test
    fun shouldPersistSingleFXLibConfig() {
       val conf = Configuration()
+      val configFile = Configuration.configurationFile(configDir)
       
       val label = "fx13"
       val fxlibs = "dir/javafx13/libs"
       conf.javafxLibEntries[label] = File(fxlibs)
 
       // save
-      val writer = ConfigurationWriter(configDir)
+      val writer = ApplicationJsonWriter<Configuration>(configFile, JsonParserFactory.configurationParser())
       writer.save(conf)
       
-      val savedFile = Configuration.configurationFile(configDir)
-      assertThat(savedFile).exists()
+      assertThat(configFile).exists()
+      assertThat(configFile.readText()).isNotEmpty()
       
       // now read 
-      val reader = ConfigurationReader(configDir)
+      val reader = ApplicationJsonReader<Configuration>(Configuration::class, configFile, JsonParserFactory.configurationParser())
       val loadedConf = reader.load()
       
       assertThat(loadedConf.javafxLibEntries).hasSize(1)
@@ -70,7 +74,8 @@ class ConfigurationReadWriteTest {
    @Test
    fun shouldPersistMultipleFXLibConfig() {
       val conf = Configuration()
-
+      val configFile = Configuration.configurationFile(configDir)
+      
       // FX 12
       val label12 = "fx12"
       val fxlibs12 = "dir/javafx12/libs"
@@ -82,14 +87,14 @@ class ConfigurationReadWriteTest {
       conf.javafxLibEntries[label13] = File(fxlibs13)
 
       // save
-      val writer = ConfigurationWriter(configDir)
+      val writer = ApplicationJsonWriter<Configuration>(configFile, JsonParserFactory.configurationParser())
       writer.save(conf)
 
-      val savedFile = Configuration.configurationFile(configDir)
-      assertThat(savedFile).exists()
+      assertThat(configFile).exists()
+      assertThat(configFile.readText()).isNotEmpty()
 
       // now read 
-      val reader = ConfigurationReader(configDir)
+      val reader = ApplicationJsonReader<Configuration>(Configuration::class, configFile, JsonParserFactory.configurationParser())
       val loadedConf = reader.load()
 
       assertThat(loadedConf.javafxLibEntries).hasSize(2)
@@ -103,20 +108,20 @@ class ConfigurationReadWriteTest {
    @Test
    fun shouldPersistFXModuleConfig() {
       val conf = Configuration()
-
+      val configFile = Configuration.configurationFile(configDir)
+      
       val label = "fx13"
       val fxmods = "dir/javafx13/mods"
       conf.javafxModuleEntries[label] = File(fxmods)
 
       // save
-      val writer = ConfigurationWriter(configDir)
+      val writer = ApplicationJsonWriter<Configuration>(configFile, JsonParserFactory.configurationParser())
       writer.save(conf)
 
-      val savedFile = Configuration.configurationFile(configDir)
-      assertThat(savedFile).exists()
-
+      assertThat(configFile).exists()
+      assertThat(configFile.readText()).isNotEmpty()
       // now read 
-      val reader = ConfigurationReader(configDir)
+      val reader = ApplicationJsonReader<Configuration>(Configuration::class, configFile, JsonParserFactory.configurationParser())
       val loadedConf = reader.load()
 
       assertThat(loadedConf.javafxLibEntries).hasSize(0)
@@ -129,20 +134,21 @@ class ConfigurationReadWriteTest {
    @Test
    fun shouldPersistJDKConfig() {
       val conf = Configuration()
+      val configFile = Configuration.configurationFile(configDir)
 
       val label = "jpackager-49"
       val macjdk14 = MacJDK(File("dir/java14"))
       conf.jdkEntries[label] = macjdk14
 
       // save
-      val writer = ConfigurationWriter(configDir)
+      val writer = ApplicationJsonWriter<Configuration>(configFile, JsonParserFactory.configurationParser())
       writer.save(conf)
 
       val savedFile = Configuration.configurationFile(configDir)
       assertThat(savedFile).exists()
 
       // now read 
-      val reader = ConfigurationReader(configDir)
+      val reader = ApplicationJsonReader<Configuration>(Configuration::class, configFile, JsonParserFactory.configurationParser())
       val loadedConf = reader.load()
 
       assertThat(loadedConf.javafxLibEntries).hasSize(0)

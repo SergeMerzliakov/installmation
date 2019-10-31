@@ -17,31 +17,36 @@
  * under the License.
  **/
 
-package org.installmation.configuration
+package org.installmation.model
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.configuration.Constant
 import java.io.File
-import java.io.FileReader
 
-class ConfigurationReader(installPath: File) : ConfigurationProcessor(installPath) {
+/**
+ * Stores history of projects worked on, and has its own
+ * persistent file. If this is cannot be loaded or saved,
+ * all that is lost is a list of projects.
+ *
+ * Not a concept that is visible to the user, so they will
+ * never 'see' workspaces
+ */
+class Workspace {
 
    companion object {
-      val log: Logger = LogManager.getLogger(ConfigurationReader::class.java)
-   }
+      val log: Logger = LogManager.getLogger(Workspace::class.java)
 
-   fun load(): Configuration {
-      val configFile = Configuration.configurationFile(installPath)
-      if (!configFile.exists())
-         throw InstallationException("Configuration file not found at '${configFile.canonicalPath}'. May have been deleted or renamed.")
-
-      log.debug("Loading configuration from: ${configFile.canonicalPath}")
-      val reader = FileReader(configFile)
-      val gson = createGson()
-      try {
-         return gson.fromJson<Configuration>(reader, Configuration::class.java)
-      } catch (e: Exception) {
-         throw BadFileException("Configuration file '${configFile.canonicalPath}' could not be read. Problem parsing JSON.", e)
+      /**
+       * Full path, relative to base path
+       */
+      fun workspaceFile(baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)): File {
+         return File(File(baseDirectory, Constant.WORKSPACE_DIR), Constant.WORKSPACE_FILE)
       }
    }
+
+   var currentProject: InstallProject? = null
+
+   // project name -> location on disk
+   var projectHistory = mutableMapOf<String, File>()
 }

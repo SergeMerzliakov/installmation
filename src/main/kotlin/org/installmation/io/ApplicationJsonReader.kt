@@ -17,35 +17,36 @@
  * under the License.
  **/
 
-package org.installmation.configuration
+package org.installmation.io
 
+import com.google.gson.Gson
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
-import java.nio.charset.StandardCharsets
+import java.io.FileReader
+import kotlin.reflect.KClass
 
-class ConfigurationWriter(installPath: File) : ConfigurationProcessor(installPath) {
-
+/**
+ * Load any application related json data from file
+ * the classOfT parameter is a hack because we cannot determine Java class from a generic type,
+ * thanks to JVM type erasure.
+ */
+class ApplicationJsonReader<T>(private val classOfT: KClass<*>, private val file: File, private val parser: Gson) {
+   
    companion object {
-      val log: Logger = LogManager.getLogger(ConfigurationWriter::class.java)
+      val log: Logger = LogManager.getLogger(ApplicationJsonReader::class.java)
    }
 
-   fun save(config: Configuration) {
-      val configFile = Configuration.configurationFile(installPath)
-      if (!configFile.parentFile.exists()) {
-         // first time - may not exist and that's OK
-         configFile.parentFile.mkdirs()
-         log.info("Creating configuration directory '${configFile.parentFile.canonicalPath}' for first time")
-      }
+   fun load(): T {
+      if (!file.exists())
+         throw InstallationException("File not found at '${file.canonicalPath}'. May have been deleted or renamed.")
 
-      log.debug("Write configuration to: ${configFile.canonicalPath}")
-
-      val gson = createGson()
+      log.debug("Loading file from: ${file.canonicalPath}")
+      val reader = FileReader(file)
       try {
-         val jsonContents = gson.toJson(config)
-         configFile.writeText(jsonContents, StandardCharsets.UTF_8)
+         return parser.fromJson<T>(reader, classOfT.java)
       } catch (e: Exception) {
-         throw RuntimeException("Configuration file '${configFile.canonicalPath}' could not be saved. Problem converting to JSON.")
+         throw BadFileException("File '${file.canonicalPath}' could not be read. Problem parsing JSON.", e)
       }
    }
 }

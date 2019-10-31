@@ -15,16 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- **/
+**/
 
-package org.installmation.configuration
+package org.installmation.model
 
 /**
- * Thrown due to error in installmation's installation or setup
+ * For errors on saving
  */
-class InstallationException:Exception {
-
-   constructor() : super()
+class SaveDataException : Exception {
    constructor(message: String?) : super(message)
    constructor(message: String?, cause: Throwable?) : super(message, cause)
+   constructor(cause: Throwable?) : super(cause)
 }

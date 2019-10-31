@@ -17,23 +17,21 @@
  * under the License.
 **/
 
-package org.installmation.configuration
+package org.installmation.model
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.installmation.model.binary.JDKSerializer
-import org.installmation.model.binary.JDK
-import org.installmation.model.binary.LinuxJDK
-import org.installmation.model.binary.MacJDK
-import org.installmation.model.binary.WindowsJDK
-import java.io.File
+import org.installmation.model.binary.*
 
 /**
  * Functionality shared by configuration readers and writers
  */
-abstract class ConfigurationProcessor(protected val installPath: File) {
+object JsonParserFactory {
 
-   protected fun createGson(): Gson {
+   /**
+    * for configuration files
+    */
+   fun configurationParser(): Gson {
       val builder = GsonBuilder()
       builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
       builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
@@ -41,4 +39,13 @@ abstract class ConfigurationProcessor(protected val installPath: File) {
       builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
       return builder.setPrettyPrinting().create()
    }
+
+   /**
+    * For POJOs
+    */
+   fun basicParser(): Gson {
+      val builder = GsonBuilder()
+      return builder.setPrettyPrinting().create()
+   }
+
 }

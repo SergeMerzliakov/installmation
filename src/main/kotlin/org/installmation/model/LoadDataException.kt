@@ -15,15 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- **/
+**/
 
-package org.installmation.configuration
+package org.installmation.model
 
-object Constant {
-   const val CONFIG_DIR = "configuration"
-   const val CONFIG_FILE = "config.json"
-   const val WORKSPACE_DIR = "workspace"
-   const val WORKSPACE_FILE = "workspace.json"
-   const val APP_DIR = ".installmation"
-   val USER_HOME_DIR:String = System.getProperty("user.home")
+/**
+ * For errors on loading from file
+ */
+class LoadDataException : Exception {
+   constructor(message: String?) : super(message)
+   constructor(message: String?, cause: Throwable?) : super(message, cause)
+   constructor(cause: Throwable?) : super(cause)
 }
