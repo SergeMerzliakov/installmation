@@ -46,7 +46,15 @@ class Workspace {
    }
 
    var currentProject: InstallProject? = null
-
+      private set
+   
    // project name -> location on disk
-   var projectHistory = mutableMapOf<String, File>()
+   private var projectHistory = mutableMapOf<String, File>()
+
+   fun setCurrentProject(p: InstallProject) {
+      checkNotNull(p.name)
+      currentProject = p
+      projectHistory[p.name!!] = p.projectFile()
+      log.debug("Workspace current project is set to '${p.name}'")
+   }
 }

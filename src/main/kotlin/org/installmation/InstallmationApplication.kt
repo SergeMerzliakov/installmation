@@ -62,7 +62,7 @@ class InstallmationApplication : Application() {
          val projectService = ProjectService(configuration)
 
          // step 4 - Controllers
-         val controller = InstallmationController(configuration, projectService)
+         val controller = InstallmationController(configuration, workspace, projectService)
 
          // step 5 - Global Event Handlers
          setupEventHandlers(primaryStage, configuration, workspace)

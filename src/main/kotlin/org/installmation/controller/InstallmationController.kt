@@ -5,16 +5,18 @@ import javafx.scene.control.*
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.installmation.io.ApplicationJsonWriter
 import org.installmation.configuration.Configuration
+import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.JsonParserFactory
-import org.installmation.model.InstallProject
+import org.installmation.model.Workspace
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
-class InstallmationController(private val configuration: Configuration, private val projectService: ProjectService) {
+class InstallmationController(private val configuration: Configuration,
+                              private val workspace: Workspace,
+                              private val projectService: ProjectService) {
    
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationController::class.java)
@@ -64,16 +66,19 @@ class InstallmationController(private val configuration: Configuration, private 
       if (result.ok) {
          val project = projectService.newProject(result.data)
          log.debug("Created project ${project.name}")
+         workspace.setCurrentProject(project)
       }
    }
 
    @FXML
    fun openProject() {
-      projectService.openProject("myProject")
+      projectService.loadProject("myProject")
    }
 
    @FXML
    fun saveProject() {
-      projectService.saveProject(InstallProject())
+      val current = workspace.currentProject
+      if (current != null)
+         projectService.saveProject(current)
    }
 }
