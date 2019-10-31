@@ -19,6 +19,7 @@
 
 package org.installmation.configuration
 
+import com.google.common.eventbus.EventBus
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.model.binary.JDK
@@ -28,7 +29,7 @@ import java.io.File
  * JSON format
  * Always loaded from the same location
  */
-class Configuration(val baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)) {
+class Configuration(bus: EventBus? = null, val baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)) {
 
    companion object {
       val log: Logger = LogManager.getLogger(Configuration::class.java)
@@ -45,8 +46,18 @@ class Configuration(val baseDirectory: File = File(Constant.USER_HOME_DIR, Const
    val jdkEntries = mutableMapOf<String, JDK>()
    val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
    val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
-
+   @Transient lateinit var eventBus: EventBus 
+   
    init {
       log.trace("Configuration base directory set to $baseDirectory")
+      if (bus != null)
+         eventBus = bus
+   }
+
+   /**
+    * Used after deserialization
+    */
+   fun initEventBus(bus: EventBus) {
+      eventBus = bus
    }
 }

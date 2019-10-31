@@ -1,5 +1,6 @@
 package org.installmation
 
+import com.google.common.eventbus.EventBus
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -32,6 +33,8 @@ class InstallmationApplication : Application() {
       }
    }
 
+   private val eventBus = EventBus("installmationApp")
+   
    private fun setupEventHandlers(stage: Stage, configuration: Configuration, workspace: Workspace) {
 
       stage.setOnCloseRequest {
@@ -48,26 +51,15 @@ class InstallmationApplication : Application() {
    }
    
    override fun start(primaryStage: Stage) {
-
       try {
          log.info("Starting Installmation from ${File(".").canonicalPath}")
 
-         // step 1 - Configuration
-         val configuration = loadConfiguration()
-
-         // step 2 - Configuration
+         val configuration = loadConfiguration(eventBus)
          val workspace = loadWorkspace()
-
-         // step 3 - Services
          val projectService = ProjectService(configuration)
-
-         // step 4 - Controllers
          val controller = InstallmationController(configuration, workspace, projectService)
-
-         // step 5 - Global Event Handlers
          setupEventHandlers(primaryStage, configuration, workspace)
 
-         // step 6 - UI
          val loader = FXMLLoader(javaClass.getResource("/installmation.fxml"))
          loader.setController(controller)
          val root = loader.load<Pane>()
@@ -118,7 +110,7 @@ class InstallmationApplication : Application() {
       }
    }
 
-   private fun loadConfiguration(): Configuration {
+   private fun loadConfiguration(eventBus:EventBus): Configuration {
       log.debug("Started loading configuration...")
       val location = Configuration.configurationFile()
       if (location.exists()) {
@@ -127,10 +119,11 @@ class InstallmationApplication : Application() {
          val reader = ApplicationJsonReader<Configuration>(Configuration::class, location, JsonParserFactory.configurationParser())
          val configuration = reader.load()
          log.info("Loaded configuration successfully from ${location.canonicalPath}")
+         configuration.initEventBus(eventBus)
          return configuration
       } else {
          log.info("No configuration file found - may be first startup. Creating default configuration")
-         return Configuration()
+         return Configuration(eventBus)
       }
    }
 }

@@ -82,7 +82,7 @@
                                                                         <Insets left="5.0" right="5.0" />
                                                                     </GridPane.margin>
                                                                 </TextField>
-                                                                <Label text="Copyright" GridPane.rowIndex="2" />
+                                                                <Label text="Copyright Message" GridPane.rowIndex="2" />
                                                                 <TextField fx:id="copyrightField" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                     <GridPane.margin>
                                                                         <Insets left="5.0" right="5.0" />

@@ -1,5 +1,6 @@
 package org.installmation.controller
 
+import com.google.common.eventbus.Subscribe
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.stage.Stage
@@ -10,7 +11,7 @@ import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.JsonParserFactory
 import org.installmation.model.Workspace
 import org.installmation.model.binary.OperatingSystem
-import org.installmation.service.ProjectService
+import org.installmation.service.*
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
@@ -38,6 +39,10 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var modulePathListView: ListView<File>
    @FXML private lateinit var shutdownMenu: Menu
 
+   init {
+      configuration.eventBus.register(this)
+   }
+   
    @FXML
    fun initialize() {
       if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
@@ -67,18 +72,52 @@ class InstallmationController(private val configuration: Configuration,
          val project = projectService.newProject(result.data)
          log.debug("Created project ${project.name}")
          workspace.setCurrentProject(project)
+         configuration.eventBus.post(ProjectCreatedEvent(project))
       }
+
    }
 
    @FXML
    fun openProject() {
-      projectService.loadProject("myProject")
+      val p = projectService.loadProject("myProject")
+      configuration.eventBus.post(ProjectLoadedEvent(p))
    }
 
    @FXML
    fun saveProject() {
       val current = workspace.currentProject
-      if (current != null)
+      if (current != null) {
          projectService.saveProject(current)
+         configuration.eventBus.post(ProjectSavedEvent(current))
+      }
    }
+
+   //-------------------------------------------------------
+   //  Event Subscribers
+   //-------------------------------------------------------
+
+   @Subscribe
+   fun handleProjectCreated(e: ProjectCreatedEvent) {
+      projectNameField.text = e.project.name
+   }
+
+   @Subscribe
+   fun handleProjectUpdated(e: ProjectUpdatedEvent) {
+
+   }
+
+   @Subscribe
+   fun handleProjectDeleted(e: ProjectDeletedEvent) {
+
+   }
+
+   @Subscribe
+   fun handleProjectSaved(e: ProjectSavedEvent) {
+
+   }
+
 }
+
+
+
+

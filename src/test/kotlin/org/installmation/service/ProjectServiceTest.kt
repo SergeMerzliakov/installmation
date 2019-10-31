@@ -31,7 +31,7 @@ import java.io.File
 class ProjectServiceTest {
 
    private val baseDirectory = File("testproject")
-   private val config = Configuration(baseDirectory)
+   private val config = Configuration(null, baseDirectory)
    
    @After
    fun cleanup() {
