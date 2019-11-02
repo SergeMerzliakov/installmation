@@ -23,8 +23,6 @@ import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.stage.Stage
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 
 
 class SingleValueDialogController(val label: String, private val defaultValue: String?) {
