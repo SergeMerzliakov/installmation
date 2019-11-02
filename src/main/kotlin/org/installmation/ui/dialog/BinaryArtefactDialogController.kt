@@ -23,6 +23,7 @@ import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
+import javafx.scene.control.cell.TextFieldTableCell
 import javafx.stage.Stage
 import java.io.File
 
@@ -34,7 +35,7 @@ class BinaryArtefactDialogController(currentArtefacts: List<Pair<String, File>>)
 
    private var saved: Boolean = false
    @FXML lateinit var nameColumn: TableColumn<Pair<String, File>, String>
-   @FXML lateinit var locationColumn: TableColumn<Pair<String, File>, String>
+   @FXML lateinit var locationColumn: TableColumn<Pair<String, File>, File>
    @FXML lateinit var artefactTableView: TableView<Pair<String, File>>
 
    // true if user has modified artefact list
@@ -47,8 +48,11 @@ class BinaryArtefactDialogController(currentArtefacts: List<Pair<String, File>>)
    fun initialize() {
       artefactTableView.selectionModel.selectionMode = SelectionMode.SINGLE
       nameColumn.cellValueFactory = PropertyValueFactory<Pair<String, File>, String>("first")
-      locationColumn.cellValueFactory = PropertyValueFactory<Pair<String, File>, String>("second")
+      locationColumn.cellValueFactory = PropertyValueFactory<Pair<String, File>, File>("second")
       artefactTableView.items = artefacts
+
+      nameColumn.cellFactory = TextFieldTableCell.forTableColumn()
+      locationColumn.cellFactory = TextFieldTableCell.forTableColumn(FileStringConverter())
    }
 
    /**
