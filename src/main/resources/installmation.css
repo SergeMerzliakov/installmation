@@ -5,9 +5,9 @@
 }
 
 .toolbar-button{
-    -fx-min-height: 40px;
-    -fx-max-height: 40px;
-    -fx-min-width: 40px;
-    -fx-max-width: 40px;
-    -fx-font-size: 12;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-min-width: 50px;
+    -fx-max-width: 80px;
+    -fx-font-size: 8px;
 }

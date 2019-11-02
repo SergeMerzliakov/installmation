@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar fx:id="applicationMenuBar" prefHeight="30.0" prefWidth="476.0">
             <menus>
                 <Menu id="shutdownMenu" fx:id="shutdownMenu" mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="quitMenuItem" accelerator="Shortcut+Q" mnemonicParsing="false" text="Quit Application" onAction="#shutdown"/>
+                        <MenuItem fx:id="quitMenuItem" accelerator="Shortcut+Q" mnemonicParsing="false" onAction="#shutdown" text="Quit Application" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" text="New Project"
-                                  onAction="#newProject"/>
-                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" text="Save Project"  onAction="#saveProject"/>
-                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" text="Open Project"  onAction="#openProject" />
+                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
+                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Project" />
+                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Library">
@@ -36,11 +51,11 @@
         </MenuBar>
         <AnchorPane prefHeight="400.0" prefWidth="600.0">
             <children>
-                <ToolBar layoutY="-74.0" maxHeight="46.0" minHeight="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="46.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <ToolBar layoutY="-74.0" maxHeight="38.0" minHeight="38.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                         <Button mnemonicParsing="false" styleClass="toolbar-button" text="JDK" />
                         <Button mnemonicParsing="false" styleClass="toolbar-button" text="JFX" />
-                        <Button mnemonicParsing="false" styleClass="toolbar-button" text="Generate" />
+                        <Button mnemonicParsing="false" styleClass="toolbar-button" text="Inst" />
                     </items>
                 </ToolBar>
                 <SplitPane dividerPositions="0.1" layoutX="128.0" layoutY="63.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0">
@@ -54,7 +69,7 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <GridPane layoutX="-47.0" layoutY="73.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <GridPane layoutX="-47.0" layoutY="73.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                                                             <columnConstraints>
                                                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="130.0" minWidth="60.0" prefWidth="130.0" />
                                                                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -98,7 +113,7 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                                                             <columnConstraints>
                                                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="90.0" prefWidth="90.0" />
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -113,22 +128,22 @@
                                                             <children>
                                                                 <Label alignment="CENTER" contentDisplay="RIGHT" text="Jpackage" textAlignment="RIGHT" />
                                                                 <Label text="JavaFx" GridPane.rowIndex="1" />
-                                                                <ChoiceBox fx:id="jpackageChoiceBox" maxWidth="1.7976931348623157E308" minHeight="28.0" minWidth="28.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                                                                <ComboBox fx:id="jpackageComboBox" maxWidth="1.7976931348623157E308" minHeight="28.0" minWidth="28.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT">
                                                                     <GridPane.margin>
                                                                         <Insets left="5.0" right="5.0" />
                                                                     </GridPane.margin>
-                                                                </ChoiceBox>
-                                                                <Button fx:id="configureJPackageButton" mnemonicParsing="false" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
+                                                                </ComboBox>
+                                                                <Button fx:id="configureJPackageButton" mnemonicParsing="false" onAction="#configureJPackageBinaries" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
                                                                     <GridPane.margin>
                                                                         <Insets right="8.0" />
                                                                     </GridPane.margin>
                                                                 </Button>
-                                                                <ChoiceBox fx:id="javafxChoiceBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                                                                <ComboBox fx:id="javafxComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                                                                     <GridPane.margin>
                                                                         <Insets left="5.0" right="5.0" />
                                                                     </GridPane.margin>
-                                                                </ChoiceBox>
-                                                                <Button fx:id="configureJFXButton" mnemonicParsing="false" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                                </ComboBox>
+                                                                <Button fx:id="configureJFXButton" mnemonicParsing="false" onAction="#configureJavaFxBinaries" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                                                                     <GridPane.margin>
                                                                         <Insets right="8.0" />
                                                                     </GridPane.margin>
@@ -143,7 +158,7 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                                                             <columnConstraints>
                                                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -176,7 +191,7 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <GridPane layoutX="82.0" layoutY="102.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <GridPane layoutX="82.0" layoutY="102.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
