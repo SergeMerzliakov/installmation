@@ -22,7 +22,11 @@ package org.installmation.model.binary
 import java.io.File
 
 interface JDK {
-
+   /**
+    * User defined name or label
+    */
+   var name:String
+   
    /*
     location full path
     */

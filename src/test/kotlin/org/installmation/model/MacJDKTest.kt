@@ -31,7 +31,7 @@ class MacJDKTest {
    @Test
    fun shouldFindExecutablesInJDKPrior14() {
       val f = TestFile.resourceFile("mac/jdk13")
-      val mac = MacJDK(f)
+      val mac = MacJDK("myJDK", f)
       assertThat(mac.javaExecutable).exists()
       assertThatExceptionOfType(FileNotFoundException::class.java).isThrownBy { mac.packageExecutable }
       assertThat(mac.supportsJPackage).isFalse()
@@ -40,7 +40,7 @@ class MacJDKTest {
    @Test
    fun shouldFindAllExecutablesInJDK14() {
       val f = TestFile.resourceFile("mac/jpackage49")
-      val mac = MacJDK(f)
+      val mac = MacJDK("myJDK", f)
       assertThat(mac.javaExecutable).exists()
       assertThat(mac.supportsJPackage).isTrue()
       assertThat(mac.packageExecutable).exists()

@@ -21,7 +21,7 @@ package org.installmation.model.binary
 
 import java.io.File
 
-class LinuxJDK(path: File) : AbstractJDK(path) {
+class LinuxJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
 
    override val binaryDirectory = "bin"
    override val javaExecutableName = "java"
