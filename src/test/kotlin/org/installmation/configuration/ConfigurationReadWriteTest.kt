@@ -137,7 +137,7 @@ class ConfigurationReadWriteTest {
       val configFile = Configuration.configurationFile(configDir)
 
       val label = "jpackager-49"
-      val macjdk14 = MacJDK(File("dir/java14"))
+      val macjdk14 = MacJDK("myJDK", File("dir/java14"))
       conf.jdkEntries[label] = macjdk14
 
       // save

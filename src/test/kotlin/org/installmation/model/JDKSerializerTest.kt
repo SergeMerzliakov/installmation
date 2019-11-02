@@ -29,12 +29,11 @@ import java.io.File
 
 class JDKSerializerTest {
 
-
    @Test
    fun shouldSerializeOSX() {
       val gson = SerializationUtils.createAdapterGson(MacJDK::class.java)
 
-      val jdk = MacJDK(File("dir/java14"))
+      val jdk = MacJDK("myJDK", File("dir/java14"))
       val data = gson.toJson(jdk, MacJDK::class.java)
 
       val loadedJdk = gson.fromJson(data, MacJDK::class.java)
@@ -45,7 +44,7 @@ class JDKSerializerTest {
    fun shouldSerializeWindows() {
       val gson = SerializationUtils.createAdapterGson(WindowsJDK::class.java)
 
-      val jdk = WindowsJDK(File("C:\\java\\java14"))
+      val jdk = WindowsJDK("myJDK", File("C:\\java\\java14"))
       val data = gson.toJson(jdk, WindowsJDK::class.java)
 
       val loadedJdk = gson.fromJson(data, WindowsJDK::class.java)
@@ -56,7 +55,7 @@ class JDKSerializerTest {
    fun shouldSerializeLinux() {
       val gson = SerializationUtils.createAdapterGson(LinuxJDK::class.java)
 
-      val jdk = LinuxJDK(File("/usr/var/java14"))
+      val jdk = LinuxJDK("myJDK", File("/usr/var/java14"))
       val data = gson.toJson(jdk, LinuxJDK::class.java)
 
       val loadedJdk = gson.fromJson(data, LinuxJDK::class.java)

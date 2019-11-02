@@ -46,7 +46,7 @@ class InstallProjectTest {
     */
    @Test
    fun shouldCreateImage() {
-      val packageJdk = MacJDK(File("/Users/loyaltyuser/tools/jpackage49"))
+      val packageJdk = MacJDK("myJDK", File("/Users/loyaltyuser/tools/jpackage49"))
       val jpackage = JPackageExecutable(packageJdk.packageExecutable)
       val proj = InstallProject()
       proj.name = "CobolBrowser"

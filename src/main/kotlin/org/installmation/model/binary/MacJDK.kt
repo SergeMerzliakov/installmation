@@ -21,10 +21,14 @@ package org.installmation.model.binary
 
 import java.io.File
 
-class MacJDK(path: File) : AbstractJDK(path) {
+class MacJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
 
    override val binaryDirectory = "Contents/Home/bin" 
    override val javaExecutableName = "java"
    override val jpackageExecutableName = "jpackage"
    override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.OSX
+
+   override fun toString(): String {
+      return name
+   }
 }

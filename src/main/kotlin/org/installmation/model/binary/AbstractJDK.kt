@@ -22,13 +22,14 @@ package org.installmation.model.binary
 import java.io.File
 import java.io.FileNotFoundException
 
-abstract class AbstractJDK(fullJDKPath: File) : JDK {
+abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
 
    //subclasses must define the OS and version specific values for these
    protected abstract val binaryDirectory: String
    protected abstract val javaExecutableName: String
    protected abstract val jpackageExecutableName: String
 
+   override var name = usersJDKName
    override val path = fullJDKPath
    override val javaExecutable: File
       get() = getJDKFile(binaryDirectory, javaExecutableName)
