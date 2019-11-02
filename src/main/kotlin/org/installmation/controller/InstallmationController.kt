@@ -1,6 +1,8 @@
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.stage.Stage
@@ -10,8 +12,10 @@ import org.installmation.configuration.Configuration
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.JsonParserFactory
 import org.installmation.model.Workspace
+import org.installmation.model.binary.JDK
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
+import org.installmation.ui.dialog.BinaryArtefactDialog
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
@@ -29,9 +33,9 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var projectNameField: TextField
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
-   @FXML private lateinit var jpackageChoiceBox: ChoiceBox<File>
+   @FXML private lateinit var jpackageComboBox: ComboBox<JDK>
    @FXML private lateinit var configureJPackageButton: Button
-   @FXML private lateinit var javafxChoiceBox: ChoiceBox<File>
+   @FXML private lateinit var javafxComboBox: ComboBox<File>
    @FXML private lateinit var configureJFXButton: Button
    @FXML private lateinit var mainJarField: TextField
    @FXML private lateinit var mainClassField: TextField
@@ -39,6 +43,10 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var modulePathListView: ListView<File>
    @FXML private lateinit var shutdownMenu: Menu
 
+   //model
+   private val jpackageLocations: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
+   private val javafxLocations: ObservableList<File> = FXCollections.observableArrayList<File>()
+   
    init {
       configuration.eventBus.register(this)
    }
@@ -49,6 +57,15 @@ class InstallmationController(private val configuration: Configuration,
          shutdownMenu.isDisable = true
          shutdownMenu.isVisible = false
       }
+      fillConfiguredBinaries()
+   }
+
+   /**
+    * JDKs and drop down lists
+    */
+   private fun fillConfiguredBinaries() {
+      jpackageLocations.addAll(configuration.jdkEntries.values)
+      jpackageComboBox.items = jpackageLocations.sorted()
    }
    
    @FXML
@@ -65,16 +82,14 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun newProject() {
       // get a name first
-      val applicationStage = mainJarField.scene.window as Stage
-      val sd = SingleValueDialog(applicationStage, "Project Name", "Choose Project Name", "myProject")
+      val sd = SingleValueDialog(applicationStage(), "Project Name", "Choose Project Name", "myProject")
       val result = sd.showAndWait()
       if (result.ok) {
-         val project = projectService.newProject(result.data)
+         val project = projectService.newProject(result.data!!)
          log.debug("Created project ${project.name}")
          workspace.setCurrentProject(project)
          configuration.eventBus.post(ProjectCreatedEvent(project))
       }
-
    }
 
    @FXML
@@ -92,6 +107,26 @@ class InstallmationController(private val configuration: Configuration,
       }
    }
 
+   @FXML
+   fun configureJPackageBinaries() {
+      val pairs = configuration.jdkEntries.values.map { Pair(it.name, it.path) }
+      val dialog = BinaryArtefactDialog(applicationStage(), "JPackager JDKs", pairs)
+      val result = dialog.showAndWait()
+      if (result.ok) {
+         val jpackageName = result.data?.first
+         val jdk = jpackageComboBox.items.find { it.name == jpackageName }
+         jpackageComboBox.selectionModel.select(jdk)
+      }
+   }
+
+   @FXML
+   fun configureJavaFxBinaries() {
+   }
+
+   private fun applicationStage(): Stage {
+      return mainJarField.scene.window as Stage
+   }
+   
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
@@ -103,17 +138,14 @@ class InstallmationController(private val configuration: Configuration,
 
    @Subscribe
    fun handleProjectUpdated(e: ProjectUpdatedEvent) {
-
    }
 
    @Subscribe
    fun handleProjectDeleted(e: ProjectDeletedEvent) {
-
    }
 
    @Subscribe
    fun handleProjectSaved(e: ProjectSavedEvent) {
-
    }
 
 }
