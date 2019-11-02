@@ -19,4 +19,4 @@
 
 package org.installmation.ui.dialog
 
-class DialogResult<T>(val ok: Boolean, val data: T)
+class DialogResult<T>(val ok: Boolean, val data: T?)
