@@ -16,6 +16,7 @@ import org.installmation.model.binary.JDK
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
 import org.installmation.ui.dialog.BinaryArtefactDialog
+import org.installmation.ui.dialog.MutablePair
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
@@ -109,7 +110,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun configureJPackageBinaries() {
-      val pairs = configuration.jdkEntries.values.map { Pair(it.name, it.path) }
+      val pairs = configuration.jdkEntries.values.map { MutablePair(it.name, it.path) }
       val dialog = BinaryArtefactDialog(applicationStage(), "JPackager JDKs", pairs)
       val result = dialog.showAndWait()
       if (result.ok) {
