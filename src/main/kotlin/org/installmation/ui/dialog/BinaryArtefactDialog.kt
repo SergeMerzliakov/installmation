@@ -31,7 +31,7 @@ import java.io.File
  * Pair<String, File> is a label -> location
  * e.g. "jkd13" -> File("/usr/local/java13")
  */
-class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<Pair<String, File>>) : CustomDialog<Pair<String, File>>(ownerStage, title) {
+class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<MutablePair<String, File>>) : CustomDialog<MutablePair<String, File>>(ownerStage, title) {
 
    private var controller: BinaryArtefactDialogController
 
@@ -43,7 +43,7 @@ class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: L
       stage.scene = Scene(root)
    }
 
-   override fun result(): DialogResult<Pair<String, File>> {
+   override fun result(): DialogResult<MutablePair<String, File>> {
       val v = controller.getValue()
       if (v != null)
          return DialogResult(true, v)

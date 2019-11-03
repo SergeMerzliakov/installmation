@@ -20,8 +20,11 @@
 package org.installmation.ui.dialog
 
 import javafx.collections.FXCollections
+import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.control.*
+import javafx.scene.control.SelectionMode
+import javafx.scene.control.TableColumn
+import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.control.cell.TextFieldTableCell
 import javafx.stage.Stage
@@ -31,34 +34,45 @@ import java.io.File
 /**
  * Data
  */
-class BinaryArtefactDialogController(currentArtefacts: List<Pair<String, File>>) {
+class BinaryArtefactDialogController(currentArtefacts: List<MutablePair<String, File>>) {
 
    private var saved: Boolean = false
-   @FXML lateinit var nameColumn: TableColumn<Pair<String, File>, String>
-   @FXML lateinit var locationColumn: TableColumn<Pair<String, File>, File>
-   @FXML lateinit var artefactTableView: TableView<Pair<String, File>>
+   @FXML lateinit var nameColumn: TableColumn<MutablePair<String, File>, String>
+   @FXML lateinit var locationColumn: TableColumn<MutablePair<String, File>, File>
+   @FXML lateinit var artefactTableView: TableView<MutablePair<String, File>>
 
    // true if user has modified artefact list
    var artefactsUpdated = false
       private set
 
-   private val artefacts = FXCollections.observableArrayList<Pair<String, File>>(currentArtefacts)
+   private val artefacts = FXCollections.observableArrayList<MutablePair<String, File>>(currentArtefacts)
 
    @FXML
    fun initialize() {
       artefactTableView.selectionModel.selectionMode = SelectionMode.SINGLE
-      nameColumn.cellValueFactory = PropertyValueFactory<Pair<String, File>, String>("first")
-      locationColumn.cellValueFactory = PropertyValueFactory<Pair<String, File>, File>("second")
+      nameColumn.cellValueFactory = PropertyValueFactory<MutablePair<String, File>, String>("first")
+      locationColumn.cellValueFactory = PropertyValueFactory<MutablePair<String, File>, File>("second")
       artefactTableView.items = artefacts
 
       nameColumn.cellFactory = TextFieldTableCell.forTableColumn()
       locationColumn.cellFactory = TextFieldTableCell.forTableColumn(FileStringConverter())
+
+      // save tableview cell edits to data model
+      nameColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<MutablePair<String, File>, String>> { t ->
+         val updatedItem = artefacts.find { it.first == t.oldValue }
+         updatedItem?.first = t.newValue
+      }
+
+      locationColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<MutablePair<String, File>, File>> { t ->
+         val updatedItem = artefacts.find { it.first == t.rowValue.first }
+         updatedItem?.second = t.newValue
+      }
    }
 
    /**
     * return null if cancelled dialog
     */
-   fun getValue(): Pair<String, File>? {
+   fun getValue(): MutablePair<String, File>? {
       if (artefactTableView.selectionModel.isEmpty)
          return null
       return artefactTableView.selectionModel.selectedItem
