@@ -7,6 +7,13 @@ So I am writing a GUI tool, similar to exe4j, which generates installers for Mac
 
 I am writing it in Kotlin, as there is no reason to use Java anymore.
 
+The tool will provide the following:
+    
+    1. Ability to create complete installer
+    2. Ability to generate batch scripts for the relevant JPackage commands
+    
+No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
+to complement those approaches.
 
 ### Current State of Master Branch ###
 
