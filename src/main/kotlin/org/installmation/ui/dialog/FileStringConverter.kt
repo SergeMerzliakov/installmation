@@ -6,7 +6,8 @@ import java.io.File
 class FileStringConverter : StringConverter<File>(){
 
    override fun toString(obj: File?): String {
-      return obj?.canonicalPath ?: ""
+      // use path value as is not a relative path
+      return obj?.path ?: ""
    }
 
    override fun fromString(str: String?): File {
