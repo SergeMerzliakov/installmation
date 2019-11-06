@@ -13,6 +13,7 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
@@ -57,7 +58,7 @@ class InstallmationApplication : Application() {
          val configuration = loadConfiguration(eventBus)
          val workspace = loadWorkspace()
          val projectService = ProjectService(configuration)
-         val controller = InstallmationController(configuration, workspace, projectService)
+         val controller = InstallmationController(configuration, UserHistory(), workspace, projectService)
          setupEventHandlers(primaryStage, configuration, workspace)
 
          val loader = FXMLLoader(javaClass.getResource("/installmation.fxml"))

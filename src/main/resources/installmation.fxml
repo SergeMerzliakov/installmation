@@ -143,7 +143,7 @@
                                                                         <Insets left="5.0" right="5.0" />
                                                                     </GridPane.margin>
                                                                 </ComboBox>
-                                                                <Button fx:id="configureJFXButton" mnemonicParsing="false" onAction="#configureJavaFxBinaries" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                                <Button fx:id="configureJFXButton" mnemonicParsing="false" onAction="#configureJavaFxModules" text="Configure" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                                                                     <GridPane.margin>
                                                                         <Insets right="8.0" />
                                                                     </GridPane.margin>

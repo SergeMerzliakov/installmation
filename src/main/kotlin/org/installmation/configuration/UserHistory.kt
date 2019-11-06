@@ -17,35 +17,13 @@
  * under the License.
 **/
 
-package org.installmation.model.binary
+package org.installmation.configuration
 
 import java.io.File
 
-interface JDK {
-   /**
-    * User defined name or label
-    */
-   val name:String
-   
-   /*
-    location full path
-    */
-   val path: File
-   
-   val operatingSystem: OperatingSystem.Type
-   
-   /**
-    * java executable full path
-    */
-   val javaExecutable: File
-   
-   /**
-    * Returns true of JPackage was found (in JDK 14 or later)
-    */
-   val supportsJPackage:Boolean
-
-   /**
-    * jpackage full path is part of JDK14+ used to build installs
-    */
-   val packageExecutable: File
+/**
+ * Stores users last action history for convenience
+ */
+class UserHistory {
+   var lastPath: File = File(Constant.USER_HOME_DIR)
 }

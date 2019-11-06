@@ -22,31 +22,44 @@ package org.installmation.ui.dialog
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.layout.Pane
-import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import java.io.File
+import org.installmation.configuration.UserHistory
 
 /**
  * Dialog for selecting a JDK or JFX install. Can also add items
  * Pair<String, File> is a label -> location
  * e.g. "jkd13" -> File("/usr/local/java13")
  */
-class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<MutablePair<String, File>>) : CustomDialog<MutablePair<String, File>>(ownerStage, title) {
+class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<BinaryArtefactDialogController.Item>, userHistory: UserHistory) : CustomDialog<BinaryArtefactDialogController.Item>(ownerStage, title) {
 
    private var controller: BinaryArtefactDialogController
 
    init {
       val loader = FXMLLoader(javaClass.classLoader.getResource("dialog/binaryArtefactDialog.fxml"))
-      controller = BinaryArtefactDialogController(currentArtefacts)
+      controller = BinaryArtefactDialogController(currentArtefacts, userHistory)
       loader.setController(controller)
       val root = loader.load<Pane>()
       stage.scene = Scene(root)
    }
 
-   override fun result(): DialogResult<MutablePair<String, File>> {
-      val v = controller.getValue()
+   override fun result(): DialogResult<BinaryArtefactDialogController.Item> {
+      val v = controller.getSelected()
       if (v != null)
          return DialogResult(true, v)
-      return DialogResult(false, null)
+      else {
+         return if (controller.modelUpdated)
+            DialogResult(true, null)
+         else
+            DialogResult(false, null)
+      }
+   }
+
+   /**
+    * If model updated return it, otherwise return null
+    */
+   fun updatedModel(): List<BinaryArtefactDialogController.Item>? {
+      if (controller.modelUpdated)
+         return controller.artefacts()
+      return null
    }
 }
