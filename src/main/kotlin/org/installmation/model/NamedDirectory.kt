@@ -5,5 +5,5 @@ import java.io.File
 /**
  * Directory with a user defined name or label
  */
-class NamedDirectory(val name:String, var path: File) {
+class NamedDirectory(var name:String, var path: File) {
 }

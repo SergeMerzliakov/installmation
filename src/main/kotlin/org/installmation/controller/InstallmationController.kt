@@ -20,7 +20,6 @@ import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
 import org.installmation.ui.dialog.BinaryArtefactDialog
-import org.installmation.ui.dialog.BinaryArtefactDialogController
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
 
@@ -129,7 +128,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun configureJPackageBinaries() {
-      val pairs = configuration.jdkEntries.values.map { BinaryArtefactDialogController.Item(it.name, it.name, it.path) }
+      val pairs = configuration.jdkEntries.values.map { NamedDirectory(it.name, it.path) }
       val dialog = BinaryArtefactDialog(applicationStage(), "JPackager JDKs", pairs, userHistory)
       val result = dialog.showAndWait()
       if (result.ok) {
@@ -147,7 +146,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun configureJavaFxModules() {
-      val pairs = configuration.javafxModuleEntries.map { BinaryArtefactDialogController.Item(it.key, it.key, it.value) }
+      val pairs = configuration.javafxModuleEntries.map { NamedDirectory(it.key, it.value) }
       val dialog = BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", pairs, userHistory)
       val result = dialog.showAndWait()
       if (result.ok) {

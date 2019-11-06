@@ -24,13 +24,14 @@ import javafx.scene.Scene
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
 import org.installmation.configuration.UserHistory
+import org.installmation.model.NamedDirectory
 
 /**
  * Dialog for selecting a JDK or JFX install. Can also add items
  * Pair<String, File> is a label -> location
  * e.g. "jkd13" -> File("/usr/local/java13")
  */
-class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<BinaryArtefactDialogController.Item>, userHistory: UserHistory) : CustomDialog<BinaryArtefactDialogController.Item>(ownerStage, title) {
+class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: List<NamedDirectory>, userHistory: UserHistory) : CustomDialog<NamedDirectory>(ownerStage, title) {
 
    private var controller: BinaryArtefactDialogController
 
@@ -42,7 +43,7 @@ class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: L
       stage.scene = Scene(root)
    }
 
-   override fun result(): DialogResult<BinaryArtefactDialogController.Item> {
+   override fun result(): DialogResult<NamedDirectory> {
       val v = controller.getSelected()
       if (v != null)
          return DialogResult(true, v)
@@ -57,7 +58,7 @@ class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: L
    /**
     * If model updated return it, otherwise return null
     */
-   fun updatedModel(): List<BinaryArtefactDialogController.Item>? {
+   fun updatedModel(): List<NamedDirectory>? {
       if (controller.modelUpdated)
          return controller.artefacts()
       return null

@@ -32,62 +32,60 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.UserHistory
+import org.installmation.model.NamedDirectory
 import java.io.File
 import kotlin.random.Random
 
 
-class BinaryArtefactDialogController(currentArtefacts: List<Item>, private val userHistory: UserHistory) {
+class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, private val userHistory: UserHistory) {
 
    companion object {
       val log: Logger = LogManager.getLogger(BinaryArtefactDialogController::class.java)
    }
 
-   // identifier is a reference to original object
-   class Item(val identifier: String, var name: String, var path: File)
-
-   @FXML lateinit var nameColumn: TableColumn<Item, String>
-   @FXML lateinit var locationColumn: TableColumn<Item, File>
-   @FXML lateinit var artefactTableView: TableView<Item>
+   @FXML lateinit var nameColumn: TableColumn<NamedDirectory, String>
+   @FXML lateinit var locationColumn: TableColumn<NamedDirectory, File>
+   @FXML lateinit var artefactTableView: TableView<NamedDirectory>
 
    // true if user has modified artefact list
    private var save = false
    var modelUpdated = false
       private set
 
-   private val artefacts = FXCollections.observableArrayList<Item>(currentArtefacts)
+   private val artefacts = FXCollections.observableArrayList<NamedDirectory>(currentArtefacts)
 
    @FXML
    fun initialize() {
       artefactTableView.selectionModel.selectionMode = SelectionMode.SINGLE
-      nameColumn.cellValueFactory = PropertyValueFactory<Item, String>("name")
-      locationColumn.cellValueFactory = PropertyValueFactory<Item, File>("path")
+      nameColumn.cellValueFactory = PropertyValueFactory<NamedDirectory, String>("name")
+      locationColumn.cellValueFactory = PropertyValueFactory<NamedDirectory, File>("path")
       artefactTableView.items = artefacts.sorted()
 
       nameColumn.cellFactory = TextFieldTableCell.forTableColumn()
       locationColumn.cellFactory = TextFieldTableCell.forTableColumn(FileStringConverter())
 
       // save tableview cell edits to data model
-      nameColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<Item, String>> { t ->
-         val updatedItem = artefacts.find { it.identifier == t.oldValue }
+      nameColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<NamedDirectory, String>> { t ->
+         val updatedItem = artefacts.find { it.name == t.oldValue }
          updatedItem?.name = t.newValue
          modelUpdated = true
       }
 
-      locationColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<Item, File>> { t ->
+      locationColumn.onEditCommit = EventHandler<TableColumn.CellEditEvent<NamedDirectory, File>> { t ->
          val updatedItem = artefacts.find { it.name == t.rowValue.name }
          updatedItem?.path = t.newValue
          modelUpdated = true
       }
    }
 
-   fun getSelected(): Item? {
+   fun getSelected(): NamedDirectory? {
       return artefactTableView.selectionModel.selectedItem
    }
 
    /**
     * Return the updated artefacts. Only useful if modelUpdated is true
     */
-   fun artefacts(): List<Item> {
+   fun artefacts(): List<NamedDirectory> {
       return artefacts
    }
 
@@ -114,7 +112,7 @@ class BinaryArtefactDialogController(currentArtefacts: List<Item>, private val u
       if (chosen != null) {
          userHistory.lastPath = chosen.parentFile
          val id = "artefact-${Random.nextInt(99, 9999)}"
-         val addedItem = Item(id, id, chosen)
+         val addedItem = NamedDirectory(id, chosen)
          artefacts.add(addedItem)
          log.debug("Added new artefact $id at ${chosen.canonicalPath}")
          modelUpdated = true
