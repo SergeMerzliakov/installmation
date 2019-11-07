@@ -20,11 +20,10 @@
 package org.installmation.ui.dialog
 
 import javafx.collections.FXCollections
+import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.control.SelectionMode
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
+import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.control.cell.TextFieldTableCell
 import javafx.stage.DirectoryChooser
@@ -46,7 +45,8 @@ class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, pri
    @FXML lateinit var nameColumn: TableColumn<NamedDirectory, String>
    @FXML lateinit var locationColumn: TableColumn<NamedDirectory, File>
    @FXML lateinit var artefactTableView: TableView<NamedDirectory>
-
+   @FXML lateinit var tableContextMenu: ContextMenu
+   
    // true if user has modified artefact list
    private var save = false
    var modelUpdated = false
@@ -56,6 +56,11 @@ class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, pri
 
    @FXML
    fun initialize() {
+      initializeTableView()
+      initializeContextMenu()
+   }
+
+   private fun initializeTableView() {
       artefactTableView.selectionModel.selectionMode = SelectionMode.SINGLE
       nameColumn.cellValueFactory = PropertyValueFactory<NamedDirectory, String>("name")
       locationColumn.cellValueFactory = PropertyValueFactory<NamedDirectory, File>("path")
@@ -78,6 +83,19 @@ class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, pri
       }
    }
 
+   private fun initializeContextMenu() {
+      val removeMenuItem = MenuItem("Remove")
+      removeMenuItem.onAction = EventHandler<ActionEvent> {
+         if (!artefactTableView.selectionModel.isEmpty) {
+            artefacts.remove(artefactTableView.selectionModel.selectedItem)
+            modelUpdated = true
+         }
+      }
+
+      tableContextMenu.items.add(removeMenuItem)
+   }
+   
+   
    fun getSelected(): NamedDirectory? {
       return artefactTableView.selectionModel.selectedItem
    }
