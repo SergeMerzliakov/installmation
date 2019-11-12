@@ -123,10 +123,10 @@ class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, pri
 
    @FXML
    fun addBinaryArtefact() {
-      val fileChooser = DirectoryChooser()
-      fileChooser.title = "Add Artefact Directory"
-      fileChooser.initialDirectory = userHistory.lastPath
-      val chosen = fileChooser.showDialog(artefactTableView.scene.window as Stage)
+      val chooser = DirectoryChooser()
+      chooser.title = "Add Artefact Directory"
+      chooser.initialDirectory = userHistory.lastPath
+      val chosen = chooser.showDialog(artefactTableView.scene.window as Stage)
       if (chosen != null) {
          userHistory.lastPath = chosen.parentFile
          val id = "artefact-${Random.nextInt(99, 9999)}"
