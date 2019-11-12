@@ -22,6 +22,7 @@ import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
+import org.installmation.ui.dialog.AboutDialog
 import org.installmation.ui.dialog.BinaryArtefactDialog
 import org.installmation.ui.dialog.SingleValueDialog
 import java.io.File
@@ -181,6 +182,12 @@ class InstallmationController(private val configuration: Configuration,
          val mod = javafxComboBox.items.find { it.name == fxModule }
          javafxComboBox.selectionModel.select(mod)
       }
+   }
+
+   @FXML
+   fun aboutDialog() {
+      val dialog = AboutDialog(applicationStage())
+      dialog.showAndWait()
    }
 
    private fun applicationStage(): Stage {
