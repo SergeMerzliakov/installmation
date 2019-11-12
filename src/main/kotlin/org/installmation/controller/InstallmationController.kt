@@ -4,7 +4,10 @@ import com.google.common.eventbus.Subscribe
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
 import javafx.scene.control.*
+import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.Pane
 import javafx.stage.Stage
 import javafx.util.StringConverter
 import org.apache.logging.log4j.LogManager
@@ -34,6 +37,7 @@ class InstallmationController(private val configuration: Configuration,
    }
 
    @FXML private lateinit var applicationMenuBar: MenuBar
+   @FXML private lateinit var dependenciesPane: AnchorPane
    @FXML private lateinit var newProjectMenuItem: MenuItem
    @FXML private lateinit var openProjectMenuItem: MenuItem
    @FXML private lateinit var projectNameField: TextField
@@ -49,6 +53,12 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var modulePathListView: ListView<File>
    @FXML private lateinit var shutdownMenu: Menu
 
+
+   private var dependenciesController = DependenciesController(configuration,
+         userHistory,
+         workspace,
+         projectService)
+   
    //model
    private val jpackageLocations: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
    private val javafxLocations: ObservableList<NamedDirectory> = FXCollections.observableArrayList<NamedDirectory>()
@@ -62,14 +72,20 @@ class InstallmationController(private val configuration: Configuration,
       if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
          shutdownMenu.isDisable = true
          shutdownMenu.isVisible = false
+         applicationMenuBar.useSystemMenuBarProperty().set(true)
       }
-      fillConfiguredBinaries()
+      initializeChildControllers()
+      initiializeConfiguredBinaries()
    }
 
+   private fun initializeChildControllers() {
+      // load file list UI and insert into it's pane in the application
+      val fileListPane = setupChildController("/dependenciesTab.fxml", dependenciesController, dependenciesPane)
+   }
    /**
     * JDKs and drop down lists
     */
-   private fun fillConfiguredBinaries() {
+   private fun initiializeConfiguredBinaries() {
       jpackageLocations.addAll(configuration.jdkEntries.values)
       jpackageComboBox.items = jpackageLocations.sorted()
 
@@ -169,6 +185,19 @@ class InstallmationController(private val configuration: Configuration,
 
    private fun applicationStage(): Stage {
       return mainJarField.scene.window as Stage
+   }
+
+   private fun setupChildController(fxmlPath: String, controller: Any, parent: Pane) {
+      log.debug("Loading child controller from $fxmlPath")
+      val loader = FXMLLoader(javaClass.getResource(fxmlPath))
+      loader.setController(controller)
+      val pane = loader.load<Pane>()
+      AnchorPane.setTopAnchor(pane, 0.0)
+      AnchorPane.setLeftAnchor(pane, 0.0)
+      AnchorPane.setBottomAnchor(pane, 0.0)
+      AnchorPane.setRightAnchor(pane, 0.0)
+      parent.children.add(pane)
+      log.debug("Child controller initialized successfully - $fxmlPath")
    }
    
    //-------------------------------------------------------
