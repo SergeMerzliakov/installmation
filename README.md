@@ -17,11 +17,22 @@ to complement those approaches.
 
 ### Current State of Master Branch ###
 
-Rudimentary GUI mockup which runs with the gradle command (under Java 11 or later)
+Before You run update this variable in the build.gradle file to location of your OpenJFX install
+
+    def JFX_INSTALL = '/Library/Java/javafx/13.0'
+
+
+This path should contain an OpenJFX install:
+
+    /libs
+    /jmods
+
+
+You can run the latest version (rudimentary so far) with the gradle command (under Java 11 or later)
  
     gradlew runApp
 
-Application starts and does very little.
+Application starts and currently does very little.
 
 
 ### Prequisites
