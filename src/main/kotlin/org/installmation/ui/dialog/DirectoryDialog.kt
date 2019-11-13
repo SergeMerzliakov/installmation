@@ -33,9 +33,10 @@ object ChooseDirectoryDialog {
       chooser.title = title
       chooser.initialDirectory = userHistory.lastPath
       val chosen = chooser.showDialog(parent)
-      userHistory.lastPath = chosen.parentFile
-      if (chosen != null) 
+      if (chosen != null) {
+         userHistory.lastPath = chosen.parentFile
          return DialogResult(true, chosen)
+      }
       return DialogResult(false, chosen)
    }
 }
