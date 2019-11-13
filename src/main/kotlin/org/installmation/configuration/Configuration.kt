@@ -24,6 +24,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.model.binary.JDK
 import java.io.File
+import java.util.*
 
 /**
  * JSON format
@@ -46,12 +47,16 @@ class Configuration(bus: EventBus? = null, val baseDirectory: File = File(Consta
    val jdkEntries = mutableMapOf<String, JDK>()
    val javafxLibEntries = mutableMapOf<String, File>()   // each lib dir in FX Directory
    val javafxModuleEntries = mutableMapOf<String, File>()  // each jmods dir in FX Directory
+   @Transient val resourceBundle:ResourceBundle
    @Transient lateinit var eventBus: EventBus 
    
    init {
       log.trace("Configuration base directory set to $baseDirectory")
       if (bus != null)
          eventBus = bus
+      log.trace("Loading messages from resource bundle for default locale ${Locale.getDefault().language}")
+      resourceBundle = ResourceBundle.getBundle("i18n/messages")
+      log.trace("Configuration setup successfully")
    }
 
    /**
