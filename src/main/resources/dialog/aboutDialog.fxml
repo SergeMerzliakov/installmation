@@ -28,7 +28,7 @@
                   <Insets right="5.0" />
                </GridPane.margin>
             </Label>
-            <Button cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#close" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="okButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#close" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <padding>
                   <Insets left="30.0" right="30.0" />
                </padding>

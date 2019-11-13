@@ -11,3 +11,27 @@
     -fx-max-width: 80px;
     -fx-font-size: 8px;
 }
+
+.help-button {
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-min-width: 32px;
+    -fx-max-width: 32px;
+    -fx-font-size: 10px;
+    -fx-padding: 0px;
+    -fx-border-width: 2px;
+    -fx-font-weight: bold;
+    -fx-text-fill: darkblue;
+}
+
+.title-2{
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-font-family: Verdana,sans-serif;
+}
+
+.tooltip-helptext{
+    -fx-show-delay: 300ms;
+    -fx-text-alignment: justify;
+    -fx-wrap-text: true;
+}

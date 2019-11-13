@@ -25,7 +25,6 @@ import javafx.fxml.FXML
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.ListView
 import javafx.scene.control.MenuItem
-import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -85,7 +84,7 @@ class DependenciesController(private val configuration: Configuration,
          // TODO - Here
          //workspace.currentProject
 
-         log.debug("Added ${result.data!!.path} to classpath")
+         log.debug("Added ${result.data.path} to classpath")
       }
    }
 
@@ -96,7 +95,7 @@ class DependenciesController(private val configuration: Configuration,
          moduleItems.add(result.data!!.path)
          // TODO - Here
          //workspace.currentProject
-         log.debug("Added ${result.data!!.path} to modules")
+         log.debug("Added ${result.data.path} to modules")
       }
    }
 

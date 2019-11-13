@@ -39,6 +39,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML private lateinit var applicationMenuBar: MenuBar
    @FXML private lateinit var dependenciesPane: AnchorPane
+   @FXML private lateinit var locationPane: AnchorPane
    @FXML private lateinit var newProjectMenuItem: MenuItem
    @FXML private lateinit var openProjectMenuItem: MenuItem
    @FXML private lateinit var projectNameField: TextField
@@ -54,11 +55,16 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var modulePathListView: ListView<File>
    @FXML private lateinit var shutdownMenu: Menu
 
-
    private var dependenciesController = DependenciesController(configuration,
          userHistory,
          workspace,
          projectService)
+   
+   private var locationController = LocationController(configuration,
+         userHistory,
+         workspace,
+         projectService)
+
    
    //model
    private val jpackageLocations: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
@@ -81,7 +87,9 @@ class InstallmationController(private val configuration: Configuration,
 
    private fun initializeChildControllers() {
       // load file list UI and insert into it's pane in the application
-      val fileListPane = setupChildController("/dependenciesTab.fxml", dependenciesController, dependenciesPane)
+      setupChildController("/dependenciesTab.fxml", dependenciesController, dependenciesPane)
+      setupChildController("/locationTab.fxml", locationController, locationPane)
+      
    }
    /**
     * JDKs and drop down lists

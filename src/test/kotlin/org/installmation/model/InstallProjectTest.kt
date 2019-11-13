@@ -33,7 +33,7 @@ class InstallProjectTest {
    gradlew imageJar             ==> action create main jar file 
    gradlew lib                  ==> copy depedencies here
    cd installer/mac
-   export JPACKAGE=/Users/loyaltyuser/tools/jpackage49/Contents/Home/bin/jpackage
+   export JPACKAGE=/Users/foo/tools/jpackage49/Contents/Home/bin/jpackage
    $JPACKAGE 
       --package-type app-image 
       -d ../../image-build 
@@ -46,19 +46,16 @@ class InstallProjectTest {
     */
    @Test
    fun shouldCreateImage() {
-      val packageJdk = MacJDK("myJDK", File("/Users/loyaltyuser/tools/jpackage49"))
-      val jpackage = JPackageExecutable(packageJdk.packageExecutable)
-      val proj = InstallProject()
-      proj.name = "CobolBrowser"
-      proj.version = "1.0"
-      proj.jpackage = jpackage
-      proj.imageStructure = SimpleImageStructure()
+      // TODO
+   }
 
-      // some directories have a role such as classpath
-      proj.imageStructure?.addDirectory("lib")
-      proj.imageStructure?.addFile("main.jar")
-
-      proj.imageContentDirectory = File("imageBuild")
-      proj.imageBuildDirectory = File("imageBuild")
+   //   export JPACKAGE=/Users/foo/tools/jpackage49/Contents/Home/bin/jpackage
+   //   $JPACKAGE --package-type pkg 
+   //   -d ../../image-build 
+   //   --name demoApplication1 
+   //   --app-image ../../image-build/demo1.app
+   @Test
+   fun shouldCreatePackage() {
+      //TODO
    }
 }
