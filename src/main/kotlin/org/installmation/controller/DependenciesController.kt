@@ -1,3 +1,22 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ **/
+
 package org.installmation.controller
 
 import javafx.collections.FXCollections
@@ -14,6 +33,7 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
 import org.installmation.service.ProjectService
+import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
 
 
@@ -59,27 +79,24 @@ class DependenciesController(private val configuration: Configuration,
 
    @FXML
    fun addClasspathItem() {
-      val chooser = DirectoryChooser()
-      chooser.title = "Add Classpath Item"
-      chooser.initialDirectory = userHistory.lastPath
-      val chosen = chooser.showDialog(moduleListView.scene.window as Stage)
-      if (chosen != null) {
-         userHistory.lastPath = chosen.parentFile
-         classpathItems.add(chosen.path)
-         log.debug("Added ${chosen.path} to classpath")
+      val result = ChooseDirectoryDialog.showAndWait(moduleListView.scene.window as Stage, "Add Classpath Item", userHistory)
+      if (result.ok) {
+         classpathItems.add(result.data!!.path)
+         // TODO - Here
+         //workspace.currentProject
+
+         log.debug("Added ${result.data!!.path} to classpath")
       }
    }
 
    @FXML
    fun addModuleItem() {
-      val chooser = DirectoryChooser()
-      chooser.title = "Add Module Item"
-      chooser.initialDirectory = userHistory.lastPath
-      val chosen = chooser.showDialog(moduleListView.scene.window as Stage)
-      if (chosen != null) {
-         userHistory.lastPath = chosen.parentFile
-         moduleItems.add(chosen.path)
-         log.debug("Added ${chosen.path} to modules")
+      val result = ChooseDirectoryDialog.showAndWait(moduleListView.scene.window as Stage, "Add Module Item", userHistory)
+      if (result.ok) {
+         moduleItems.add(result.data!!.path)
+         // TODO - Here
+         //workspace.currentProject
+         log.debug("Added ${result.data!!.path} to modules")
       }
    }
 
