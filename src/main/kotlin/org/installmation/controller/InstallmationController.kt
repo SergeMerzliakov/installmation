@@ -214,6 +214,42 @@ class InstallmationController(private val configuration: Configuration,
       dialog.showAndWait()
    }
 
+   /**
+    * Generate in a single directory all the artefacts required for the install, but NOT
+    * the final installer
+    */
+   @FXML
+   fun generateImage() {
+
+   }
+
+   /*
+     Will generate full installer file, creating an image as well
+    */
+   @FXML
+   fun generateInstaller() {
+
+   }
+
+   /**
+    * Generate scripts of creating images and installers for
+    * Mac/Linux and Windows
+    */
+   @FXML
+   fun generateScripts() {
+
+   }
+
+   @FXML
+   fun showAllJDK() {
+
+   }
+
+   @FXML
+   fun showAllJavaFX() {
+
+   }
+   
    private fun applicationStage(): Stage {
       return mainJarField.scene.window as Stage
    }
