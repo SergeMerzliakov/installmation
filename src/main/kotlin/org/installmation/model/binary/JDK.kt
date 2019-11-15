@@ -16,13 +16,10 @@
 
 package org.installmation.model.binary
 
+import org.installmation.core.UserNamed
 import java.io.File
 
-interface JDK {
-   /**
-    * User defined name or label
-    */
-   val name:String
+interface JDK : UserNamed {
    
    /*
     location full path

@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.installmation.model
-
-import org.installmation.core.UserNamed
-import java.io.File
+package org.installmation.core
 
 /**
- * Directory with a user defined name or label
+ * for all things with a user defined name or label, and
+ * never used as a unique identifier
  */
-class NamedDirectory(override var name: String, var path: File) : UserNamed
+interface UserNamed {
+
+   /**
+    * User defined name or label
+    */
+   val name:String
+
+}
