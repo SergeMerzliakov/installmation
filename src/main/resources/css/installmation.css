@@ -23,9 +23,3 @@
     -fx-font-size: 14px;
     -fx-font-family: Verdana,sans-serif;
 }
-
-.tooltip-helptext{
-    -fx-show-delay: 300ms;
-    -fx-text-alignment: justify;
-    -fx-wrap-text: true;
-}
