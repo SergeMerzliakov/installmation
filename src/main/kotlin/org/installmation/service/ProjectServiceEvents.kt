@@ -29,4 +29,6 @@ class ProjectUpdatedEvent(p: InstallProject) : ProjectEvent(p)
 
 class ProjectSavedEvent(p: InstallProject) : ProjectEvent(p)
 
+class ProjectClosedEvent(p: InstallProject) : ProjectEvent(p)
+
 class ProjectDeletedEvent(p: InstallProject) : ProjectEvent(p)

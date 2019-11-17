@@ -54,4 +54,12 @@ class Workspace {
       projectHistory[p.name!!] = p.projectFile()
       log.debug("Workspace current project is set to '${p.name}'")
    }
+
+   fun closeCurrentProject() {
+      if (currentProject != null) {
+         log.debug("Project '${currentProject!!.name}' closed")
+         // TODO more
+      }
+   }
+
 }

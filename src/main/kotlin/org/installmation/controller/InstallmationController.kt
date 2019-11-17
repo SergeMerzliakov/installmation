@@ -55,8 +55,6 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var applicationMenuBar: MenuBar
    @FXML private lateinit var dependenciesPane: AnchorPane
    @FXML private lateinit var locationPane: AnchorPane
-   @FXML private lateinit var newProjectMenuItem: MenuItem
-   @FXML private lateinit var openProjectMenuItem: MenuItem
    @FXML private lateinit var projectNameField: TextField
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
@@ -158,6 +156,17 @@ class InstallmationController(private val configuration: Configuration,
    }
 
    @FXML
+   fun closeProject() {
+      val current = workspace.currentProject
+      if (current != null) {
+         //save then close
+         projectService.saveProject(current)
+         configuration.eventBus.post(ProjectSavedEvent(current))
+         configuration.eventBus.post(ProjectClosedEvent(current))
+      }
+   }
+   
+   @FXML
    fun saveProject() {
       val current = workspace.currentProject
       if (current != null) {
@@ -168,8 +177,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun configureJPackageBinaries() {
-      val pairs = jpackageLocations.map { NamedDirectory(it.name, it.path) }
-      val dialog = BinaryArtefactDialog(applicationStage(), "JPackager JDKs", pairs, userHistory)
+      val dialog = jdkDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
          ComboUtils.comboSelect(jpackageComboBox, result.data?.name)
@@ -183,8 +191,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun configureJavaFxModules() {
-      val items = javafxLocations.map { NamedDirectory(it.name, it.path) }
-      val dialog = BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
+      val dialog = javaFXFDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
          ComboUtils.comboSelect(javafxComboBox, result.data?.name)
@@ -230,8 +237,7 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun showAllJDK() {
-      val items = jpackageLocations.map { NamedDirectory(it.name, it.path) }
-      val dialog = BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
+      val dialog = jdkDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
          // update jdk entries 
@@ -244,11 +250,29 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun showAllJavaFX() {
-
+      val dialog = javaFXFDialog()
+      val result = dialog.showAndWait()
+      if (result.ok) {
+         // update model
+         val updatedModel = dialog.updatedModel()
+         if (updatedModel != null) {
+            configuration.eventBus.post(JFXModuleUpdatedEvent(updatedModel))
+         }
+      }
    }
    
    private fun applicationStage(): Stage {
       return mainJarField.scene.window as Stage
+   }
+
+   private fun jdkDialog(): BinaryArtefactDialog {
+      val items = jpackageLocations.map { NamedDirectory(it.name, it.path) }
+      return BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
+   }
+   
+   private fun javaFXFDialog(): BinaryArtefactDialog {
+      val items = javafxLocations.map { NamedDirectory(it.name, it.path) }
+      return BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
    }
 
    private fun setupChildController(fxmlPath: String, controller: Any, parent: Pane) {
@@ -285,6 +309,15 @@ class InstallmationController(private val configuration: Configuration,
    fun handleProjectSaved(e: ProjectSavedEvent) {
    }
 
+   @Subscribe
+   fun handleProjectClosed(e: ProjectClosedEvent) {
+      workspace.closeCurrentProject()
+      projectNameField.text = null
+      mainJarField.text = null
+      mainClassField.text = null
+      copyrightField.text = null
+      applicationVersionField.text = null
+   }
 
    /**
     * Clear out and refresh list of JDKs from this controller's model
@@ -315,7 +348,6 @@ class InstallmationController(private val configuration: Configuration,
          configuration.javafxModuleEntries[it.name] = it.path
       }
    }
-
 }
 
 

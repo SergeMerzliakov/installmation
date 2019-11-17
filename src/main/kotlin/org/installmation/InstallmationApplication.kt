@@ -17,6 +17,7 @@
 package org.installmation
 
 import com.google.common.eventbus.EventBus
+import com.google.common.eventbus.Subscribe
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -35,6 +36,8 @@ import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.JsonParserFactory
 import org.installmation.model.Workspace
+import org.installmation.service.ProjectClosedEvent
+import org.installmation.service.ProjectCreatedEvent
 import org.installmation.service.ProjectService
 import java.io.File
 
@@ -43,13 +46,15 @@ class InstallmationApplication : Application() {
 
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
-
+      const val WINDOW_TITLE = "Installmation"
+      
       @JvmStatic
       fun main(args: Array<String>) {
          launch(InstallmationApplication::class.java, *args)
       }
    }
 
+   private lateinit var applicationStage: Stage
    private val eventBus = EventBus("installmationApp")
    
    private fun setupEventHandlers(stage: Stage, configuration: Configuration, workspace: Workspace) {
@@ -68,9 +73,10 @@ class InstallmationApplication : Application() {
    }
    
    override fun start(primaryStage: Stage) {
+      applicationStage = primaryStage
       try {
          log.info("Starting Installmation from ${File(".").canonicalPath}")
-
+         eventBus.register(this)
          val configuration = loadConfiguration(eventBus)
          val workspace = loadWorkspace()
          val projectService = ProjectService(configuration)
@@ -80,7 +86,7 @@ class InstallmationApplication : Application() {
          val loader = FXMLLoader(javaClass.getResource("/installmation.fxml"))
          loader.setController(controller)
          val root = loader.load<Pane>()
-         primaryStage.title = "Installmation"
+         primaryStage.title = WINDOW_TITLE
          primaryStage.scene = Scene(root)
          primaryStage.show()
       } catch (e: Throwable) {
@@ -143,4 +149,19 @@ class InstallmationApplication : Application() {
          return Configuration(eventBus)
       }
    }
+
+   //-------------------------------------------------------
+   //  Event Subscribers
+   //-------------------------------------------------------
+
+   @Subscribe
+   fun handleProjectCreated(e: ProjectCreatedEvent) {
+      applicationStage.title = "${WINDOW_TITLE} - ${e.project.name}"
+   }
+
+   @Subscribe
+   fun handleProjectClosed(e: ProjectClosedEvent) {
+      applicationStage.title = WINDOW_TITLE
+   }
 }
+

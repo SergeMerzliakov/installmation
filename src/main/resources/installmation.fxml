@@ -30,9 +30,10 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
-                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Project" />
-                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
+                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Library">

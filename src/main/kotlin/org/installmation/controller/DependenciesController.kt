@@ -16,6 +16,7 @@
 
 package org.installmation.controller
 
+import com.google.common.eventbus.Subscribe
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -28,6 +29,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
+import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
@@ -99,6 +101,12 @@ class DependenciesController(private val configuration: Configuration,
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
+
+   @Subscribe
+   fun handleProjectClosed(e: ProjectClosedEvent) {
+      classPathListView.items.clear()
+      moduleListView.items.clear()
+   }
 
 }
 
