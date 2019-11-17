@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar fx:id="applicationMenuBar">
@@ -26,6 +36,13 @@
                         <MenuItem mnemonicParsing="false" text="JavaFX Library" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Generate">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#generateScripts" text="Generate Installer Scripts" />
+                  <MenuItem mnemonicParsing="false" onAction="#generateImage" text="Generate Image" />
+                  <MenuItem mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#aboutDialog" text="About" />
@@ -43,9 +60,18 @@
                 </ToolBar>
             <ToolBar maxWidth="1.7976931348623157E308" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
-                  <Button mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts" />
-                        <Button mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image" />
-                  <Button mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button" text="Installer" />
+                  <Button mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts" textAlignment="JUSTIFY">
+                     <tooltip>
+                        <Tooltip fx:id="generateScriptTooltip" textAlignment="JUSTIFY" wrapText="true" />
+                     </tooltip></Button>
+                        <Button mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image" textAlignment="JUSTIFY">
+                     <tooltip>
+                        <Tooltip fx:id="generateImageTooltip" textAlignment="JUSTIFY" wrapText="true" />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button" text="Installer" textAlignment="JUSTIFY">
+                     <tooltip>
+                        <Tooltip fx:id="generateInstallerTooltip" text="Empty Tooltip" textAlignment="JUSTIFY" wrapText="true" />
+                     </tooltip></Button>
               </items>
             </ToolBar>
                 <SplitPane dividerPositions="0.1" layoutX="128.0" layoutY="63.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
@@ -62,19 +88,17 @@
                               </Tab>
                                         <Tab text="General Info">
                                             <content>
-                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
+                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab text="Java Binaries">
                                             <content>
-                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab text=" Application Executable">
                                             <content>
-                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
+                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab text="Dependencies">
@@ -90,8 +114,8 @@
                 </SplitPane>
             </children>
             <stylesheets>
-                <URL value="@../css/installmation.css"/>
-                <URL value="@../css/bootstrap3.css"/>
+                <URL value="@../css/installmation.css" />
+                <URL value="@../css/bootstrap3.css" />
             </stylesheets>
         </AnchorPane>
     </children>

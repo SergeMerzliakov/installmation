@@ -21,6 +21,7 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuBar
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
@@ -44,6 +45,9 @@ class InstallmationController(private val configuration: Configuration,
    
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationController::class.java)
+      const val PROPERTY_HELP_GENERATE_SCRIPTS = "help.generate.scripts"
+      const val PROPERTY_HELP_GENERATE_IMAGE = "help.generate.image"
+      const val PROPERTY_HELP_GENERATE_INSTALLER = "help.generate.installer"
    }
 
    @FXML private lateinit var applicationMenuBar: MenuBar
@@ -53,6 +57,10 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var generalInfoPane: AnchorPane
    @FXML private lateinit var executablePane: AnchorPane
    @FXML private lateinit var shutdownMenu: Menu
+
+   @FXML private lateinit var generateScriptTooltip :Tooltip
+   @FXML private lateinit var generateImageTooltip :Tooltip
+   @FXML private lateinit var generateInstallerTooltip : Tooltip
 
    private var dependenciesController = DependenciesController(configuration,
          userHistory,
@@ -92,8 +100,16 @@ class InstallmationController(private val configuration: Configuration,
          applicationMenuBar.useSystemMenuBarProperty().set(true)
       }
       initializeChildControllers()
+      initializeTooltips()
    }
 
+   private fun initializeTooltips() {
+      generateScriptTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_SCRIPTS)
+      generateImageTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_IMAGE)
+      generateInstallerTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_INSTALLER)
+   }
+   
+   
    private fun initializeChildControllers() {
       // load file list UI and insert into it's pane in the application
       setupChildController("/fxml/dependenciesTab.fxml", dependenciesController, dependenciesPane)
