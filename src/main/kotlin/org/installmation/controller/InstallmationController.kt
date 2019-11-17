@@ -17,30 +17,24 @@
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.scene.control.*
+import javafx.scene.control.Menu
+import javafx.scene.control.MenuBar
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
-import javafx.util.StringConverter
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.io.ApplicationJsonWriter
-import org.installmation.javafx.ComboUtils
 import org.installmation.model.*
-import org.installmation.model.binary.JDK
-import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
 import org.installmation.ui.dialog.AboutDialog
 import org.installmation.ui.dialog.BinaryArtefactDialog
 import org.installmation.ui.dialog.SingleValueDialog
-import java.io.File
 
 
 class InstallmationController(private val configuration: Configuration,
@@ -55,17 +49,9 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var applicationMenuBar: MenuBar
    @FXML private lateinit var dependenciesPane: AnchorPane
    @FXML private lateinit var locationPane: AnchorPane
-   @FXML private lateinit var projectNameField: TextField
-   @FXML private lateinit var applicationVersionField: TextField
-   @FXML private lateinit var copyrightField: TextField
-   @FXML private lateinit var jpackageComboBox: ComboBox<JDK>
-   @FXML private lateinit var configureJPackageButton: Button
-   @FXML private lateinit var javafxComboBox: ComboBox<NamedDirectory>
-   @FXML private lateinit var configureJFXButton: Button
-   @FXML private lateinit var mainJarField: TextField
-   @FXML private lateinit var mainClassField: TextField
-   @FXML private lateinit var classPathListView: ListView<File>
-   @FXML private lateinit var modulePathListView: ListView<File>
+   @FXML private lateinit var binariesPane: AnchorPane
+   @FXML private lateinit var generalInfoPane: AnchorPane
+   @FXML private lateinit var executablePane: AnchorPane
    @FXML private lateinit var shutdownMenu: Menu
 
    private var dependenciesController = DependenciesController(configuration,
@@ -78,10 +64,21 @@ class InstallmationController(private val configuration: Configuration,
          workspace,
          projectService)
 
+   private var binariesController = BinariesController(configuration,
+         userHistory,
+         workspace,
+         projectService)
 
-   // model loaded from configuration
-   private val jpackageLocations: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
-   private val javafxLocations: ObservableList<NamedDirectory> = FXCollections.observableArrayList<NamedDirectory>()
+   private var generalInfoController = GeneralInfoController(configuration,
+         userHistory,
+         workspace,
+         projectService)
+
+   private var executeController = ExecutableController(configuration,
+         userHistory,
+         workspace,
+         projectService)
+
    
    init {
       configuration.eventBus.register(this)
@@ -95,34 +92,15 @@ class InstallmationController(private val configuration: Configuration,
          applicationMenuBar.useSystemMenuBarProperty().set(true)
       }
       initializeChildControllers()
-      initializeConfiguredBinaries()
    }
 
    private fun initializeChildControllers() {
       // load file list UI and insert into it's pane in the application
-      setupChildController("/dependenciesTab.fxml", dependenciesController, dependenciesPane)
-      setupChildController("/locationTab.fxml", locationController, locationPane)
-      
-   }
-   /**
-    * JDKs and drop down lists
-    */
-   private fun initializeConfiguredBinaries() {
-      jpackageLocations.addAll(configuration.jdkEntries.values)
-      jpackageComboBox.items = jpackageLocations.sorted()
-
-      javafxLocations.addAll(configuration.javafxModuleEntries.entries.map { NamedDirectory(it.key, it.value) })
-      javafxComboBox.items = javafxLocations.sorted()
-      javafxComboBox.converter = object : StringConverter<NamedDirectory>() {
-
-         override fun toString(obj: NamedDirectory?): String? {
-            return obj?.name
-         }
-
-         override fun fromString(name: String): NamedDirectory {
-            return javafxComboBox.items.first { it.name == name }
-         }
-      }
+      setupChildController("/fxml/dependenciesTab.fxml", dependenciesController, dependenciesPane)
+      setupChildController("/fxml/locationTab.fxml", locationController, locationPane)
+      setupChildController("/fxml/binariesTab.fxml", binariesController, binariesPane)
+      setupChildController("/fxml/generalInfoTab.fxml", generalInfoController, generalInfoPane)
+      setupChildController("/fxml/executableTab.fxml", executeController, executablePane)
    }
    
    @FXML
@@ -130,9 +108,7 @@ class InstallmationController(private val configuration: Configuration,
       // save configuration
       val reader = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
       reader.save(configuration)
-      
-      val stage = mainJarField.scene.window as Stage
-      stage.close()
+      applicationStage().close()
       log.info("Shutting down Installmation Application")
    }
 
@@ -172,34 +148,6 @@ class InstallmationController(private val configuration: Configuration,
       if (current != null) {
          projectService.saveProject(current)
          configuration.eventBus.post(ProjectSavedEvent(current))
-      }
-   }
-
-   @FXML
-   fun configureJPackageBinaries() {
-      val dialog = jdkDialog()
-      val result = dialog.showAndWait()
-      if (result.ok) {
-         ComboUtils.comboSelect(jpackageComboBox, result.data?.name)
-
-         val updatedModel = dialog.updatedModel()
-         if (updatedModel != null) {
-            configuration.eventBus.post(JDKUpdatedEvent(updatedModel))
-         }
-      }
-   }
-
-   @FXML
-   fun configureJavaFxModules() {
-      val dialog = javaFXFDialog()
-      val result = dialog.showAndWait()
-      if (result.ok) {
-         ComboUtils.comboSelect(javafxComboBox, result.data?.name)
-         // update model
-         val updatedModel = dialog.updatedModel()
-         if (updatedModel != null) {
-            configuration.eventBus.post(JFXModuleUpdatedEvent(updatedModel))
-         }
       }
    }
 
@@ -260,19 +208,19 @@ class InstallmationController(private val configuration: Configuration,
          }
       }
    }
-   
-   private fun applicationStage(): Stage {
-      return mainJarField.scene.window as Stage
-   }
 
    private fun jdkDialog(): BinaryArtefactDialog {
-      val items = jpackageLocations.map { NamedDirectory(it.name, it.path) }
+      val items = configuration.jdkEntries.values.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
    }
-   
+
    private fun javaFXFDialog(): BinaryArtefactDialog {
-      val items = javafxLocations.map { NamedDirectory(it.name, it.path) }
+      val items = configuration.javafxModuleEntries.values.map { NamedDirectory(it.name, it) }
       return BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
+   }
+   
+   private fun applicationStage(): Stage {
+      return applicationMenuBar.scene.window as Stage
    }
 
    private fun setupChildController(fxmlPath: String, controller: Any, parent: Pane) {
@@ -294,7 +242,6 @@ class InstallmationController(private val configuration: Configuration,
 
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
-      projectNameField.text = e.project.name
    }
 
    @Subscribe
@@ -312,42 +259,8 @@ class InstallmationController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       workspace.closeCurrentProject()
-      projectNameField.text = null
-      mainJarField.text = null
-      mainClassField.text = null
-      copyrightField.text = null
-      applicationVersionField.text = null
    }
 
-   /**
-    * Clear out and refresh list of JDKs from this controller's model
-    * and configuration
-    */
-   @Subscribe
-   fun handleJDKUpdated(e: JDKUpdatedEvent) {
-      jpackageLocations.clear()
-      configuration.jdkEntries.clear()
-      e.updated.map {
-         val jdk = JDKFactory.create(OperatingSystem.os(), it.name, it.path)
-         jpackageLocations.add(jdk)
-         configuration.jdkEntries[it.name] = jdk
-      }
-   }
-
-   /**
-    * Clear out and refresh list of FX modules from this controller's model
-    * and configuration
-    */
-   @Subscribe
-   fun handleJFXModuleUpdated(e: JFXModuleUpdatedEvent) {
-      javafxLocations.clear()
-      configuration.javafxModuleEntries.clear()
-      e.updated.map {
-         val nd = NamedDirectory(it.name, it.path)
-         javafxLocations.add(nd)
-         configuration.javafxModuleEntries[it.name] = it.path
-      }
-   }
 }
 
 

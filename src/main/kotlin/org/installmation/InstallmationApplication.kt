@@ -83,7 +83,7 @@ class InstallmationApplication : Application() {
          val controller = InstallmationController(configuration, UserHistory(), workspace, projectService)
          setupEventHandlers(primaryStage, configuration, workspace)
 
-         val loader = FXMLLoader(javaClass.getResource("/installmation.fxml"))
+         val loader = FXMLLoader(javaClass.getResource("/fxml/installmation.fxml"))
          loader.setController(controller)
          val root = loader.load<Pane>()
          primaryStage.title = WINDOW_TITLE

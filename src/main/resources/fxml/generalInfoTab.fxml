@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <Label text="Project Name" />
+        <Label text="Application Version" GridPane.rowIndex="1" />
+        <TextField fx:id="projectNameField" GridPane.columnIndex="1">
+            <GridPane.margin>
+                <Insets left="5.0" right="5.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="applicationVersionField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets left="5.0" right="5.0" />
+            </GridPane.margin>
+        </TextField>
+        <Label text="Copyright Message" GridPane.rowIndex="2" />
+        <TextField fx:id="copyrightField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets left="5.0" right="5.0" />
+            </GridPane.margin>
+        </TextField>
+
+    </children>
+   <stylesheets>
+      <URL value="@../bootstrap3.css" />
+      <URL value="@../installmation.css" />
+   </stylesheets>
+</GridPane>
