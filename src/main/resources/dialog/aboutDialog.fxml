@@ -37,7 +37,7 @@
       </GridPane>
    </children>
    <stylesheets>
-      <URL value="@../bootstrap3.css" />
-      <URL value="@../installmation.css" />
+      <URL value="@../css/bootstrap3.css" />
+      <URL value="@../css/installmation.css" />
    </stylesheets>
 </AnchorPane>

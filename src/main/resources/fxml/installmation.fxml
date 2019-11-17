@@ -90,8 +90,8 @@
                 </SplitPane>
             </children>
             <stylesheets>
-                <URL value="@../installmation.css"/>
-                <URL value="@../bootstrap3.css"/>
+                <URL value="@../css/installmation.css"/>
+                <URL value="@../css/bootstrap3.css"/>
             </stylesheets>
         </AnchorPane>
     </children>
