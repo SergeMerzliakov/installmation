@@ -24,7 +24,7 @@ import javafx.stage.Stage
 /**
  * Generic dialog for entering a single string value
  */
-class SingleValueDialog(ownerStage: Stage, label: String, title: String, defaultValue: String?) : CustomDialog<String>(ownerStage, title) {
+class SingleValueDialog(ownerStage: Stage, title: String, label: String, defaultValue: String?) : CustomDialog<String>(ownerStage, title) {
 
    private var controller: SingleValueDialogController
 

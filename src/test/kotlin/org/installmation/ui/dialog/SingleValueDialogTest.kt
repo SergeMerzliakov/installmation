@@ -18,6 +18,7 @@ package org.installmation.ui.dialog
 
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.input.KeyCode
 import javafx.scene.layout.VBox
@@ -29,7 +30,15 @@ import org.testfx.framework.junit.ApplicationTest
 class SingleValueDialogTest : ApplicationTest() {
 
    companion object {
-      const val DIALOG_SINGLE_BUTTON = "button1"
+      const val SHOW_DIALOG_BUTTON = "button1"
+      const val DIALOG_TITLE = "Colour Picker"
+      const val DIALOG_LABEL = "Choose Colour"
+      const val DEFAULT_VALUE = "red"
+
+      const val LABEL_ID = "#itemLabel"
+      const val VALUE_ID = "#itemValue"
+      const val SAVE_BUTTON_ID = "#saveButton"
+      const val CANCEL_BUTTON_ID = "#cancelButton"
    }
 
    private lateinit var dialog: SingleValueDialog
@@ -39,9 +48,9 @@ class SingleValueDialogTest : ApplicationTest() {
    override fun start(stage: Stage?) {
       super.start(stage)
       buttonSingle = Button("Show Dialog")
-      buttonSingle.id = DIALOG_SINGLE_BUTTON
+      buttonSingle.id = SHOW_DIALOG_BUTTON
       buttonSingle.setOnAction {
-         dialog = SingleValueDialog(stage!!, "Colour Picker", "Choose Colour", "red")
+         dialog = SingleValueDialog(stage!!, DIALOG_TITLE, DIALOG_LABEL, DEFAULT_VALUE)
          result = dialog.showAndWait()
       }
 
@@ -50,27 +59,47 @@ class SingleValueDialogTest : ApplicationTest() {
    }
 
    @Test
+   fun showHaveCorrectTitleAndLabelAndDefault() {
+      clickOn("#$SHOW_DIALOG_BUTTON")
+      
+      assertThat(dialog.stage.title).isEqualTo(DIALOG_TITLE)
+      
+      val label = lookup(LABEL_ID).query<Label>()
+      assertThat(label.text).isEqualTo(DIALOG_LABEL)
+      
+      val value = lookup(VALUE_ID).query<TextField>()
+      assertThat(value.text).isEqualTo(DEFAULT_VALUE)
+   }
+   
+   @Test
    fun shouldSave() {
+      clickOn("#$SHOW_DIALOG_BUTTON")
       val newColour = "green"
-      clickOn("#$DIALOG_SINGLE_BUTTON")
-      val field = lookup("#itemValue").query<TextField>()
+      
+      val field = lookup(VALUE_ID).query<TextField>()
       doubleClickOn(field)
       write(newColour)
       type(KeyCode.TAB)
-      clickOn("#saveButton")
+      
+      clickOn(SAVE_BUTTON_ID)
+      
       assertThat(result.ok).isTrue()
       assertThat(result.data).isEqualTo(newColour)
    }
 
    @Test
    fun shouldCancel() {
+      clickOn("#$SHOW_DIALOG_BUTTON")
       val newColour = "green"
-      clickOn("#$DIALOG_SINGLE_BUTTON")
-      val field = lookup("#itemValue").query<TextField>()
+      
+      val field = lookup(VALUE_ID).query<TextField>()
       doubleClickOn(field)
       write(newColour)
       type(KeyCode.TAB)
-      clickOn("#cancelButton")
+      
+      clickOn(CANCEL_BUTTON_ID)
+      
       assertThat(result.ok).isFalse()
+      assertThat(result.data).isNull()
    }
 }
