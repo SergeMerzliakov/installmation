@@ -29,21 +29,18 @@ import java.lang.reflect.Type
 class WorkspaceSerializer : JsonSerializer<Workspace>, JsonDeserializer<Workspace> {
 
    companion object {
-      const val CURRENT_PROJECT_NAME = "current-project-name"
       const val CURRENT_PROJECT_PATH = "current-project-path"
       val log: Logger = LogManager.getLogger(WorkspaceSerializer::class.java)
    }
 
    override fun serialize(workspace: Workspace?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
       val json = JsonObject()
-      json.addProperty(CURRENT_PROJECT_NAME, workspace?.currentProject?.name)
       json.addProperty(CURRENT_PROJECT_PATH, workspace?.currentProject?.projectFile()?.canonicalPath)
       return json
    }
 
    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Workspace {
       val obj = json?.asJsonObject
-      var name = obj?.get(CURRENT_PROJECT_NAME)?.asJsonPrimitive?.asString
       var path = obj?.get(CURRENT_PROJECT_PATH)?.asJsonPrimitive?.asString
       //load current project completely
       val ws = Workspace()
