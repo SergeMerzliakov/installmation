@@ -123,7 +123,7 @@ class InstallmationApplication : Application() {
       if (location.exists()) {
          log.debug("Workspace file found. Loading from ${location.canonicalPath}")
 
-         val reader = ApplicationJsonReader<Workspace>(Workspace::class, location, JsonParserFactory.basicParser())
+         val reader = ApplicationJsonReader<Workspace>(Workspace::class, location, JsonParserFactory.configurationParser())
          val workspace = reader.load()
          log.info("Loaded workspace successfully from ${location.canonicalPath}")
          return workspace
