@@ -12,7 +12,8 @@ class WorkspaceTest {
    companion object {
       val SAVED_FILE = File("testdata", "workspace.json")
       const val PROJECT_NAME = "testproject"
-      val SAVED_PROJECT_FILE = File("/Users/loyaltyuser/.installmation/projects/$PROJECT_NAME.json")
+      // for now... projects try hard to save themselves in user.home directory - fix in future to make projects more test-friendly
+      val SAVED_PROJECT_FILE = File(System.getProperty("user.home"), ".installmation/projects/$PROJECT_NAME.json")
 
       @AfterClass
       @JvmStatic
