@@ -16,9 +16,70 @@
 
 package org.installmation.model
 
+import org.assertj.core.api.Assertions.assertThat
+import org.installmation.io.ApplicationJsonReader
+import org.installmation.io.ApplicationJsonWriter
+import org.installmation.model.binary.JPackageExecutable
+import org.junit.AfterClass
+import org.junit.BeforeClass
 import org.junit.Test
+import java.io.File
 
 class InstallProjectTest {
+
+   companion object {
+      val SAVED_FILE = File("testdata", "project.json")
+
+      @AfterClass
+      @JvmStatic
+      fun cleanup() {
+         SAVED_FILE.parentFile.deleteRecursively()
+      }
+   }
+
+   @Test
+   fun shouldSerializeMinimalProject() {
+      val name = "project"
+
+      val p = InstallProject()
+      p.name = name
+      p.imageStructure = SimpleImageStructure()
+
+      val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
+      writer.save(p)
+
+      val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, SAVED_FILE, JsonParserFactory.configurationParser())
+      val p2 = reader.load()
+
+      assertThat(p2.name).isEqualTo(p.name)
+      assertThat(p2.imageStructure).isInstanceOf(SimpleImageStructure::class.java)
+   }
+
+
+   @Test
+   fun shouldSerializeProject() {
+      val name = "project"
+      val version = "1.0"
+      val p = InstallProject()
+      p.name = name
+      p.version = version
+      p.imageStructure = SimpleImageStructure()
+      p.imageStructure as SimpleImageStructure
+      p.imageStructure!!.addFile("file1.txt")
+      p.imageStructure!!.addDirectory("dir1")
+      p.modulePath = File("module1")
+      p.imageBuildDirectory = File("image")
+      p.imageContentDirectory = File("content")
+      p.jpackage = JPackageExecutable(File("/java11/bin/jpackage"))
+      // TODO - Check Install Artefacts
+      val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
+      writer.save(p)
+
+      val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, SAVED_FILE, JsonParserFactory.configurationParser())
+      val p2 = reader.load()
+
+      assertThat(p2).isEqualToComparingFieldByField(p)
+   }
 
    /*
    rm -rf ../../image-build     ==> temporary dir

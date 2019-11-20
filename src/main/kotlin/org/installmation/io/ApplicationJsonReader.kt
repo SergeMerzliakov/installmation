@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
  * the classOfT parameter is a hack because we cannot determine Java class from a generic type,
  * thanks to JVM type erasure.
  */
-class ApplicationJsonReader<T>(private val classOfT: KClass<*>, private val file: File, private val parser: Gson) {
+class ApplicationJsonReader<out T>(private val classOfT: KClass<*>, private val file: File, private val parser: Gson) {
    
    companion object {
       val log: Logger = LogManager.getLogger(ApplicationJsonReader::class.java)

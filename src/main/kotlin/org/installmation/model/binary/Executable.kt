@@ -30,5 +30,5 @@ interface Executable {
     * version of this executable. Often no easy way to determine this
     * apart from running from command with option like '-version'
     */
-   fun getVersion(): String
+   fun queryVersion(): String
 }

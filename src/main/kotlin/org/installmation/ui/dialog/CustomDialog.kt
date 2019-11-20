@@ -44,4 +44,14 @@ abstract class CustomDialog<T>(ownerStage:Stage, title:String) {
       stage.showAndWait()
       return result()
    }
+
+   /**
+    * Show dialog non-modally
+    */
+   fun showNonModal(): DialogResult<T> {
+      stage.initOwner(null)
+      stage.initModality(Modality.NONE)
+      stage.showAndWait()
+      return result()
+   }
 }

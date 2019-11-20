@@ -25,6 +25,7 @@ import org.installmation.configuration.Constant
 import org.installmation.model.InstallProject
 import org.installmation.model.LoadDataException
 import org.installmation.model.SaveDataException
+import org.installmation.model.SimpleImageStructure
 import java.io.File
 import java.io.FileReader
 
@@ -39,6 +40,7 @@ class ProjectService(val configuration: Configuration) {
 
    fun newProject(name: String): InstallProject {
       val p = InstallProject()
+      p.imageStructure = SimpleImageStructure()
       p.name = name
       return p
    }

@@ -34,6 +34,6 @@ class JPackageExecutableTest {
    fun shouldGetVersionEarlyAccessJdk14() {
       val mockPackage = spyk(JPackageExecutable(File("ignored")))
       every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
-      assertThat(mockPackage.getVersion()).isEqualTo(JDK_14_BUILD49)
+      assertThat(mockPackage.queryVersion()).isEqualTo(JDK_14_BUILD49)
    }
 }

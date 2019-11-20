@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.installmation.io
 
-package org.installmation.model.binary
-
-import org.installmation.model.FlagArgument
-import java.io.File
-
-class JPackageExecutable(executable: File) : AbstractExecutable(executable) {
-   
-   override val id = "jpackage"
+import java.nio.file.InvalidPathException
+import java.nio.file.Paths
 
 
-   override fun queryVersion(): String {
-      parameters.addArgument(FlagArgument("--version"))
-      val output = execute()
-      if (output.isEmpty())
-         throw ExecutableException("No version info output from '${executable}'")
-      if (output.size == 1)
-         return output[0]
-      return output[1]
+object PathValidator {
+
+   /**
+    * Checks path syntax only
+    */
+   fun isValidPath(path: String?): Boolean {
+      try {
+         Paths.get(path)
+      } catch (ex: InvalidPathException) {
+         return false
+      } catch (ex: NullPointerException) {
+         return false
+      }
+      return true
    }
 }

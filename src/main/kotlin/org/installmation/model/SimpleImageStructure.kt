@@ -27,8 +27,8 @@ import java.io.File
  */
 class SimpleImageStructure : ImageStructure {
    var mainJar: String? = null
-   private val fileNames: MutableCollection<String> = mutableSetOf()
-   private val directories: MutableCollection<File> = mutableSetOf()
+   private val fileNames: MutableSet<String> = mutableSetOf()
+   private val directories: MutableSet<File> = mutableSetOf()
 
    override fun addFile(name: String) {
       val trimmed = name.trim()
@@ -43,11 +43,31 @@ class SimpleImageStructure : ImageStructure {
       directories.add(File(trimmed))
    }
 
-   override fun getFiles(): Collection<String> {
+   override fun getFiles(): Set<String> {
       return fileNames
    }
 
-   override fun getDirectories(): Collection<File> {
+   override fun getDirectories(): Set<File> {
       return directories
    }
+
+   override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other !is SimpleImageStructure) return false
+
+      if (mainJar != other.mainJar) return false
+      if (fileNames != other.fileNames) return false
+      if (directories != other.directories) return false
+
+      return true
+   }
+
+   override fun hashCode(): Int {
+      var result = mainJar?.hashCode() ?: 0
+      result = 31 * result + fileNames.hashCode()
+      result = 31 * result + directories.hashCode()
+      return result
+   }
+
+
 }

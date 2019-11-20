@@ -33,9 +33,7 @@ import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.*
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.*
-import org.installmation.ui.dialog.AboutDialog
-import org.installmation.ui.dialog.BinaryArtefactDialog
-import org.installmation.ui.dialog.SingleValueDialog
+import org.installmation.ui.dialog.*
 
 
 class InstallmationController(private val configuration: Configuration,
@@ -131,7 +129,7 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun newProject() {
       // get a name first
-      val sd = SingleValueDialog(applicationStage(), "Project Name", "Choose Project Name", "myProject")
+      val sd = SingleValueDialog(applicationStage(), "Choose Project Name", "Project Name", "myProject")
       val result = sd.showAndWait()
       if (result.ok) {
          val project = projectService.newProject(result.data!!)
@@ -179,7 +177,26 @@ class InstallmationController(private val configuration: Configuration,
     */
    @FXML
    fun generateImage() {
+      if (workspace.currentProject == null) {
+         HelpDialog.showAndWait("Cannot Generate Image", "No project selected, created or loaded. Cannot generate an image.")
+         return
+      }
 
+      try {
+         log.info("Generate Image  - Validating configuration")
+         val validationResult = workspace.currentProject?.validateConfiguration()
+         if (validationResult?.success == false) {
+            val errorDialog = ItemListDialog(applicationStage(), "Errors", "Issues", validationResult.errors)
+            errorDialog.showNonModal()
+            return
+         }
+
+         log.info("Generate Image  - Generating Image")
+
+         log.info("Generate Image  - Image created successfully")
+      } catch (e: Exception) {
+         log.info("Generate Image  - Failed with error: ${e.message}", e)
+      }
    }
 
    /*
@@ -187,7 +204,21 @@ class InstallmationController(private val configuration: Configuration,
     */
    @FXML
    fun generateInstaller() {
+      if (workspace.currentProject == null) {
+         HelpDialog.showAndWait("Cannot Generate Installer", "No project selected, created or loaded. Cannot generate an installer.")
+         return
+      }
 
+      try {
+         log.info("Generate Installer  - Validating configuration")
+
+
+         log.info("Generate Installer  - Generating Image")
+
+         log.info("Generate Installer  - Installer created successfully")
+      } catch (e: Exception) {
+         log.info("Generate Installer  - Failed with error: ${e.message}", e)
+      }
    }
 
    /**
@@ -196,7 +227,21 @@ class InstallmationController(private val configuration: Configuration,
     */
    @FXML
    fun generateScripts() {
+      if (workspace.currentProject == null) {
+         HelpDialog.showAndWait("Cannot Generate Scripts", "No project selected, created or loaded. Cannot generate installer scripts.")
+         return
+      }
+      try {
 
+         log.info("Generate Scripts  - Validating configuration")
+         //workspace.currentProject.
+
+         log.info("Generate Scripts  - Generating Scripts")
+
+         log.info("Generate Scripts  - Scripts created successfully")
+      } catch (e: Exception) {
+         log.info("Generate Scripts  - Failed with error: ${e.message}", e)
+      }
    }
 
    @FXML

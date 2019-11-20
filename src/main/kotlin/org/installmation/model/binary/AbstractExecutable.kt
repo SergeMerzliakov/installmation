@@ -45,4 +45,21 @@ abstract class AbstractExecutable(executable: File) : Executable {
       return proc.inputStream.bufferedReader().readLines()
    }
 
+   override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other !is AbstractExecutable) return false
+
+      if (executable != other.executable) return false
+
+      return true
+   }
+
+   /**
+    * Do not use version - this is a dynamic funcion
+    */
+   override fun hashCode(): Int {
+      return executable.hashCode()
+   }
+
+
 }

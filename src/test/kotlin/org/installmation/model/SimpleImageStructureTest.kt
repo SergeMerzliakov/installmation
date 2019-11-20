@@ -18,6 +18,10 @@ package org.installmation.model
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.io.ApplicationJsonReader
+import org.installmation.io.ApplicationJsonWriter
+import org.junit.AfterClass
+import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
 
@@ -27,7 +31,44 @@ class SimpleImageStructureTest {
       const val FILE1 = "file1"
       const val DIR1 = "dir1"
       const val DIR2 = "dir2"
+      val SAVED_FILE = File("testdata", "image-structure.json")
+
+      @BeforeClass
+      fun setup() {
+         SAVED_FILE.parentFile.mkdirs()
+      }
+
+      @AfterClass
+      fun cleanup() {
+         SAVED_FILE.parentFile.deleteRecursively()
+      }
    }
+
+   @Test
+   fun shouldSerializeEmptyStructure() {
+      val sis = SimpleImageStructure()
+      val writer = ApplicationJsonWriter<SimpleImageStructure>(SAVED_FILE, JsonParserFactory.configurationParser())
+      writer.save(sis)
+
+      val reader = ApplicationJsonReader<SimpleImageStructure>(SimpleImageStructure::class, SAVED_FILE, JsonParserFactory.basicParser())
+      val sis2 = reader.load()
+      assertThat(sis2).isEqualToComparingFieldByField(sis)
+   }
+
+   @Test
+   fun shouldSerializeStructure() {
+      val sis = SimpleImageStructure()
+      sis.mainJar = "main.jar"
+      sis.addDirectory("/usr/bin/local")
+      sis.addFile("file.txt")
+      val writer = ApplicationJsonWriter<SimpleImageStructure>(SAVED_FILE, JsonParserFactory.configurationParser())
+      writer.save(sis)
+
+      val reader = ApplicationJsonReader<SimpleImageStructure>(SimpleImageStructure::class, SAVED_FILE, JsonParserFactory.basicParser())
+      val sis2 = reader.load()
+      assertThat(sis2).isEqualToComparingFieldByField(sis)
+   }
+   
 
    @Test
    fun shouldAcceptMultipleDirectories() {

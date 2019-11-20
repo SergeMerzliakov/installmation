@@ -28,6 +28,6 @@ import java.io.File
 interface ImageStructure {
    fun addFile(name:String)
    fun addDirectory(name:String)
-   fun getFiles():Collection<String>
-   fun getDirectories():Collection<File>
+   fun getFiles():Set<String>
+   fun getDirectories():Set<File>
 }

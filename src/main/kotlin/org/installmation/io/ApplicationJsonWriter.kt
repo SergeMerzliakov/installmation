@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets
 /**
  * Save any application related json data to file
  */
-class ApplicationJsonWriter<T>(private val file: File, private val parser: Gson) {
+class ApplicationJsonWriter<in T>(private val file: File, private val parser: Gson) {
 
    companion object {
       val log: Logger = LogManager.getLogger(ApplicationJsonWriter::class.java)

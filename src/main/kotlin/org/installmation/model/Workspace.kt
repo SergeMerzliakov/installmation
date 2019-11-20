@@ -49,7 +49,7 @@ class Workspace {
    private var projectHistory = mutableMapOf<String, File>()
 
    fun setCurrentProject(p: InstallProject) {
-      checkNotNull(p.name)
+      checkNotNull(p.name, { "Project must have a name before it can be used" })
       currentProject = p
       projectHistory[p.name!!] = p.projectFile()
       log.debug("Workspace current project is set to '${p.name}'")
@@ -59,6 +59,7 @@ class Workspace {
       if (currentProject != null) {
          log.debug("Project '${currentProject!!.name}' closed")
          // TODO more
+         currentProject = null
       }
    }
 
