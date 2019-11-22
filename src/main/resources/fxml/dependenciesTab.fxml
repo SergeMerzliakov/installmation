@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
@@ -29,12 +30,12 @@
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
     </rowConstraints>
    <children>
-      <Label maxWidth="1.7976931348623157E308" minWidth="70.0" text="Classpath" GridPane.columnIndex="4">
+      <Label maxWidth="1.7976931348623157E308" minWidth="70.0" styleClass="title-2" text="Classpath" GridPane.columnIndex="4">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>
       </Label>
-      <Label maxWidth="1.7976931348623157E308" minWidth="70.0" text="Modules" GridPane.columnIndex="4" GridPane.rowIndex="3">
+      <Label maxWidth="1.7976931348623157E308" minWidth="70.0" styleClass="title-2" text="Modules" GridPane.columnIndex="4" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>
@@ -66,4 +67,8 @@
          </GridPane.margin>
       </Button>
    </children>
+   <stylesheets>
+      <URL value="@../css/bootstrap3.css" />
+      <URL value="@../css/installmation.css" />
+   </stylesheets>
 </GridPane>
