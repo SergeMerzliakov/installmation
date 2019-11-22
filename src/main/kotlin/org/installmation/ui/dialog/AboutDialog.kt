@@ -28,7 +28,7 @@ import javafx.stage.Stage
 class AboutDialog(parentStage: Stage) : CustomDialog<String>(parentStage, "About Installmation") {
 
    init {
-      val loader = FXMLLoader(javaClass.classLoader.getResource("dialog/aboutDialog.fxml"))
+      val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/aboutDialog.fxml"))
       loader.setController(this)
       val root = loader.load<Pane>()
       stage.scene = Scene(root)

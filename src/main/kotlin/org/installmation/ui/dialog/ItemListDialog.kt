@@ -29,7 +29,7 @@ class ItemListDialog(ownerStage: Stage, title: String, label: String, errors: Li
    private var controller: ItemListDialogController
 
    init {
-      val loader = FXMLLoader(javaClass.classLoader.getResource("dialog/itemListDialog.fxml"))
+      val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/itemListDialog.fxml"))
       controller = ItemListDialogController(label, errors)
       loader.setController(controller)
       val root = loader.load<Pane>()

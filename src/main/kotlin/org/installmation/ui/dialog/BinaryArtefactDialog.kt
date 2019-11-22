@@ -33,7 +33,7 @@ class BinaryArtefactDialog(ownerStage: Stage, title: String, currentArtefacts: L
    private var controller: BinaryArtefactDialogController
 
    init {
-      val loader = FXMLLoader(javaClass.classLoader.getResource("dialog/binaryArtefactDialog.fxml"))
+      val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/binaryArtefactDialog.fxml"))
       controller = BinaryArtefactDialogController(currentArtefacts, userHistory)
       loader.setController(controller)
       val root = loader.load<Pane>()

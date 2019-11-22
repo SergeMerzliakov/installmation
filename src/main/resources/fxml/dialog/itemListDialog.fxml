@@ -19,8 +19,8 @@
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
    <stylesheets>
-      <URL value="@../css/bootstrap3.css" />
-      <URL value="@../css/installmation.css" />
+      <URL value="@../../css/bootstrap3.css" />
+      <URL value="@../../css/installmation.css" />
    </stylesheets>
    <children>
       <Button fx:id="okButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#ok" text="OK" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="2">

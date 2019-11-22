@@ -29,7 +29,7 @@ class SingleValueDialog(ownerStage: Stage, title: String, label: String, default
    private var controller: SingleValueDialogController
 
    init {
-      val loader = FXMLLoader(javaClass.classLoader.getResource("dialog/singleValueDialog.fxml"))
+      val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/singleValueDialog.fxml"))
       controller = SingleValueDialogController(label, defaultValue)
       loader.setController(controller)
       val root = loader.load<VBox>()
