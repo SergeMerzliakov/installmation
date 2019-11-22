@@ -29,7 +29,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.javafx.ComboUtils
-import org.installmation.model.JDKUpdatedEvent
+import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.JFXModuleUpdatedEvent
 import org.installmation.model.NamedDirectory
 import org.installmation.model.Workspace
@@ -37,6 +37,7 @@ import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.ProjectClosedEvent
+import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.BinaryArtefactDialog
 
@@ -53,11 +54,12 @@ class BinariesController(private val configuration: Configuration,
    @FXML private lateinit var jpackageComboBox: ComboBox<JDK>
    @FXML private lateinit var configureJPackageButton: Button
    @FXML private lateinit var javafxComboBox: ComboBox<NamedDirectory>
-   @FXML private lateinit var configureJFXButton: Button
+   @FXML private lateinit var installJDKComboBox: ComboBox<JDK>
 
    // model loaded from configuration
-   private val jpackageLocations: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
-   private val javafxLocations: ObservableList<NamedDirectory> = FXCollections.observableArrayList<NamedDirectory>()
+   private val jpackageJDKItems: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
+   private val installJDKItems: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
+   private val javafxItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList<NamedDirectory>()
 
    init {
       configuration.eventBus.register(this)
@@ -72,11 +74,14 @@ class BinariesController(private val configuration: Configuration,
     * JDKs and drop down lists
     */
    private fun initializeConfiguredBinaries() {
-      jpackageLocations.addAll(configuration.jdkEntries.values)
-      jpackageComboBox.items = jpackageLocations.sorted()
+      jpackageJDKItems.addAll(configuration.jdkEntries.values)
+      jpackageComboBox.items = jpackageJDKItems.sorted()
 
-      javafxLocations.addAll(configuration.javafxModuleEntries.entries.map { NamedDirectory(it.key, it.value) })
-      javafxComboBox.items = javafxLocations.sorted()
+      installJDKItems.addAll(configuration.jdkEntries.values)
+      installJDKComboBox.items = installJDKItems.sorted()
+
+      javafxItems.addAll(configuration.javafxModuleEntries.entries.map { NamedDirectory(it.key, it.value) })
+      javafxComboBox.items = javafxItems.sorted()
       javafxComboBox.converter = object : StringConverter<NamedDirectory>() {
 
          override fun toString(obj: NamedDirectory?): String? {
@@ -88,20 +93,17 @@ class BinariesController(private val configuration: Configuration,
          }
       }
    }
+   
    @FXML
    fun configureJPackageBinaries() {
-      val dialog = jdkDialog()
-      val result = dialog.showAndWait()
-      if (result.ok) {
-         ComboUtils.comboSelect(jpackageComboBox, result.data?.name)
-
-         val updatedModel = dialog.updatedModel()
-         if (updatedModel != null) {
-            configuration.eventBus.post(JDKUpdatedEvent(updatedModel))
-         }
-      }
+      updateJDKList(jpackageComboBox)
    }
 
+   @FXML
+   fun configureInstallJDK() {
+      updateJDKList(installJDKComboBox)
+   }
+   
    @FXML
    fun configureJavaFxModules() {
       val dialog = javaFXFDialog()
@@ -116,16 +118,32 @@ class BinariesController(private val configuration: Configuration,
       }
    }
 
+   /**
+    * Update list of known JDKs. Used for both JPackager access, and
+    * setting the JDK to add to installer.
+    */
+   private fun updateJDKList(combo: ComboBox<JDK>){
+      val dialog = jdkDialog()
+      val result = dialog.showAndWait()
+      if (result.ok) {
+         ComboUtils.comboSelect(combo, result.data?.name)
+
+         val updatedModel = dialog.updatedModel()
+         if (updatedModel != null) {
+            configuration.eventBus.post(JDKListUpdatedEvent(updatedModel))
+         }
+      }
+   }
+   
    private fun jdkDialog(): BinaryArtefactDialog {
-      val items = jpackageLocations.map { NamedDirectory(it.name, it.path) }
+      val items = jpackageJDKItems.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
    }
 
    private fun javaFXFDialog(): BinaryArtefactDialog {
-      val items = javafxLocations.map { NamedDirectory(it.name, it.path) }
+      val items = javafxItems.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
    }
-
 
    private fun applicationStage(): Stage {
       return configureJPackageButton.scene.window as Stage
@@ -136,7 +154,17 @@ class BinariesController(private val configuration: Configuration,
    //-------------------------------------------------------
 
    @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      jpackageComboBox.selectionModel.select(e.project.jpackageJDK)
+      installJDKComboBox.selectionModel.select(e.project.installJDK)
+      javafxComboBox.selectionModel.select(e.project.modulePath)
+   }
+   
+   @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
+      jpackageComboBox.selectionModel.clearSelection()
+      installJDKComboBox.selectionModel.clearSelection()
+      javafxComboBox.selectionModel.clearSelection()
    }
 
    /**
@@ -144,12 +172,14 @@ class BinariesController(private val configuration: Configuration,
     * and configuration
     */
    @Subscribe
-   fun handleJDKUpdated(e: JDKUpdatedEvent) {
-      jpackageLocations.clear()
+   fun handleJDKUpdated(e: JDKListUpdatedEvent) {
+      jpackageJDKItems.clear()
+      installJDKItems.clear()
       configuration.jdkEntries.clear()
       e.updated.map {
          val jdk = JDKFactory.create(OperatingSystem.os(), it.name, it.path)
-         jpackageLocations.add(jdk)
+         jpackageJDKItems.add(jdk)
+         installJDKItems.add(jdk)
          configuration.jdkEntries[it.name] = jdk
       }
    }
@@ -160,15 +190,14 @@ class BinariesController(private val configuration: Configuration,
     */
    @Subscribe
    fun handleJFXModuleUpdated(e: JFXModuleUpdatedEvent) {
-      javafxLocations.clear()
+      javafxItems.clear()
       configuration.javafxModuleEntries.clear()
       e.updated.map {
          val nd = NamedDirectory(it.name, it.path)
-         javafxLocations.add(nd)
+         javafxItems.add(nd)
          configuration.javafxModuleEntries[it.name] = it.path
       }
    }
-
 }
 
 

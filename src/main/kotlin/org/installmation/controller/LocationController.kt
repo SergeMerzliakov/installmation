@@ -27,6 +27,7 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
 import org.installmation.service.ProjectClosedEvent
+import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
@@ -116,6 +117,12 @@ class LocationController(private val configuration: Configuration,
    //  Event Subscribers
    //-------------------------------------------------------
 
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+
+   }
+   
+   
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       inputDirectoryText.text = null

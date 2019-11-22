@@ -20,6 +20,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.installmation.configuration.Configuration
 import org.installmation.model.InstallProject
+import org.installmation.model.NamedDirectory
 import org.junit.After
 import org.junit.Test
 import java.io.File
@@ -40,7 +41,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project1"
       p.version = "1.0"
-      p.modulePath = File("/some/dir")
+      p.modulePath = NamedDirectory("m1", File("/some/dir"))
       
       // save
       val service = ProjectService(config)
@@ -55,7 +56,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project2"
       p.version = "2.0"
-      p.modulePath = File("/other/dir")
+      p.modulePath = NamedDirectory("m1", File("/other/dir"))
 
       // save
       val service = ProjectService(config)

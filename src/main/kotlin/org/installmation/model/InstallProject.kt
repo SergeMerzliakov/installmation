@@ -33,7 +33,7 @@ package org.installmation.model
 
 import org.installmation.configuration.Constant
 import org.installmation.io.PathValidator
-import org.installmation.model.binary.JPackageExecutable
+import org.installmation.model.binary.JDK
 import java.io.File
 
 /**
@@ -50,8 +50,9 @@ class InstallProject {
    }
    var name: String? = null
    var version: String? = null
-   var jpackage: JPackageExecutable? = null
-   var modulePath:File? = null
+   var jpackageJDK: JDK? = null
+   var installJDK: JDK? = null // JDK to install with application
+   var modulePath: NamedDirectory? = null
    var imageStructure: ImageStructure? = null
    var imageContentDirectory: File? = null  // application content defined by imageStructure
    var imageBuildDirectory: File? = null  //output
@@ -69,9 +70,9 @@ class InstallProject {
       val result = ValidationResult(true)
       validateStringField("Project Name", name, result)
       validateStringField("Project Version", version, result)
-      if (validateFieldNotNull("Java JDK", jpackage, result))
-         validateExistingFileField("Java JDK Path", jpackage?.executable, result)
-      validateExistingFileField("JFX Module Path", modulePath, result)
+      if (validateFieldNotNull("Java JDK", jpackageJDK, result))
+         validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
+      validateExistingFileField("JFX Module Path", modulePath?.path, result)
       validateFutureFileField("Image Content", imageContentDirectory, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
       
@@ -120,7 +121,7 @@ class InstallProject {
 
       if (name != other.name) return false
       if (version != other.version) return false
-      if (jpackage != other.jpackage) return false
+      if (jpackageJDK != other.jpackageJDK) return false
       if (modulePath != other.modulePath) return false
       if (imageStructure != other.imageStructure) return false
       if (imageContentDirectory != other.imageContentDirectory) return false
@@ -133,7 +134,7 @@ class InstallProject {
    override fun hashCode(): Int {
       var result = name?.hashCode() ?: 0
       result = 31 * result + (version?.hashCode() ?: 0)
-      result = 31 * result + (jpackage?.hashCode() ?: 0)
+      result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
       result = 31 * result + (modulePath?.hashCode() ?: 0)
       result = 31 * result + (imageStructure?.hashCode() ?: 0)
       result = 31 * result + (imageContentDirectory?.hashCode() ?: 0)

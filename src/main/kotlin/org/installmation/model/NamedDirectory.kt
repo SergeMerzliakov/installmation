@@ -22,4 +22,5 @@ import java.io.File
 /**
  * Directory with a user defined name or label
  */
-class NamedDirectory(override var name: String, var path: File) : UserNamed
+data class NamedDirectory(override var name: String, var path: File) : UserNamed
+   

@@ -19,7 +19,9 @@ package org.installmation.model
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
+import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.JPackageExecutable
+import org.installmation.model.binary.OperatingSystem
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
@@ -67,11 +69,13 @@ class InstallProjectTest {
       p.imageStructure as SimpleImageStructure
       p.imageStructure!!.addFile("file1.txt")
       p.imageStructure!!.addDirectory("dir1")
-      p.modulePath = File("module1")
+      p.modulePath = NamedDirectory("m1", File("module1"))
       p.imageBuildDirectory = File("image")
       p.imageContentDirectory = File("content")
-      p.jpackage = JPackageExecutable(File("/java11/bin/jpackage"))
-      // TODO - Check Install Artefacts
+      p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
+      
+      // class path items
+      
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p)
 

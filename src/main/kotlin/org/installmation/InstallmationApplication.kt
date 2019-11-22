@@ -38,6 +38,7 @@ import org.installmation.model.JsonParserFactory
 import org.installmation.model.Workspace
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectCreatedEvent
+import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import java.io.File
 
@@ -89,6 +90,7 @@ class InstallmationApplication : Application() {
          primaryStage.title = WINDOW_TITLE
          primaryStage.scene = Scene(root)
          primaryStage.show()
+         fireStartupEvents(workspace)
       } catch (e: Throwable) {
          errorDialog("Fatal Startup Error", e.message ?: e.toString())
          log.error("Fatal startup error - aborting and shutting down", e)
@@ -96,6 +98,13 @@ class InstallmationApplication : Application() {
       }
    }
 
+   /**
+    * After UI setup fire events to update UI from model
+    */
+   private fun fireStartupEvents(workspace: Workspace) {
+      if (workspace.currentProject != null)
+      eventBus.post(ProjectLoadedEvent(workspace.currentProject!!))
+   }
    /**
     * SHow for all fatal unexpected errors on start
     */

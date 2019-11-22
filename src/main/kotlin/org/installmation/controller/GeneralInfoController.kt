@@ -17,30 +17,17 @@
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.fxml.FXML
-import javafx.scene.control.Button
-import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
-import javafx.stage.Stage
-import javafx.util.StringConverter
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.javafx.ComboUtils
-import org.installmation.model.JDKUpdatedEvent
-import org.installmation.model.JFXModuleUpdatedEvent
-import org.installmation.model.NamedDirectory
 import org.installmation.model.Workspace
-import org.installmation.model.binary.JDK
-import org.installmation.model.binary.JDKFactory
-import org.installmation.model.binary.OperatingSystem
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectCreatedEvent
+import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
-import org.installmation.ui.dialog.BinaryArtefactDialog
 
 
 class GeneralInfoController(private val configuration: Configuration,
@@ -73,6 +60,11 @@ class GeneralInfoController(private val configuration: Configuration,
       projectNameField.text = e.project.name
    }
 
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+
+   }
+   
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       projectNameField.text = null

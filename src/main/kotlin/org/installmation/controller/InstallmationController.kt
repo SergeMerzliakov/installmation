@@ -252,7 +252,7 @@ class InstallmationController(private val configuration: Configuration,
          // update jdk entries 
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
-            configuration.eventBus.post(JDKUpdatedEvent(updatedModel))
+            configuration.eventBus.post(JDKListUpdatedEvent(updatedModel))
          }
       }
    }
@@ -305,6 +305,11 @@ class InstallmationController(private val configuration: Configuration,
    fun handleProjectCreated(e: ProjectCreatedEvent) {
    }
 
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      
+   }
+   
    @Subscribe
    fun handleProjectUpdated(e: ProjectUpdatedEvent) {
    }
