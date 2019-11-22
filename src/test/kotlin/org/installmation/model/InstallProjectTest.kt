@@ -74,7 +74,9 @@ class InstallProjectTest {
       p.imageContentDirectory = File("content")
       p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
       
-      // class path items
+      // directory and file artefacts
+      p.artefacts["classpathLib"] = DirectoryArtefact("classpathLib", File("/myapp/lib"))
+      p.artefacts["mainJar"] = FileArtefact("mainJar", File("/myapp/app.jar"))
       
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p)
