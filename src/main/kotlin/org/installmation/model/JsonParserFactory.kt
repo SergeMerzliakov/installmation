@@ -36,6 +36,7 @@ object JsonParserFactory {
       builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
       builder.registerTypeAdapter(ImageStructure::class.java, ImageStructureSerializer())
       builder.registerTypeAdapter(Workspace::class.java, WorkspaceSerializer())
+      builder.registerTypeAdapter(InstallArtefact::class.java, FileArtefactSerializer())
       return builder.setPrettyPrinting().create()
    }
 

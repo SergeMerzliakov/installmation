@@ -18,6 +18,5 @@ package org.installmation.model
 
 import java.io.File
 
-class DirectoryArtefact(val name:String, var sourceLocation: File): InstallArtefact {
-   var destination:File? = null
-}
+class DirectoryArtefact(name:String, source: File, destination:File? = null): FileArtefact(name, source, destination)
+
