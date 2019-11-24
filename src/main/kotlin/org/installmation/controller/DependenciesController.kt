@@ -131,8 +131,8 @@ class DependenciesController(private val configuration: Configuration,
 
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
-      classPathListView.items.clear()
-      moduleListView.items.clear()
+      classpathItems.clear()
+      moduleItems.clear()
    }
 
 
