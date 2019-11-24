@@ -48,14 +48,21 @@ class InstallProject {
          return "$name.json"
       }
    }
+
+   // TODO - Should all these be String/Value/Label type artefacts? 
    var name: String? = null
    var version: String? = null
+   var mainClass: String? = null
+   var mainJar: File? = null
+   var copyright: String? = null
    var jpackageJDK: JDK? = null
    var installJDK: JDK? = null // JDK to install with application
    var modulePath: NamedDirectory? = null
    var imageStructure: ImageStructure? = null
+   var inputDirectory: File? = null
    var imageContentDirectory: File? = null  // application content defined by imageStructure
    var imageBuildDirectory: File? = null  //output
+   var classPath = mutableListOf<File>()
    
    val artefacts = mutableMapOf<String, InstallArtefact>()
 

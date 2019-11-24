@@ -24,10 +24,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
-import org.installmation.service.ProjectClosedEvent
-import org.installmation.service.ProjectCreatedEvent
-import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
+import org.installmation.service.*
 
 
 class GeneralInfoController(private val configuration: Configuration,
@@ -61,8 +58,19 @@ class GeneralInfoController(private val configuration: Configuration,
    }
 
    @Subscribe
-   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+   fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
+      checkNotNull(e.project)
+      e.project.name = projectNameField.text
+      e.project.version = applicationVersionField.text ?: "1.0-SNAPSHOT"
+      e.project.copyright = copyrightField.text
+   }
 
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      checkNotNull(e.project)
+      projectNameField.text = e.project.name
+      applicationVersionField.text = e.project.version
+      copyrightField.text = e.project.copyright
    }
    
    @Subscribe

@@ -24,10 +24,8 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
-import org.installmation.service.ProjectClosedEvent
-import org.installmation.service.ProjectCreatedEvent
-import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
+import org.installmation.service.*
+import java.io.File
 
 
 class ExecutableController(private val configuration: Configuration,
@@ -60,8 +58,18 @@ class ExecutableController(private val configuration: Configuration,
    }
 
    @Subscribe
-   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+   fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
+      checkNotNull(e.project)
 
+      e.project.mainJar = File(mainJarField.text)
+      e.project.mainClass = mainClassField.text
+   }
+
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      checkNotNull(e.project)
+      mainJarField.text = e.project.mainJar?.path
+      mainClassField.text = e.project.mainClass
    }
 
    @Subscribe

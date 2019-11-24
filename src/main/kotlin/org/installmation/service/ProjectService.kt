@@ -16,18 +16,14 @@
 
 package org.installmation.service
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
-import org.installmation.model.InstallProject
-import org.installmation.model.LoadDataException
-import org.installmation.model.SaveDataException
-import org.installmation.model.SimpleImageStructure
+import org.installmation.io.ApplicationJsonReader
+import org.installmation.io.ApplicationJsonWriter
+import org.installmation.model.*
 import java.io.File
-import java.io.FileReader
 
 /**
  * Manages Project lifecycle
@@ -53,10 +49,10 @@ class ProjectService(val configuration: Configuration) {
          throw LoadDataException("Error loading project '${projectName}' from file. Project not found at ${baseDir.canonicalPath}")
 
       val file = matches[0]
-      val gson = Gson()
       try {
-         val project = gson.fromJson(FileReader(file), InstallProject::class.java)
-         log.info("project ${project.name} loaded successfully")
+         val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, file, JsonParserFactory.configurationParser())
+         val project = reader.load()
+         log.info("Project ${project.name} loaded successfully")
          return project
       } catch (e: Exception) {
          throw LoadDataException("Error loading project '${projectName}' from file. Deserialization error.", e)
@@ -66,13 +62,10 @@ class ProjectService(val configuration: Configuration) {
    fun saveProject(p: InstallProject) {
       check(p.name != null && p.name!!.isNotEmpty())
 
-      val gson = GsonBuilder().setPrettyPrinting().create()
       try {
-         val data = gson.toJson(p, p::class.java)
-         val baseDir = projectBaseDirectory()
-         baseDir.mkdirs()
-         val projectFile = File(baseDir, InstallProject.projectFileName(p.name!!))
-         projectFile.writeText(data)
+         val projectFile = File(projectBaseDirectory(), InstallProject.projectFileName(p.name!!))
+         val writer = ApplicationJsonWriter<InstallProject>(projectFile, JsonParserFactory.configurationParser())
+         writer.save(p)
          log.debug("Saved project ${p.name} to file")
       } catch (e: Exception) {
          throw SaveDataException("Error saving project ${p.name} to file", e)

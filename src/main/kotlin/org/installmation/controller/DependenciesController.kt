@@ -28,12 +28,15 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.model.NamedDirectory
 import org.installmation.model.Workspace
+import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
+import java.io.File
 
 
 class DependenciesController(private val configuration: Configuration,
@@ -105,8 +108,27 @@ class DependenciesController(private val configuration: Configuration,
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      checkNotNull(e.project)
+      for (cp in e.project.classPath) {
+         classpathItems.add(cp.path)
+      }
+      moduleItems.add(e.project.modulePath?.path?.path)
    }
-   
+
+   @Subscribe
+   fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
+      checkNotNull(e.project)
+
+      e.project.classPath.clear()
+      for (path in classPathListView.items) {
+         e.project.classPath.add(File(path))
+      }
+
+      // TODO - why do we need more than one
+      if (moduleItems.isNotEmpty())
+         e.project.modulePath = NamedDirectory("module1", File(moduleItems[0]))
+   }
+
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       classPathListView.items.clear()

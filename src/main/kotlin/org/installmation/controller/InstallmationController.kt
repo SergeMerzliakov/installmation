@@ -119,9 +119,6 @@ class InstallmationController(private val configuration: Configuration,
    
    @FXML
    fun shutdown() {
-      // save configuration
-      val reader = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
-      reader.save(configuration)
       applicationStage().close()
       log.info("Shutting down Installmation Application")
    }
@@ -160,9 +157,18 @@ class InstallmationController(private val configuration: Configuration,
    fun saveProject() {
       val current = workspace.currentProject
       if (current != null) {
+         configuration.eventBus.post(ProjectBeginSaveEvent(current))
          projectService.saveProject(current)
          configuration.eventBus.post(ProjectSavedEvent(current))
+
+         // save workspace as well
+         // workspace
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(), JsonParserFactory.configurationParser())
+         workspaceWriter.save(workspace)
+      } else {
+         // TODO - prompt to create project possibly
       }
+
    }
 
    @FXML

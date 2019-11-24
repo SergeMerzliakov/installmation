@@ -36,6 +36,7 @@ import org.installmation.model.Workspace
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
+import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
@@ -154,7 +155,17 @@ class BinariesController(private val configuration: Configuration,
    //-------------------------------------------------------
 
    @Subscribe
+   fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
+      checkNotNull(e.project)
+      e.project.installJDK = installJDKComboBox.selectionModel.selectedItem
+      e.project.jpackageJDK = jpackageComboBox.selectionModel.selectedItem
+      e.project.modulePath = javafxComboBox.selectionModel.selectedItem
+   }
+
+
+   @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      checkNotNull(e.project)
       jpackageComboBox.selectionModel.select(e.project.jpackageJDK)
       installJDKComboBox.selectionModel.select(e.project.installJDK)
       javafxComboBox.selectionModel.select(e.project.modulePath)

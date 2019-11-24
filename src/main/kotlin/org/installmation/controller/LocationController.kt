@@ -26,11 +26,13 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
+import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
+import java.io.File
 
 
 class LocationController(private val configuration: Configuration,
@@ -119,10 +121,26 @@ class LocationController(private val configuration: Configuration,
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
-
+      checkNotNull(e.project)
+      inputDirectoryText.text = e.project.inputDirectory?.path
+      installerDirectoryText.text = e.project.imageContentDirectory?.path
+      imageBuildDirectoryText.text = e.project.imageBuildDirectory?.path
    }
-   
-   
+
+   @Subscribe
+   fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
+      checkNotNull(e.project)
+
+      if (inputDirectoryText.text != null)
+         e.project.inputDirectory = File(inputDirectoryText.text)
+
+      if (installerDirectoryText.text != null)
+         e.project.imageContentDirectory = File(installerDirectoryText.text)
+
+      if (imageBuildDirectoryText.text != null)
+         e.project.imageBuildDirectory = File(imageBuildDirectoryText.text)
+   }
+
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       inputDirectoryText.text = null

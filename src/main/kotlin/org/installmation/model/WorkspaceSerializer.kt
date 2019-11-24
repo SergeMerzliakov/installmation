@@ -41,7 +41,7 @@ class WorkspaceSerializer : JsonSerializer<Workspace>, JsonDeserializer<Workspac
 
    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Workspace {
       val obj = json?.asJsonObject
-      var path = obj?.get(CURRENT_PROJECT_PATH)?.asJsonPrimitive?.asString
+      val path = obj?.get(CURRENT_PROJECT_PATH)?.asJsonPrimitive?.asString
       //load current project completely
       val ws = Workspace()
       if (path != null) {

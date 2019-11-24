@@ -66,7 +66,7 @@ class InstallmationApplication : Application() {
          configWriter.save(configuration)
 
          // workspace
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(), JsonParserFactory.basicParser())
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(), JsonParserFactory.configurationParser())
          workspaceWriter.save(workspace)
 
          InstallmationController.log.info("Installmation Application has shutdown")
@@ -103,7 +103,7 @@ class InstallmationApplication : Application() {
     */
    private fun fireStartupEvents(workspace: Workspace) {
       if (workspace.currentProject != null)
-      eventBus.post(ProjectLoadedEvent(workspace.currentProject!!))
+         eventBus.post(ProjectLoadedEvent(workspace.currentProject!!))
    }
    /**
     * SHow for all fatal unexpected errors on start
@@ -165,6 +165,12 @@ class InstallmationApplication : Application() {
 
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
+      applicationStage.title = "${WINDOW_TITLE} - ${e.project.name}"
+   }
+
+
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
       applicationStage.title = "${WINDOW_TITLE} - ${e.project.name}"
    }
 
