@@ -27,6 +27,11 @@ class ProjectLoadedEvent(p: InstallProject) : ProjectEvent(p)
 
 class ProjectUpdatedEvent(p: InstallProject) : ProjectEvent(p)
 
+/**
+ * Fire when a request to save the projech has been made
+ */
+class ProjectBeginSaveEvent(p: InstallProject) : ProjectEvent(p)
+
 class ProjectSavedEvent(p: InstallProject) : ProjectEvent(p)
 
 class ProjectClosedEvent(p: InstallProject) : ProjectEvent(p)
