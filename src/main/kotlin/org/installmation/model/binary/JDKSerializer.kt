@@ -53,7 +53,7 @@ class JDKSerializer : JsonSerializer<JDK>, JsonDeserializer<JDK> {
       val obj = json?.asJsonObject
       var jdkName = obj?.get(JDK_NAME)?.asJsonPrimitive?.asString
       if (jdkName.isNullOrBlank()) {
-         jdkName = "JDK-" + Random(9999)
+         jdkName = "JDK-" + Random.nextInt(0, 9999)
          log.warn("Deserialized JDK had no name. Not fatal, but random name ${jdkName} assigned.")
       }
       val osString = obj?.get(JDK_OS)?.asJsonPrimitive?.asString
