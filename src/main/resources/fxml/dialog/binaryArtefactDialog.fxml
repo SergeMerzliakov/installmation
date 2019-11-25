@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
-<?import javafx.scene.control.ContextMenu?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="binaryArtefactDialog" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TableView fx:id="artefactTableView" editable="true" layoutX="4.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
@@ -35,8 +28,8 @@
             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button defaultButton="true" maxWidth="80.0" mnemonicParsing="false" onAction="#save" text="Save" GridPane.columnIndex="2" GridPane.valignment="CENTER" />
-            <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancel" text="Cancel" GridPane.columnIndex="3">
+            <Button fx:id="saveButton" defaultButton="true" maxWidth="80.0" mnemonicParsing="false" onAction="#save" text="Save" GridPane.columnIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="cancelButton" cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancel" text="Cancel" GridPane.columnIndex="3">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

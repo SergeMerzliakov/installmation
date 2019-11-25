@@ -7,35 +7,38 @@
     <children>
         <MenuBar fx:id="applicationMenuBar">
             <menus>
-                <Menu id="shutdownMenu" fx:id="shutdownMenu" mnemonicParsing="false" text="File">
+                <Menu fx:id="shutdownMenu" mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem fx:id="quitMenuItem" accelerator="Shortcut+Q" mnemonicParsing="false" onAction="#shutdown" text="Quit Application" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Project">
+                <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
-                        <MenuItem accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#openProject" text="Open Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
+                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject"
+                                  text="New Project"/>
+                        <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject"
+                                  text="Save Current Project"/>
+                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project"/>
+                        <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project"/>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Library">
+                <Menu fx:id="libraryMenu" mnemonicParsing="false" text="Library">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="JPackage Library" />
-                        <MenuItem mnemonicParsing="false" text="JavaFX Library" />
+                        <MenuItem fx:id="jpackageMenuItem" mnemonicParsing="false" text="JPackage Library" onAction="#showAllJDK"/>
+                        <MenuItem fx:id="javafxMenuItem" mnemonicParsing="false" text="JavaFX Library" onAction="#showAllJavaFX"/>
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Generate">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#generateScripts" text="Generate Installer Scripts" />
-                  <MenuItem mnemonicParsing="false" onAction="#generateImage" text="Generate Image" />
-                  <MenuItem mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer" />
-              </items>
-            </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu fx:id="generateMenu" mnemonicParsing="false" text="Generate">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#aboutDialog" text="About" />
+                        <MenuItem fx:id="generateScriptsMenuItem" mnemonicParsing="false" onAction="#generateScripts"
+                                  text="Generate Installer Scripts"/>
+                        <MenuItem fx:id="generateImageMenuItem" mnemonicParsing="false" onAction="#generateImage" text="Generate Image"/>
+                        <MenuItem fx:id="generateInstallerMenuItem" mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="aboutMenu" mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutDialog" text="About"/>
                     </items>
                 </Menu>
             </menus>
@@ -44,21 +47,24 @@
             <children>
                 <ToolBar layoutY="-74.0" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <Button mnemonicParsing="false" onAction="#showAllJDK" styleClass="toolbar-button" text="JDK" />
-                        <Button mnemonicParsing="false" onAction="#showAllJavaFX" styleClass="toolbar-button" text="JavaFX" />
+                        <Button fx:id="jpackageButton" mnemonicParsing="false" onAction="#showAllJDK" styleClass="toolbar-button" text="JDK"/>
+                        <Button fx:id="javafxButton" mnemonicParsing="false" onAction="#showAllJavaFX" styleClass="toolbar-button" text="JavaFX"/>
                     </items>
                 </ToolBar>
             <ToolBar maxWidth="1.7976931348623157E308" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
-                  <Button mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts" textAlignment="JUSTIFY">
+                  <Button fx:id="generateScriptsButton" mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts"
+                          textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateScriptTooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image" textAlignment="JUSTIFY">
+                  <Button fx:id="generateImageButton" mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image"
+                          textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateImageTooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button" text="Installer" textAlignment="JUSTIFY">
+                  <Button fx:id="generateInstallerButton" mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button"
+                          text="Installer" textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateInstallerTooltip" text="Empty Tooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>

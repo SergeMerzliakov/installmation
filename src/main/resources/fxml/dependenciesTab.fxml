@@ -56,12 +56,12 @@
               <ContextMenu fx:id="moduleListContextMenu" />
           </contextMenu>
       </ListView>
-      <Button mnemonicParsing="false" onAction="#addClasspathItem" text="Add Path" GridPane.columnIndex="7" GridPane.rowIndex="2">
+      <Button fx:id="addClasspathButton" mnemonicParsing="false" onAction="#addClasspathItem" text="Add Path" GridPane.columnIndex="7" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
       </Button>
-      <Button mnemonicParsing="false" onAction="#addModuleItem" text="Add Path" GridPane.columnIndex="7" GridPane.rowIndex="5">
+      <Button fx:id="addModuleButton" mnemonicParsing="false" onAction="#addModuleItem" text="Add Path" GridPane.columnIndex="7" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
