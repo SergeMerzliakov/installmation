@@ -26,7 +26,7 @@ import org.installmation.model.*
 import java.io.File
 
 /**
- * Manages Project lifecycle
+ * Manages Project lifecycle and fires all relevant project events
  */
 class ProjectService(val configuration: Configuration) {
 
@@ -41,6 +41,9 @@ class ProjectService(val configuration: Configuration) {
       return p
    }
 
+   /**
+    * Load from file
+    */
    fun loadProject(projectName: String): InstallProject {
       val projectFileName = InstallProject.projectFileName(projectName)
       val baseDir = projectBaseDirectory()
@@ -53,12 +56,23 @@ class ProjectService(val configuration: Configuration) {
          val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, file, JsonParserFactory.configurationParser())
          val project = reader.load()
          log.info("Project ${project.name} loaded successfully")
+         configuration.eventBus.post(ProjectLoadedEvent(project))
          return project
       } catch (e: Exception) {
          throw LoadDataException("Error loading project '${projectName}' from file. Deserialization error.", e)
       }
    }
 
+   fun closeProject(p: InstallProject?) {
+      if (p == null)
+         return
+      //save then close
+      saveProject(p)
+      configuration.eventBus.post(ProjectSavedEvent(p))
+      configuration.eventBus.post(ProjectClosedEvent(p))
+      log.info("Project '${p.name}' closed")
+   }
+   
    fun saveProject(p: InstallProject) {
       check(p.name != null && p.name!!.isNotEmpty())
 

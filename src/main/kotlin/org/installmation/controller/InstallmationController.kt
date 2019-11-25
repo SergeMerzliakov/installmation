@@ -139,19 +139,17 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun openProject() {
-      val p = projectService.loadProject("myProject")
-      configuration.eventBus.post(ProjectLoadedEvent(p))
+      val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
+
+      if (result.ok) {
+         val p = projectService.loadProject(result.data!!.nameWithoutExtension)
+         workspace.setCurrentProject(p)
+      }
    }
 
    @FXML
    fun closeProject() {
-      val current = workspace.currentProject
-      if (current != null) {
-         //save then close
-         projectService.saveProject(current)
-         configuration.eventBus.post(ProjectSavedEvent(current))
-         configuration.eventBus.post(ProjectClosedEvent(current))
-      }
+      projectService.closeProject(workspace.currentProject)
    }
    
    @FXML
@@ -169,7 +167,6 @@ class InstallmationController(private val configuration: Configuration,
       } else {
          // TODO - prompt to create project possibly
       }
-
    }
 
    @FXML
