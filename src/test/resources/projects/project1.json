@@ -1,0 +1,12 @@
+{
+  "name": "project1",
+  "imageStructure": {
+    "class-name": "org.installmation.model.SimpleImageStructure",
+    "image-structure": {
+      "fileNames": [],
+      "directories": []
+    }
+  },
+  "classPath": [],
+  "artefacts": {}
+}
