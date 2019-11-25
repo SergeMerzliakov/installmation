@@ -109,10 +109,14 @@ class DependenciesController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
       checkNotNull(e.project)
-      for (cp in e.project.classPath) {
+      classpathItems.clear()
+      moduleItems.clear()
+      
+      for (cp in e.project.classPath) 
          classpathItems.add(cp.path)
-      }
-      moduleItems.add(e.project.modulePath?.path?.path)
+      
+      if (e.project.modulePath != null && e.project.modulePath?.path != null)
+         moduleItems.add(e.project.modulePath?.path?.path)
    }
 
    @Subscribe
