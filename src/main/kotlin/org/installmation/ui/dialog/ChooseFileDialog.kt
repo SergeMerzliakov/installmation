@@ -16,21 +16,27 @@
 
 package org.installmation.ui.dialog
 
-import javafx.stage.DirectoryChooser
+import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.installmation.configuration.UserHistory
 import java.io.File
 
 /**
- * Wrapper around JavaFX DirectoryChooser dialog. Chooses a directory
+ * Wrapper around JavaFX FileChooser dialog. Chooses a single file for now
  */
-object ChooseDirectoryDialog {
+object ChooseFileDialog {
 
-   fun showAndWait(parent: Stage, title: String, userHistory: UserHistory): DialogResult<File> {
-      val chooser = DirectoryChooser()
+   /**
+    * For extensionFilter parameter use InstallmationExtensionFilters methods - no need to create your own
+    */
+   fun showAndWait(parent: Stage, title: String, userHistory: UserHistory, extensionFilter: FileChooser.ExtensionFilter? = null): DialogResult<File> {
+      val chooser = FileChooser()
       chooser.title = title
       chooser.initialDirectory = userHistory.lastPath
-      val chosen = chooser.showDialog(parent)
+      if (extensionFilter != null)
+         chooser.extensionFilters.add(extensionFilter)
+
+      val chosen = chooser.showOpenDialog(parent) //single file only
       if (chosen != null) {
          userHistory.lastPath = chosen.parentFile
          return DialogResult(true, chosen)
