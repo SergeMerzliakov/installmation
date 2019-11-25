@@ -75,11 +75,19 @@ class InstallmationApplication : Application() {
    
    override fun start(primaryStage: Stage) {
       applicationStage = primaryStage
+      val configuration = loadConfiguration(eventBus)
+      val workspace = loadWorkspace()
+      startApplication(primaryStage, configuration, workspace, eventBus)
+   }
+
+   /**
+    * Integration Test friendly entry point
+    */
+   fun startApplication(primaryStage: Stage, configuration: Configuration, workspace: Workspace, eventBus: EventBus) {
       try {
          log.info("Starting Installmation from ${File(".").canonicalPath}")
          eventBus.register(this)
-         val configuration = loadConfiguration(eventBus)
-         val workspace = loadWorkspace()
+
          val projectService = ProjectService(configuration)
          val controller = InstallmationController(configuration, UserHistory(), workspace, projectService)
          setupEventHandlers(primaryStage, configuration, workspace)
