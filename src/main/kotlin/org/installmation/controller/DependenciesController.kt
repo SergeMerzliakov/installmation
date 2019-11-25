@@ -134,10 +134,6 @@ class DependenciesController(private val configuration: Configuration,
       classpathItems.clear()
       moduleItems.clear()
    }
-
-
-
-
 }
 
 
