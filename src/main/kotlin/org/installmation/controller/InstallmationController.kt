@@ -29,6 +29,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.core.RunningAsTestEvent
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.*
 import org.installmation.model.binary.OperatingSystem
@@ -333,6 +334,11 @@ class InstallmationController(private val configuration: Configuration,
       workspace.closeCurrentProject()
    }
 
+   @Subscribe
+   fun handleRunningAsTestEvent(e: RunningAsTestEvent) {
+      // only for testing, as TestFX cannot cope with System Menu Bar, as of version 4.0.16-alpha
+      applicationMenuBar.isUseSystemMenuBar = false
+   }
 }
 
 
