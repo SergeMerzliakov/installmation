@@ -18,7 +18,7 @@
           <RowConstraints maxHeight="50.0" minHeight="40.0" prefHeight="50.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Installmation build 13" GridPane.columnSpan="3">
+            <Label text="Installmation build 14" GridPane.columnSpan="3">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin>
