@@ -19,12 +19,15 @@ package org.installmation.controller
 import com.google.common.eventbus.Subscribe
 import javafx.fxml.FXML
 import javafx.scene.control.TextField
+import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.Workspace
 import org.installmation.service.*
+import org.installmation.ui.dialog.ChooseFileDialog
+import org.installmation.ui.dialog.InstallmationExtensionFilters
 import java.io.File
 
 
@@ -47,6 +50,14 @@ class ExecutableController(private val configuration: Configuration,
 
    @FXML
    fun initialize() {
+   }
+
+   @FXML
+   fun chooseMainJar() {
+      val result = ChooseFileDialog.showAndWait(mainJarField.scene.window as Stage, "Select Main Application Jar File", userHistory, InstallmationExtensionFilters.jarFilter())
+      if (result.ok) {
+         mainJarField.text = result.data!!.path
+      }
    }
 
    //-------------------------------------------------------
