@@ -24,7 +24,7 @@ import javafx.stage.Stage
 /**
  * Item for showing list of readonly messages
  */
-class ItemListDialog(ownerStage: Stage, title: String, label: String, errors: List<String>) : CustomDialog<Boolean>(ownerStage, title) {
+class ItemListDialog(title: String, label: String, errors: List<String>) : CustomDialog<Boolean>(null, title) {
 
    private var controller: ItemListDialogController
 
@@ -37,6 +37,6 @@ class ItemListDialog(ownerStage: Stage, title: String, label: String, errors: Li
    }
 
    override fun result(): DialogResult<Boolean> {
-      return DialogResult(true, true)
+      return DialogResult(ok = true, data = true)
    }
 }

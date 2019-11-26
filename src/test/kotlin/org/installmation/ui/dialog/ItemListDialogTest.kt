@@ -47,7 +47,7 @@ class ItemListDialogTest : ApplicationTest() {
       buttonSingle = Button("Show Dialog")
       buttonSingle.id = SHOW_DIALOG_BUTTON
       buttonSingle.setOnAction {
-         dialog = ItemListDialog(stage!!, DIALOG_TITLE, DIALOG_LABEL, listOf(MESSAGE_1, MESSAGE_2))
+         dialog = ItemListDialog(DIALOG_TITLE, DIALOG_LABEL, listOf(MESSAGE_1, MESSAGE_2))
          result = dialog.showAndWait()
       }
 
