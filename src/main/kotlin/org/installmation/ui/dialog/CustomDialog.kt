@@ -23,7 +23,7 @@ import javafx.stage.Stage
  * Superclass of all non-trivial custom dialogs which are essential modal windows
  * Not for standard message or warning dialogs - use JavaFX dialogs for those
  */
-abstract class CustomDialog<T>(ownerStage:Stage, title:String) {
+abstract class CustomDialog<T>(ownerStage: Stage?, title: String) {
    var stage: Stage = Stage()
 
    init {
