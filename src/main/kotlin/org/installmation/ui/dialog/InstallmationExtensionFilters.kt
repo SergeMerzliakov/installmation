@@ -22,4 +22,8 @@ object InstallmationExtensionFilters {
    fun projectFilter(): FileChooser.ExtensionFilter {
       return FileChooser.ExtensionFilter("Project Files (*.json)", "*.json")
    }
+
+   fun jarFilter(): FileChooser.ExtensionFilter {
+      return FileChooser.ExtensionFilter("Jar Files (*.jar)", "*.jar")
+   }
 }
