@@ -87,24 +87,6 @@ class InstallProjectTest {
       assertThat(p2).isEqualToComparingFieldByField(p)
    }
 
-   /*
-   rm -rf ../../image-build     ==> temporary dir
-   rm -rf ../../image-input     ==> temporary dir. put artefacts here 
-   cd ../..
-   gradlew imageJar             ==> action create main jar file 
-   gradlew lib                  ==> copy depedencies here
-   cd installer/mac
-   export JPACKAGE=/Users/foo/tools/jpackage49/Contents/Home/bin/jpackage
-   $JPACKAGE 
-      --package-type app-image 
-      -d ../../image-build 
-      -i ../../image-input 
-      -n demo1 
-      --module-path /Library/Java/javafx/13.0/jmods 
-      --add-modules java.base,javafx.controls,javafx.fxml,javafx.graphics 
-      --main-jar javafx-kotlin-demo-1.0.0.jar 
-      --main-class org.epistatic.kotlindemo.DemoApp
-    */
    @Test
    fun shouldCreateImage() {
       // TODO
