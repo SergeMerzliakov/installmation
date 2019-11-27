@@ -23,6 +23,9 @@ import org.installmation.configuration.Constant
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.*
+import org.installmation.ui.dialog.ErrorDialog
+import org.installmation.ui.dialog.HelpDialog
+import org.installmation.ui.dialog.ItemListDialog
 import java.io.File
 
 /**
@@ -83,6 +86,30 @@ class ProjectService(val configuration: Configuration) {
          log.debug("Saved project ${p.name} to file")
       } catch (e: Exception) {
          throw SaveDataException("Error saving project ${p.name} to file", e)
+      }
+   }
+
+   /**
+    * Generates an image which contains all the parts required for an installer
+    */
+   fun generateImage(p: InstallProject) {
+      try {
+         log.info("Generate Image  - Validating configuration")
+         val validationResult = p.validateConfiguration()
+         if (!validationResult.success) {
+            val d = ItemListDialog("Errors", "Issues", validationResult.errors)
+            d.showNonModal()
+            return
+         }
+
+         log.info("Generate Image  - Generating Image")
+         val creator = InstallCreator(configuration, p)
+         creator.createImage()
+         log.info("Generate Image  - Image created successfully")
+         HelpDialog.showAndWait("Image Created","Image created at ${p.imageBuildDirectory}")
+      } catch (e: Exception) {
+         log.info("Generate Image  - Failed with error: ${e.message}", e)
+         ErrorDialog.showAndWait("Image Creation Error", e.toString())
       }
    }
 

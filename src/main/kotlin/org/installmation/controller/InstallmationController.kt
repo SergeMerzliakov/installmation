@@ -17,8 +17,11 @@
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.scene.control.ListView
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuBar
 import javafx.scene.control.Tooltip
@@ -29,7 +32,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.core.ClearMessagesEvent
+import org.installmation.core.DateUtils
 import org.installmation.core.RunningAsTestEvent
+import org.installmation.core.UserMessageEvent
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.*
 import org.installmation.model.binary.OperatingSystem
@@ -56,6 +62,7 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var generalInfoPane: AnchorPane
    @FXML private lateinit var executablePane: AnchorPane
    @FXML private lateinit var shutdownMenu: Menu
+   @FXML private lateinit var messageListView: ListView<String>
 
    @FXML private lateinit var generateScriptTooltip :Tooltip
    @FXML private lateinit var generateImageTooltip :Tooltip
@@ -86,6 +93,9 @@ class InstallmationController(private val configuration: Configuration,
          workspace,
          projectService)
 
+
+   // models
+   private val userMessages: ObservableList<String> = FXCollections.observableArrayList<String>() 
    
    init {
       configuration.eventBus.register(this)
@@ -100,6 +110,7 @@ class InstallmationController(private val configuration: Configuration,
       }
       initializeChildControllers()
       initializeTooltips()
+      messageListView.items = userMessages
    }
 
    private fun initializeTooltips() {
@@ -185,22 +196,7 @@ class InstallmationController(private val configuration: Configuration,
          HelpDialog.showAndWait("Cannot Generate Image", "No project selected, created or loaded. Cannot generate an image.")
          return
       }
-
-      try {
-         log.info("Generate Image  - Validating configuration")
-         val validationResult = workspace.currentProject?.validateConfiguration()
-         if (validationResult?.success == false) {
-            val errorDialog = ItemListDialog(applicationStage(), "Errors", "Issues", validationResult.errors)
-            errorDialog.showNonModal()
-            return
-         }
-
-         log.info("Generate Image  - Generating Image")
-
-         log.info("Generate Image  - Image created successfully")
-      } catch (e: Exception) {
-         log.info("Generate Image  - Failed with error: ${e.message}", e)
-      }
+      projectService.generateImage(workspace.currentProject!!)
    }
 
    /*
@@ -332,10 +328,21 @@ class InstallmationController(private val configuration: Configuration,
    }
 
    @Subscribe
-   fun handleRunningAsTestEvent(e: RunningAsTestEvent) {
+   fun handleRunningAsTest(e: RunningAsTestEvent) {
       // only for testing, as TestFX cannot cope with System Menu Bar, as of version 4.0.16-alpha
       applicationMenuBar.isUseSystemMenuBar = false
    }
+
+   @Subscribe
+   fun handleUserMessage(e: UserMessageEvent) {
+      userMessages.add("${DateUtils.now()} - ${e.message}")
+   }
+
+   @Subscribe
+   fun handleClearMessage(e: ClearMessagesEvent) {
+      userMessages.clear()
+   }
+
 }
 
 
