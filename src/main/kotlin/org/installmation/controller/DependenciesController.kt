@@ -35,6 +35,7 @@ import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
+import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
 import java.io.File
 
@@ -46,6 +47,7 @@ class DependenciesController(private val configuration: Configuration,
 
    companion object {
       val log: Logger = LogManager.getLogger(DependenciesController::class.java)
+      const val PROPERTY_HELP_MODULES = "help.modules"
    }
 
    @FXML lateinit var classPathListView: ListView<String>
@@ -102,6 +104,12 @@ class DependenciesController(private val configuration: Configuration,
       }
    }
 
+
+   @FXML
+   fun helpModules() {
+      HelpDialog.showAndWait("Module Paths", configuration.resourceBundle.getString(PROPERTY_HELP_MODULES))     
+   }
+   
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
