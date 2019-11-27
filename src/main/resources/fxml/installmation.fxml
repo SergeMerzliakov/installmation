@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar fx:id="applicationMenuBar">
@@ -14,31 +30,28 @@
                 </Menu>
                 <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject"
-                                  text="New Project"/>
-                        <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject"
-                                  text="Save Current Project"/>
-                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project"/>
-                        <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project"/>
+                        <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
+                        <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
+                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
                 <Menu fx:id="libraryMenu" mnemonicParsing="false" text="Library">
                     <items>
-                        <MenuItem fx:id="jpackageMenuItem" mnemonicParsing="false" text="JPackage Library" onAction="#showAllJDK"/>
-                        <MenuItem fx:id="javafxMenuItem" mnemonicParsing="false" text="JavaFX Library" onAction="#showAllJavaFX"/>
+                        <MenuItem fx:id="jpackageMenuItem" mnemonicParsing="false" onAction="#showAllJDK" text="JPackage Library" />
+                        <MenuItem fx:id="javafxMenuItem" mnemonicParsing="false" onAction="#showAllJavaFX" text="JavaFX Library" />
                     </items>
                 </Menu>
                 <Menu fx:id="generateMenu" mnemonicParsing="false" text="Generate">
                     <items>
-                        <MenuItem fx:id="generateScriptsMenuItem" mnemonicParsing="false" onAction="#generateScripts"
-                                  text="Generate Installer Scripts"/>
-                        <MenuItem fx:id="generateImageMenuItem" mnemonicParsing="false" onAction="#generateImage" text="Generate Image"/>
-                        <MenuItem fx:id="generateInstallerMenuItem" mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer"/>
+                        <MenuItem fx:id="generateScriptsMenuItem" mnemonicParsing="false" onAction="#generateScripts" text="Generate Installer Scripts" />
+                        <MenuItem fx:id="generateImageMenuItem" mnemonicParsing="false" onAction="#generateImage" text="Generate Image" />
+                        <MenuItem fx:id="generateInstallerMenuItem" mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer" />
                     </items>
                 </Menu>
                 <Menu fx:id="aboutMenu" mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutDialog" text="About"/>
+                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutDialog" text="About" />
                     </items>
                 </Menu>
             </menus>
@@ -47,67 +60,90 @@
             <children>
                 <ToolBar layoutY="-74.0" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <Button fx:id="jpackageButton" mnemonicParsing="false" onAction="#showAllJDK" styleClass="toolbar-button" text="JDK"/>
-                        <Button fx:id="javafxButton" mnemonicParsing="false" onAction="#showAllJavaFX" styleClass="toolbar-button" text="JavaFX"/>
+                        <Button fx:id="jpackageButton" mnemonicParsing="false" onAction="#showAllJDK" styleClass="toolbar-button" text="JDK" />
+                        <Button fx:id="javafxButton" mnemonicParsing="false" onAction="#showAllJavaFX" styleClass="toolbar-button" text="JavaFX" />
                     </items>
                 </ToolBar>
             <ToolBar maxWidth="1.7976931348623157E308" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
-                  <Button fx:id="generateScriptsButton" mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts"
-                          textAlignment="JUSTIFY">
+                  <Button fx:id="generateScriptsButton" mnemonicParsing="false" onAction="#generateScripts" styleClass="toolbar-button" text="Scripts" textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateScriptTooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>
-                  <Button fx:id="generateImageButton" mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image"
-                          textAlignment="JUSTIFY">
+                  <Button fx:id="generateImageButton" mnemonicParsing="false" onAction="#generateImage" styleClass="toolbar-button" text="Image" textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateImageTooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>
-                  <Button fx:id="generateInstallerButton" mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button"
-                          text="Installer" textAlignment="JUSTIFY">
+                  <Button fx:id="generateInstallerButton" mnemonicParsing="false" onAction="#generateInstaller" styleClass="toolbar-button" text="Installer" textAlignment="JUSTIFY">
                      <tooltip>
                         <Tooltip fx:id="generateInstallerTooltip" text="Empty Tooltip" textAlignment="JUSTIFY" wrapText="true" />
                      </tooltip></Button>
               </items>
             </ToolBar>
-                <SplitPane dividerPositions="0.1" layoutX="128.0" layoutY="63.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
-                    <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: red;">
-                            <children>
-                                <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <tabs>
-                              <Tab text="Install Location">
-                                <content>
-                                  <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
-                                </content>
-                              </Tab>
-                                        <Tab text="General Info">
-                                            <content>
-                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Java Binaries">
-                                            <content>
-                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text=" Application Executable">
-                                            <content>
-                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Dependencies">
-                                            <content>
-                                                <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                            </content>
-                                        </Tab>
-                                    </tabs>
-                                </TabPane>
-                            </children>
-                        </AnchorPane>
-                    </items>
-                </SplitPane>
+            <SplitPane dividerPositions="0.8" layoutY="43.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
+               <items>
+                      <SplitPane dividerPositions="0.1" prefHeight="160.0" prefWidth="200.0">
+                          <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: red;">
+                                  <children>
+                                      <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <tabs>
+                                    <Tab text="Install Location">
+                                      <content>
+                                        <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </Tab>
+                                              <Tab text="General Info">
+                                                  <content>
+                                                      <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                              </Tab>
+                                              <Tab text="Java Binaries">
+                                                  <content>
+                                                      <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                              </Tab>
+                                              <Tab text=" Application Executable">
+                                                  <content>
+                                                      <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                              </Tab>
+                                              <Tab text="Dependencies">
+                                                  <content>
+                                                      <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                              </Tab>
+                                          </tabs>
+                                      </TabPane>
+                                  </children>
+                              </AnchorPane>
+                          </items>
+                      </SplitPane>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="28.0" minHeight="28.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="26.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                     <children>
+                        <ListView fx:id="messageListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </ListView>
+                        <Label text="Messages">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                     </children>
+                  </GridPane>
+               </items>
+            </SplitPane>
             </children>
             <stylesheets>
                 <URL value="@../css/installmation.css" />
