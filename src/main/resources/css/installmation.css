@@ -1,3 +1,18 @@
+/****************************
+*  Headings
+*****************************/
+
+.title-2 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-font-family: Verdana, sans-serif;
+}
+
+
+/****************************
+*  Buttons
+*****************************/
+
 .toolbar-button{
     -fx-min-height: 32px;
     -fx-max-height: 32px;
@@ -18,8 +33,24 @@
     -fx-text-fill: darkblue;
 }
 
-.title-2{
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-font-family: Verdana,sans-serif;
+/**
+   Fixed width buttons
+ */
+.button-60 {
+    -fx-min-width: 60px;
+    -fx-max-width: 60px;
+}
+
+.button-75 {
+    -fx-min-width: 75px;
+    -fx-max-width: 75px;
+}
+
+/****************************
+*  Tab Panes
+*****************************/
+
+.compressed-tab:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: -0 4 -2 2;
 }
