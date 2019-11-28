@@ -31,8 +31,8 @@
                 <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
                         <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
-                        <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
-                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
+                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+S"  mnemonicParsing="false" onAction="#openProject" text="Open Project" />
                         <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
@@ -45,8 +45,13 @@
                 <Menu fx:id="generateMenu" mnemonicParsing="false" text="Generate">
                     <items>
                         <MenuItem fx:id="generateScriptsMenuItem" mnemonicParsing="false" onAction="#generateScripts" text="Generate Installer Scripts" />
-                        <MenuItem fx:id="generateImageMenuItem" mnemonicParsing="false" onAction="#generateImage" text="Generate Image" />
-                        <MenuItem fx:id="generateInstallerMenuItem" mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer" />
+                        <MenuItem fx:id="generateImageMenuItem" accelerator="Shortcut+I" mnemonicParsing="false" onAction="#generateImage" text="Generate Image" />
+                        <MenuItem fx:id="generateInstallerMenuItem" accelerator="Shortcut+G" mnemonicParsing="false" onAction="#generateInstaller" text="Generate Installer" />
+                    </items>
+                </Menu>
+                <Menu fx:id="toolMenu" mnemonicParsing="false" text="Tools">
+                    <items>
+                        <MenuItem fx:id="jdepsMenuItem" mnemonicParsing="false" onAction="#jdepsDialog" text="jdeps tool" />
                     </items>
                 </Menu>
                 <Menu fx:id="aboutMenu" mnemonicParsing="false" text="Help">

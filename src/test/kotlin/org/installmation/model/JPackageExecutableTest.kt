@@ -19,7 +19,9 @@ package org.installmation.model
 import io.mockk.every
 import io.mockk.spyk
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.JPackageExecutable
+import org.installmation.model.binary.OperatingSystem
 import org.junit.Test
 import java.io.File
 
@@ -32,7 +34,8 @@ class JPackageExecutableTest {
    
    @Test
    fun shouldGetVersionEarlyAccessJdk14() {
-      val mockPackage = spyk(JPackageExecutable(File("ignored")))
+      val jdk = JDKFactory.create(OperatingSystem.os(), "test", File("src/test/resources/mac/jpackage49"))
+      val mockPackage = spyk(JPackageExecutable(jdk))
       every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
       assertThat(mockPackage.queryVersion()).isEqualTo(JDK_14_BUILD49)
    }

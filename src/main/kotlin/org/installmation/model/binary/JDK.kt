@@ -32,6 +32,12 @@ interface JDK : UserNamed {
     * java executable full path
     */
    val javaExecutable: File
+
+   /**
+    * jdeps executable full path
+    */
+   val jdepsExecutable: File
+
    
    /**
     * Returns true of JPackage was found (in JDK 14 or later)

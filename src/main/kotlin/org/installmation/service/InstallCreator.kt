@@ -18,7 +18,6 @@ package org.installmation.service
 import org.installmation.configuration.Configuration
 import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.UserMessageEvent
-import org.installmation.model.Argument
 import org.installmation.model.InstallProject
 import org.installmation.model.ValueArgument
 import org.installmation.model.binary.JPackageExecutable
@@ -57,7 +56,7 @@ class InstallCreator(private val configuration: Configuration, private val proje
       deleteDirectories(project.imageBuildDirectory!!)
       project.imageBuildDirectory!!.mkdir()
 
-      val packager = JPackageExecutable(project.jpackageJDK!!.packageExecutable)
+      val packager = JPackageExecutable(project.jpackageJDK!!)
       packager.parameters.addArgument(ValueArgument("--package-type", "app-image"))
       packager.parameters.addArgument(ValueArgument("-i", project.imageContentDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-d", project.imageBuildDirectory!!.path))

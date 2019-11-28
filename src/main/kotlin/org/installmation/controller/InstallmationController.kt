@@ -296,6 +296,15 @@ class InstallmationController(private val configuration: Configuration,
       parent.children.add(pane)
       log.debug("Child controller initialized successfully - $fxmlPath")
    }
+
+   /*
+    Show Jdeps tool dialog - for generic dependency generation
+    */
+   @FXML
+   fun jdepsDialog() {
+      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, workspace.currentProject?.mainJar, workspace.currentProject?.classPath, workspace.currentProject?.modulePath?.path)
+      d.showAndWait()
+   }
    
    //-------------------------------------------------------
    //  Event Subscribers

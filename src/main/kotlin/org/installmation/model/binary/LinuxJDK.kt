@@ -20,8 +20,11 @@ import java.io.File
 
 class LinuxJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
 
+   // TODO
    override val binaryDirectory = "bin"
    override val javaExecutableName = "java"
    override val jpackageExecutableName = "jpackage"
+   override val jdepsExecutableName = "jdeps"
+   
    override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.Linux
 }

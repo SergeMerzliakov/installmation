@@ -18,12 +18,14 @@ package org.installmation.model.binary
 
 import java.io.File
 
-class MacJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
-
-   override val binaryDirectory = "Contents/Home/bin" 
-   override val javaExecutableName = "java"
-   override val jpackageExecutableName = "jpackage"
-   override val jdepsExecutableName = "jdeps"
+/**
+ * runs JDK jdeps command
+ */
+class JDepsExecutable(jdk: JDK) : AbstractExecutable(jdk.jdepsExecutable) {
    
-   override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.OSX
+   override val id = "jdeps"
+
+   override fun queryVersion(): String {
+      return fetchVersion("--version")
+   }
 }

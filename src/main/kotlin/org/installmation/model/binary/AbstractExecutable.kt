@@ -19,6 +19,7 @@ package org.installmation.model.binary
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.model.ArgumentList
+import org.installmation.model.FlagArgument
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -61,5 +62,16 @@ abstract class AbstractExecutable(executable: File) : Executable {
       return executable.hashCode()
    }
 
-
+   /**
+    * query via command to executable
+    */
+   protected fun fetchVersion(versionFlag: String): String {
+      parameters.addArgument(FlagArgument(versionFlag))
+      val output = execute()
+      if (output.isEmpty())
+         throw ExecutableException("No version info output from '${executable}'")
+      if (output.size == 1)
+         return output[0]
+      return output[1]
+   }
 }

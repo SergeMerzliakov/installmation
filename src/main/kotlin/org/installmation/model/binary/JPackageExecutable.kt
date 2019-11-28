@@ -16,21 +16,16 @@
 
 package org.installmation.model.binary
 
-import org.installmation.model.FlagArgument
 import java.io.File
 
-class JPackageExecutable(executable: File) : AbstractExecutable(executable) {
+/**
+ * runs JDK jpackage command
+ */
+class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
    
    override val id = "jpackage"
 
-
    override fun queryVersion(): String {
-      parameters.addArgument(FlagArgument("--version"))
-      val output = execute()
-      if (output.isEmpty())
-         throw ExecutableException("No version info output from '${executable}'")
-      if (output.size == 1)
-         return output[0]
-      return output[1]
+      return fetchVersion("--version")
    }
 }

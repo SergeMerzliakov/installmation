@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <rowConstraints>
+      <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
+        <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" />
+        <RowConstraints minHeight="90.0" prefHeight="120.0" />
+        <RowConstraints minHeight="90.0" prefHeight="90.0" />
+        <RowConstraints minHeight="36.0" prefHeight="36.0" />
+      <RowConstraints minHeight="36.0" prefHeight="36.0" />
+      <RowConstraints minHeight="36.0" prefHeight="36.0" />
+      <RowConstraints minHeight="90.0" prefHeight="90.0" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="NEVER" />
+    </rowConstraints>
+    <columnConstraints>
+      <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+      <ColumnConstraints hgrow="ALWAYS" minWidth="50.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="86.0" minWidth="86.0" prefWidth="86.0" />
+    </columnConstraints>
+   <children>
+      <Label text="Main Jar" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </Label>
+      <Label text="Class Path" GridPane.rowIndex="2" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </Label>
+      <ListView fx:id="classPathListView" prefHeight="90.0" prefWidth="348.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                  <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </ListView>
+      <TextField fx:id="mainJar" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </TextField>
+      <FlowPane orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="addClassPathButton" alignment="CENTER" contentDisplay="CENTER" minWidth="70.0" mnemonicParsing="false" onAction="#addClassPath" styleClass="button-60" text="Add" />
+            <Button fx:id="clearClassPathButton" alignment="CENTER" mnemonicParsing="false" onAction="#clearClassPath" styleClass="button-60" text="Clear" />
+         </children>
+      </FlowPane>
+      <Label text="Module Path" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+      <ListView fx:id="modulePathListView" prefHeight="90.0" prefWidth="409.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </ListView>
+      <FlowPane orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <children>
+            <Button fx:id="addModulePathButton" mnemonicParsing="false" styleClass="button-60" text="Add" />
+            <Button fx:id="clearModulePathButton" mnemonicParsing="false" styleClass="button-60" text="Clear" />
+         </children>
+      </FlowPane>
+      <Label text="Generated Command" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </Label>
+      <TextField fx:id="generatedCommandText" GridPane.columnSpan="4" GridPane.rowIndex="5">
+         <GridPane.margin>
+            <Insets left="5.0" right="5.0" />
+         </GridPane.margin>
+      </TextField>
+      <Button fx:id="closeButton" cancelButton="true" mnemonicParsing="false" onAction="#close" styleClass="button-75" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+      <Button fx:id="runButton" mnemonicParsing="false" onAction="#run" styleClass="button-75" text="Run" GridPane.rowIndex="8" />
+      <Label styleClass="title-2" text="Module Dependencies" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+         <GridPane.margin>
+            <Insets left="10.0" top="8.0" />
+         </GridPane.margin>
+      </Label>
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="compressed-tab" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="4" GridPane.rowIndex="7">
+        <tabs>
+          <Tab text="List">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="dependencyListView" layoutX="-48.0" layoutY="-80.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Text">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="dependencyTextArea" layoutX="-17.0" layoutY="-86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </TabPane>
+      <Label text="JDK">
+         <GridPane.margin>
+            <Insets top="3.0" />
+         </GridPane.margin>
+      </Label>
+      <ComboBox fx:id="jdkComboBox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+         <GridPane.margin>
+            <Insets top="3.0" />
+         </GridPane.margin>
+      </ComboBox>
+   </children>
+   <stylesheets>
+      <URL value="@../../css/bootstrap3.css" />
+      <URL value="@../../css/installmation.css" />
+   </stylesheets>
+</GridPane>

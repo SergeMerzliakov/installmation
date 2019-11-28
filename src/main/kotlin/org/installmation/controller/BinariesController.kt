@@ -58,9 +58,9 @@ class BinariesController(private val configuration: Configuration,
    @FXML private lateinit var installJDKComboBox: ComboBox<JDK>
 
    // model loaded from configuration
-   private val jpackageJDKItems: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
-   private val installJDKItems: ObservableList<JDK> = FXCollections.observableArrayList<JDK>()
-   private val javafxItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList<NamedDirectory>()
+   private val jpackageJDKItems: ObservableList<JDK> = FXCollections.observableArrayList()
+   private val installJDKItems: ObservableList<JDK> = FXCollections.observableArrayList()
+   private val javafxItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList()
 
    init {
       configuration.eventBus.register(this)

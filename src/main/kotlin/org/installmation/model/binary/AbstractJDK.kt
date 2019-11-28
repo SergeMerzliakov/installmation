@@ -25,23 +25,28 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
    protected abstract val binaryDirectory: String
    protected abstract val javaExecutableName: String
    protected abstract val jpackageExecutableName: String
+   protected abstract val jdepsExecutableName: String
 
    override val name = usersJDKName
    override val path = fullJDKPath
-   override val javaExecutable: File
-      get() = getJDKFile(binaryDirectory, javaExecutableName)
 
    override val supportsJPackage: Boolean
       get() = File(File(path, binaryDirectory), jpackageExecutableName).exists()
 
+   override val javaExecutable: File
+      get() = getJDKFile(binaryDirectory, javaExecutableName)
+
    override val packageExecutable: File
+      get() = getJDKFile(binaryDirectory, jpackageExecutableName)
+
+   override val jdepsExecutable: File
       get() = getJDKFile(binaryDirectory, jpackageExecutableName)
 
    /**
     * Get File in JDK
     * Throws FileNotFoundException if not found
     */
-   private fun getJDKFile(fileRelativePath: String, fileName: String): File {
+   protected fun getJDKFile(fileRelativePath: String, fileName: String): File {
       val fullPath = File(File(path,fileRelativePath), fileName)
       if (!fullPath.exists())
          throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found")
@@ -64,4 +69,9 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
       result = 31 * result + path.hashCode()
       return result
    }
+
+   override fun toString(): String {
+      return name
+   }
+
 }
