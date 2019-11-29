@@ -74,4 +74,13 @@ abstract class AbstractExecutable(executable: File) : Executable {
          return output[0]
       return output[1]
    }
+
+   override fun toString(): String {
+      val buf = StringBuilder()
+      buf.append(executable)
+      for( p in parameters.toCommand())
+         buf.append(' ').append(p)
+      return buf.toString()
+   }
+
 }
