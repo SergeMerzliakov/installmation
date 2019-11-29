@@ -40,7 +40,7 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
       get() = getJDKFile(binaryDirectory, jpackageExecutableName)
 
    override val jdepsExecutable: File
-      get() = getJDKFile(binaryDirectory, jpackageExecutableName)
+      get() = getJDKFile(binaryDirectory, jdepsExecutableName)
 
    /**
     * Get File in JDK
