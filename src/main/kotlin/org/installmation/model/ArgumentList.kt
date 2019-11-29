@@ -23,7 +23,7 @@ class ArgumentList {
     * overwrites previous value
     */
    fun addArgument(arg: Argument) {
-      arguments[arg.shortForm] = arg
+      arguments[arg.name] = arg
    }
 
    /**

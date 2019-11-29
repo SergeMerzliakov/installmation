@@ -22,16 +22,15 @@ package org.installmation.model
  *  short is something like -cp lib/mylib.jar
  *  long is something like --classpath lib/mylib.jar
  */
-class ValueArgument(short: String, long: String? = null) : Argument {
+class ValueArgument(short: String, value: String? = null) : Argument {
 
-   override var shortForm: String = short
-   override var longForm: String = long ?: short
-   var value: String = "<null>"
+   override var name: String = short
+   var value: String = value ?: ""
 
    /**
     * Used in building shell commands
     */
    override fun toCommand(): String {
-      return "$shortForm $value"
+      return "$name $value"
    }
 }

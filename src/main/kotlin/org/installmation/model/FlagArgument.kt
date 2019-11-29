@@ -21,14 +21,13 @@ package org.installmation.model
  *  short is something like -h
  *  long is something like --help
  */
-class FlagArgument(short: String, long: String? = null) : Argument {
-   override var shortForm: String = short
-   override var longForm: String = long ?: short
+class FlagArgument(name: String) : Argument {
+   override var name: String = name
 
    /**
     * Used in building shell commands
     */
    override fun toCommand(): String {
-      return shortForm
+      return name
    }
 }

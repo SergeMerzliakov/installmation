@@ -18,12 +18,11 @@ package org.installmation.model
 
 /**
  * Argument to a command line executable
- *  shortForm is something like -h
- *  longForm is something like --help
+ *  name is something like -h
  */
 interface Argument {
-   var shortForm: String 
-   var longForm: String
+   var name: String 
+   
    /**
     * Used in building shell commands
     */
