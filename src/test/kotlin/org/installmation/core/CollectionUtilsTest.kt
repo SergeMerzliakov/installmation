@@ -23,20 +23,20 @@ class CollectionUtilsTest {
 
    @Test
    fun shouldGenerateClasspath() {
-      val cp = CollectionUtils.toClasspath(listOf("path1", "path2"))
+      val cp = CollectionUtils.toPathList(listOf("path1", "path2"))
       val s = File.pathSeparatorChar
       assertThat(cp).isEqualTo("path1${s}path2")
    }
 
    @Test
    fun shouldGenerateEmptyClasspath() {
-      val cp = CollectionUtils.toClasspath(listOf())
+      val cp = CollectionUtils.toPathList(listOf())
       assertThat(cp).isEqualTo("")
    }
 
    @Test
    fun shouldGenerateSingleItemClasspath() {
-      val cp = CollectionUtils.toClasspath(listOf("path1"))
+      val cp = CollectionUtils.toPathList(listOf("path1"))
       assertThat(cp).isEqualTo("path1")
    }
 }

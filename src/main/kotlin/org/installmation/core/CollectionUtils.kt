@@ -25,7 +25,7 @@ object CollectionUtils {
    /**
     * Create a string like a classpath entry
     */
-   fun toClasspath(items: Collection<String>): String {
+   fun toPathList(items: Collection<String>): String {
       val buf = StringBuilder()
       items.forEach{ buf.append(it).append(File.pathSeparatorChar)}
       if (buf.isNotEmpty())
