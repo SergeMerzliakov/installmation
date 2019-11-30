@@ -28,7 +28,8 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.model.NamedDirectory
+import org.installmation.model.ModuleJmodDeselectedEvent
+import org.installmation.model.ModuleJmodSelectedEvent
 import org.installmation.model.Workspace
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
@@ -119,12 +120,13 @@ class DependenciesController(private val configuration: Configuration,
       checkNotNull(e.project)
       classpathItems.clear()
       moduleItems.clear()
-      
-      for (cp in e.project.classPath) 
+
+      for (cp in e.project.classPath)
          classpathItems.add(cp.path)
-      
-      if (e.project.modulePath != null && e.project.modulePath?.path != null)
-         moduleItems.add(e.project.modulePath?.path?.path)
+
+      if (e.project.modulePath.isNotEmpty())
+         for (m in e.project.modulePath)
+            moduleItems.add(m.path)
    }
 
    @Subscribe
@@ -136,15 +138,31 @@ class DependenciesController(private val configuration: Configuration,
          e.project.classPath.add(File(path))
       }
 
-      // TODO - why do we need more than one
+      // TODO - module1
       if (moduleItems.isNotEmpty())
-         e.project.modulePath = NamedDirectory("module1", File(moduleItems[0]))
+         e.project.modulePath.add(File(moduleItems[0]))
    }
 
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       classpathItems.clear()
       moduleItems.clear()
+   }
+
+   /**
+    * Add JFX modules to modules list
+    */
+   @Subscribe
+   fun handleJFXModuleSelectedEvent(e: ModuleJmodDeselectedEvent) {
+      moduleItems.remove(e.deselected.path.path)
+   }
+   
+   /**
+    * Add JFX modules to modules list
+    */
+   @Subscribe
+   fun handleJFXModuleSelectedEvent(e: ModuleJmodSelectedEvent) {
+      moduleItems.add(e.selected.path.path)
    }
 }
 

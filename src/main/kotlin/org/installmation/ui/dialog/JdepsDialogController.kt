@@ -20,39 +20,51 @@ import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.ComboBox
 import javafx.scene.control.ListView
+import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.stage.Stage
+import org.installmation.core.CollectionUtils
+import org.installmation.model.FlagArgument
+import org.installmation.model.ValueArgument
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDepsExecutable
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val mainJarFile: File?, classPathFiles: List<File>?, modulePathFile: File?) {
+class JdepsDialogController(private val jdkList: Collection<JDK>, private val mainJarFile: File?, classPathFiles: Collection<File>?, modulePathFiles: Collection<File>?) {
 
    @FXML lateinit var mainJar: TextField
    @FXML lateinit var generatedCommandText: TextField
    @FXML lateinit var classPathListView: ListView<String>
    @FXML lateinit var modulePathListView: ListView<String>
    @FXML lateinit var jdkComboBox: ComboBox<JDK>
+   @FXML lateinit var processOutputView: ListView<String>
+   @FXML lateinit var dependencyListView: ListView<String>
+   @FXML lateinit var dependencyTextArea: TextArea
 
    // model
    private val classPath: ObservableList<String> = FXCollections.observableArrayList()
    private val modulePath: ObservableList<String> = FXCollections.observableArrayList()
+   private val moduleOutput: ObservableList<String> = FXCollections.observableArrayList()
+   private val processOutput: ObservableList<String> = FXCollections.observableArrayList()
 
    init {
       if (classPathFiles != null) {
          for (f in classPathFiles)
             classPath.add(f.path)
       }
-      if (modulePathFile != null) {
-         modulePath.add(modulePathFile.path)
+      if (modulePathFiles != null) {
+         for (f in modulePathFiles)
+            modulePath.add(f.path)
       }
    }
 
    @FXML
    fun initialize() {
-      mainJar.text = mainJarFile?.name
+      mainJar.text = mainJarFile?.path
       classPathListView.items = classPath.sorted()
       modulePathListView.items = modulePath.sorted()
+      dependencyListView.items = moduleOutput.sorted()
+      processOutputView.items = processOutput.sorted()
       for (jdk in jdkList)
          jdkComboBox.items.add(jdk)
       jdkComboBox.selectionModel.select(0)
@@ -62,7 +74,17 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
    fun run() {
       jdkComboBox.selectionModel
       val jdeps = JDepsExecutable(jdkComboBox.selectionModel.selectedItem)
-      jdeps.execute(15)
+      jdeps.parameters.addArgument(FlagArgument("-s"))
+      jdeps.parameters.addArgument(ValueArgument("--class-path", CollectionUtils.toPathList(classPath)))
+      jdeps.parameters.addArgument(ValueArgument("--module-path", CollectionUtils.toPathList(modulePath)))
+      jdeps.parameters.addArgument(FlagArgument(mainJar.text))
+      generatedCommandText.text = jdeps.toString()
+      val output = jdeps.execute(15)
+      moduleOutput.clear()
+      for (line in output) {
+         processOutput.add(line)
+         moduleOutput.add(line)
+      }
    }
 
    @FXML

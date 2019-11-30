@@ -32,7 +32,7 @@
                     <items>
                         <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
                         <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
-                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+S"  mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
                         <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
@@ -94,16 +94,16 @@
                                   <children>
                                       <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                           <tabs>
+                                              <Tab text="Project Info">
+                                                  <content>
+                                                      <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                              </Tab>
                                     <Tab text="Install Location">
                                       <content>
                                         <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
                                       </content>
                                     </Tab>
-                                              <Tab text="General Info">
-                                                  <content>
-                                                      <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                              </Tab>
                                               <Tab text="Java Binaries">
                                                   <content>
                                                       <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />

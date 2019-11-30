@@ -42,7 +42,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project1"
       p.version = "1.0"
-      p.modulePath = NamedDirectory("m1", File("/some/dir"))
+      p.modulePath =  mutableSetOf(File("/some/dir"))
       
       // save
       val service = ProjectService(config)
@@ -57,7 +57,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project2"
       p.version = "2.0"
-      p.modulePath = NamedDirectory("m1", File("/other/dir"))
+      p.modulePath =  mutableSetOf(File("/other/dir"))
 
       // save
       val service = ProjectService(config)

@@ -69,7 +69,7 @@ class InstallProjectTest {
       p.imageStructure as SimpleImageStructure
       p.imageStructure!!.addFile("file1.txt")
       p.imageStructure!!.addDirectory("dir1")
-      p.modulePath = NamedDirectory("m1", File("module1"))
+      p.modulePath = mutableSetOf(File("module1"))
       p.imageBuildDirectory = File("image")
       p.imageContentDirectory = File("content")
       p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))

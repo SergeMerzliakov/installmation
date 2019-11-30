@@ -56,14 +56,17 @@ class InstallProject {
    var mainJar: File? = null
    var copyright: String? = null
    var jpackageJDK: JDK? = null
+   // for JavaFX only - TODO
+   var javaFXLib: NamedDirectory? = null
+   var javaFXMods: NamedDirectory? = null
    var installJDK: JDK? = null // JDK to install with application
-   var modulePath: NamedDirectory? = null
    var imageStructure: ImageStructure? = null
    var inputDirectory: File? = null
    var imageContentDirectory: File? = null  // application content defined by imageStructure
    var imageBuildDirectory: File? = null  //output
-   var classPath = mutableListOf<File>()
-   
+   var modulePath = mutableSetOf<File>()
+   var classPath = mutableSetOf<File>()
+
    val artefacts = mutableMapOf<String, InstallArtefact>()
 
    fun projectFile(baseDirectory: File = Constant.DEFAULT_BASE_DIR): File {
@@ -79,10 +82,13 @@ class InstallProject {
       validateStringField("Project Version", version, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
-      validateExistingFileField("JFX Module Path", modulePath?.path, result)
       validateFutureFileField("Image Content", imageContentDirectory, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
-      
+      for (m in modulePath)
+         validateExistingFileField("Module Path Item", m, result)
+      for (cp in classPath)
+         validateExistingFileField("Class Path Item ", cp, result)
+
       return result
    }
 
@@ -142,13 +148,11 @@ class InstallProject {
       var result = name?.hashCode() ?: 0
       result = 31 * result + (version?.hashCode() ?: 0)
       result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
-      result = 31 * result + (modulePath?.hashCode() ?: 0)
+      result = 31 * result + modulePath.hashCode()
       result = 31 * result + (imageStructure?.hashCode() ?: 0)
       result = 31 * result + (imageContentDirectory?.hashCode() ?: 0)
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)
       result = 31 * result + artefacts.hashCode()
       return result
    }
-
-
 }

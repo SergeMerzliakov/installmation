@@ -17,6 +17,7 @@ package org.installmation.service
 
 import org.installmation.configuration.Configuration
 import org.installmation.core.ClearMessagesEvent
+import org.installmation.core.CollectionUtils
 import org.installmation.core.UserMessageEvent
 import org.installmation.model.InstallProject
 import org.installmation.model.ValueArgument
@@ -61,8 +62,8 @@ class InstallCreator(private val configuration: Configuration, private val proje
       packager.parameters.addArgument(ValueArgument("-i", project.imageContentDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-d", project.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", project.name))
-      packager.parameters.addArgument(ValueArgument("--module-path", project.modulePath?.path?.path))
-      // TODO add-modules here
+      // TODO add jdeps modules here
+      packager.parameters.addArgument(ValueArgument("--module-path", CollectionUtils.toPathList(project.modulePath.map { it.path })))
       packager.parameters.addArgument(ValueArgument("--main-jar", project.mainJar?.name))
       packager.parameters.addArgument(ValueArgument("--main-class", project.mainClass))
       

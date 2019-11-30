@@ -23,16 +23,12 @@ import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
 import javafx.stage.Stage
-import javafx.util.StringConverter
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.javafx.ComboUtils
-import org.installmation.model.JDKListUpdatedEvent
-import org.installmation.model.JFXModuleUpdatedEvent
-import org.installmation.model.NamedDirectory
-import org.installmation.model.Workspace
+import org.installmation.model.*
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
 import org.installmation.model.binary.OperatingSystem
@@ -41,6 +37,7 @@ import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.BinaryArtefactDialog
+import org.installmation.ui.dialog.HelpDialog
 
 
 class BinariesController(private val configuration: Configuration,
@@ -50,17 +47,35 @@ class BinariesController(private val configuration: Configuration,
 
    companion object {
       val log: Logger = LogManager.getLogger(BinariesController::class.java)
+      const val PROPERTY_HELP_FX_LIBS = "help.fx.libs"
+      const val PROPERTY_HELP_FX_MODULES = "help.fx.modules"
+      const val PROPERTY_HELP_JPACKAGE = "help.fx.jpackage"
+      const val PROPERTY_HELP_JDK = "help.fx.jdk"
    }
 
-   @FXML private lateinit var jpackageComboBox: ComboBox<JDK>
-   @FXML private lateinit var configureJPackageButton: Button
-   @FXML private lateinit var javafxComboBox: ComboBox<NamedDirectory>
+   // combos
+   @FXML private lateinit var moduleJmodComboBox: ComboBox<NamedDirectory>
+   @FXML private lateinit var moduleLibComboBox: ComboBox<NamedDirectory>
    @FXML private lateinit var installJDKComboBox: ComboBox<JDK>
+   @FXML private lateinit var jpackageComboBox: ComboBox<JDK>
+
+   // buttons
+   @FXML private lateinit var configureJPackageButton: Button
+   @FXML private lateinit var configureModuleJmodButton: Button
+   @FXML private lateinit var configureModuleLibrariesButton: Button
+
+   // help
+   @FXML private lateinit var helpFXLibrariesButton: Button
+   @FXML private lateinit var helpFXModulesButton: Button
+   @FXML private lateinit var helpJpackageButton: Button
+   @FXML private lateinit var helpJDKButton: Button
+
 
    // model loaded from configuration
    private val jpackageJDKItems: ObservableList<JDK> = FXCollections.observableArrayList()
    private val installJDKItems: ObservableList<JDK> = FXCollections.observableArrayList()
-   private val javafxItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList()
+   private val moduleLibItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList()
+   private val moduleJmodItems: ObservableList<NamedDirectory> = FXCollections.observableArrayList()
 
    init {
       configuration.eventBus.register(this)
@@ -69,6 +84,7 @@ class BinariesController(private val configuration: Configuration,
    @FXML
    fun initialize() {
       initializeConfiguredBinaries()
+      initializeListeners()
    }
 
    /**
@@ -81,20 +97,50 @@ class BinariesController(private val configuration: Configuration,
       installJDKItems.addAll(configuration.jdkEntries.values)
       installJDKComboBox.items = installJDKItems.sorted()
 
-      javafxItems.addAll(configuration.javafxModuleEntries.entries.map { NamedDirectory(it.key, it.value) })
-      javafxComboBox.items = javafxItems.sorted()
-      javafxComboBox.converter = object : StringConverter<NamedDirectory>() {
+      moduleLibItems.addAll(configuration.javafxLibEntries.entries.map { NamedDirectory(it.key, it.value) })
+      moduleLibComboBox.items = moduleLibItems.sorted()
+      moduleLibComboBox.converter = StringConverterFactory.namedItemConverter(moduleLibComboBox.items)
 
-         override fun toString(obj: NamedDirectory?): String? {
-            return obj?.name
-         }
+      moduleJmodItems.addAll(configuration.javafxModuleEntries.entries.map { NamedDirectory(it.key, it.value) })
+      moduleJmodComboBox.items = moduleJmodItems.sorted()
+      moduleJmodComboBox.converter = StringConverterFactory.namedItemConverter(moduleJmodComboBox.items)
+   }
 
-         override fun fromString(name: String): NamedDirectory {
-            return javafxComboBox.items.first { it.name == name }
+   /**
+    * Selection and other listeners
+    */
+   private fun initializeListeners() {
+      moduleJmodComboBox.selectionModel.selectedItemProperty()
+            .addListener { _, old, new ->
+               if (old != null)
+                  configuration.eventBus.post(ModuleJmodDeselectedEvent(old))
+               if (new != null)
+                  configuration.eventBus.post(ModuleJmodSelectedEvent(new))
+            }
+
+      moduleLibComboBox.selectionModel.selectedItemProperty()
+            .addListener { _, old, new ->
+               if (old != null)
+                  configuration.eventBus.post(ModuleLibDeselectedEvent(old))
+               if (new != null)
+                  configuration.eventBus.post(ModuleLibSelectedEvent(new))
+            }
+   }
+   
+   @FXML
+   fun configureModuleLibraries() {
+      val dialog = moduleLibraryDialog()
+      val result = dialog.showAndWait()
+      if (result.ok) {
+         ComboUtils.comboSelect(moduleLibComboBox, result.data?.name)
+         // update model
+         val updatedModel = dialog.updatedModel()
+         if (updatedModel != null) {
+            configuration.eventBus.post(ModuleLibUpdatedEvent(updatedModel))
          }
       }
    }
-   
+
    @FXML
    fun configureJPackageBinaries() {
       updateJDKList(jpackageComboBox)
@@ -104,26 +150,46 @@ class BinariesController(private val configuration: Configuration,
    fun configureInstallJDK() {
       updateJDKList(installJDKComboBox)
    }
-   
+
    @FXML
-   fun configureJavaFxModules() {
-      val dialog = javaFXFDialog()
+   fun configureModuleJmods() {
+      val dialog = moduleJmodDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
-         ComboUtils.comboSelect(javafxComboBox, result.data?.name)
+         ComboUtils.comboSelect(moduleJmodComboBox, result.data?.name)
          // update model
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
-            configuration.eventBus.post(JFXModuleUpdatedEvent(updatedModel))
+            configuration.eventBus.post(ModuleJmodUpdatedEvent(updatedModel))
          }
       }
+   }
+
+   @FXML
+   fun helpFXLibraries() {
+      HelpDialog.showAndWait("JavaFX Libraries", configuration.resourceBundle.getString(PROPERTY_HELP_FX_LIBS))
+   }
+
+   @FXML
+   fun helpFXModules() {
+      HelpDialog.showAndWait("JavaFX JMod Files", configuration.resourceBundle.getString(PROPERTY_HELP_FX_MODULES))
+   }
+
+   @FXML
+   fun helpJpackage() {
+      HelpDialog.showAndWait("jpackage", configuration.resourceBundle.getString(PROPERTY_HELP_JPACKAGE))
+   }
+
+   @FXML
+   fun helpJDK() {
+      HelpDialog.showAndWait("jpackage", configuration.resourceBundle.getString(PROPERTY_HELP_JDK))
    }
 
    /**
     * Update list of known JDKs. Used for both JPackager access, and
     * setting the JDK to add to installer.
     */
-   private fun updateJDKList(combo: ComboBox<JDK>){
+   private fun updateJDKList(combo: ComboBox<JDK>) {
       val dialog = jdkDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
@@ -135,14 +201,19 @@ class BinariesController(private val configuration: Configuration,
          }
       }
    }
-   
+
    private fun jdkDialog(): BinaryArtefactDialog {
       val items = jpackageJDKItems.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
    }
 
-   private fun javaFXFDialog(): BinaryArtefactDialog {
-      val items = javafxItems.map { NamedDirectory(it.name, it.path) }
+   private fun moduleLibraryDialog(): BinaryArtefactDialog {
+      val items = moduleLibItems.map { NamedDirectory(it.name, it.path) }
+      return BinaryArtefactDialog(applicationStage(), "JavaFX Library Directories", items, userHistory)
+   }
+
+   private fun moduleJmodDialog(): BinaryArtefactDialog {
+      val items = moduleJmodItems.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
    }
 
@@ -159,23 +230,26 @@ class BinariesController(private val configuration: Configuration,
       checkNotNull(e.project)
       e.project.installJDK = installJDKComboBox.selectionModel.selectedItem
       e.project.jpackageJDK = jpackageComboBox.selectionModel.selectedItem
-      e.project.modulePath = javafxComboBox.selectionModel.selectedItem
+      e.project.modulePath.clear()
+      e.project.javaFXLib = moduleLibComboBox.selectionModel.selectedItem
+      e.project.javaFXMods = moduleJmodComboBox.selectionModel.selectedItem
+      e.project.modulePath.add(moduleJmodComboBox.selectionModel.selectedItem.path)
    }
-
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
       checkNotNull(e.project)
       jpackageComboBox.selectionModel.select(e.project.jpackageJDK)
       installJDKComboBox.selectionModel.select(e.project.installJDK)
-      javafxComboBox.selectionModel.select(e.project.modulePath)
+      moduleJmodComboBox.selectionModel.select(e.project.javaFXMods)
+      moduleLibComboBox.selectionModel.select(e.project.javaFXLib)
    }
    
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       jpackageComboBox.selectionModel.clearSelection()
       installJDKComboBox.selectionModel.clearSelection()
-      javafxComboBox.selectionModel.clearSelection()
+      moduleJmodComboBox.selectionModel.clearSelection()
    }
 
    /**
@@ -200,13 +274,28 @@ class BinariesController(private val configuration: Configuration,
     * and configuration
     */
    @Subscribe
-   fun handleJFXModuleUpdated(e: JFXModuleUpdatedEvent) {
-      javafxItems.clear()
+   fun handleModuleJmodUpdated(e: ModuleJmodUpdatedEvent) {
+      moduleJmodItems.clear()
       configuration.javafxModuleEntries.clear()
       e.updated.map {
          val nd = NamedDirectory(it.name, it.path)
-         javafxItems.add(nd)
+         moduleJmodItems.add(nd)
          configuration.javafxModuleEntries[it.name] = it.path
+      }
+   }
+
+   /**
+    * Clear out and refresh list of FX modules from this controller's model
+    * and configuration
+    */
+   @Subscribe
+   fun handleModuleLibUpdated(e: ModuleLibUpdatedEvent) {
+      moduleLibItems.clear()
+      configuration.javafxLibEntries.clear()
+      e.updated.map {
+         val nd = NamedDirectory(it.name, it.path)
+         moduleLibItems.add(nd)
+         configuration.javafxLibEntries[it.name] = it.path
       }
    }
 }

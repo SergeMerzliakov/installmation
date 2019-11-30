@@ -10,51 +10,66 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane hgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="120.0" prefWidth="120.0" />
         <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="200.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="42.0" minWidth="42.0" prefWidth="42.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Label alignment="CENTER" contentDisplay="RIGHT" text="Jpackage" textAlignment="RIGHT" />
-        <Label text="JavaFx (Optional)" GridPane.rowIndex="2" />
+        <Label text="Libraries" GridPane.rowIndex="3" />
         <ComboBox fx:id="jpackageComboBox" maxWidth="1.7976931348623157E308" minHeight="28.0" minWidth="28.0" GridPane.columnIndex="1" GridPane.halignment="LEFT">
             <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
+            <Insets />
             </GridPane.margin>
         </ComboBox>
-        <Button fx:id="configureJPackageButton" mnemonicParsing="false" onAction="#configureJPackageBinaries" text="Configure" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+        <Button fx:id="configureJPackageButton" mnemonicParsing="false" onAction="#configureJPackageBinaries" text="Configure" GridPane.columnIndex="2">
             <GridPane.margin>
-                <Insets right="8.0" />
+                <Insets />
             </GridPane.margin>
         </Button>
-        <ComboBox fx:id="javafxComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+        <ComboBox fx:id="moduleLibComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
             <GridPane.margin>
-                <Insets left="5.0" right="5.0" />
+                <Insets />
             </GridPane.margin>
         </ComboBox>
-        <Button fx:id="configureJFXButton" mnemonicParsing="false" onAction="#configureJavaFxModules" text="Configure" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+        <Button fx:id="configureModuleLibrariesButton" mnemonicParsing="false" onAction="#configureModuleLibraries" text="Configure" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <GridPane.margin>
-                <Insets right="8.0" />
+                <Insets />
             </GridPane.margin>
         </Button>
       <Label text="JDK to Install" GridPane.rowIndex="1" />
       <ComboBox fx:id="installJDKComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
+            <Insets />
          </GridPane.margin>
       </ComboBox>
-      <Button mnemonicParsing="false" onAction="#configureInstallJDK" text="Configure" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+      <Button fx:id="configureInstallJDKButton" mnemonicParsing="false" onAction="#configureInstallJDK" text="Configure" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets right="8.0" />
+            <Insets />
          </GridPane.margin>
       </Button>
+      <Label styleClass="title-2" text="Module Configuration" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </Label>
+      <Label text="Jmods" GridPane.rowIndex="4" />
+      <ComboBox fx:id="moduleJmodComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button fx:id="configureModuleJmodButton" mnemonicParsing="false" onAction="#configureModuleJmods" text="Configure" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <Button fx:id="helpFXLibrariesButton" mnemonicParsing="false" onAction="#helpFXLibraries" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <Button fx:id="helpFXModulesButton" mnemonicParsing="false" onAction="#helpFXModules" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <Button fx:id="helpJpackageButton" mnemonicParsing="false" onAction="#helpJpackage" styleClass="help-button" text="?" GridPane.columnIndex="3" />
+      <Button fx:id="helpJDKButton" mnemonicParsing="false" onAction="#helpJDK" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="1" />
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />

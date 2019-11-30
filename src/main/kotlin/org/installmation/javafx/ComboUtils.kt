@@ -30,5 +30,4 @@ object ComboUtils {
       val item = combo.items.find { it.name == id }
       combo.selectionModel.select(item)
    }
-
 }

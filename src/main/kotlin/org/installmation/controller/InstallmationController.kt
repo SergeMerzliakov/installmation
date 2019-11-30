@@ -265,7 +265,7 @@ class InstallmationController(private val configuration: Configuration,
          // update model
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
-            configuration.eventBus.post(JFXModuleUpdatedEvent(updatedModel))
+            configuration.eventBus.post(ModuleJmodUpdatedEvent(updatedModel))
          }
       }
    }
@@ -302,7 +302,8 @@ class InstallmationController(private val configuration: Configuration,
     */
    @FXML
    fun jdepsDialog() {
-      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, workspace.currentProject?.mainJar, workspace.currentProject?.classPath, workspace.currentProject?.modulePath?.path)
+      //combined JFX mods with other mods
+      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, workspace.currentProject?.mainJar, workspace.currentProject?.classPath, workspace.currentProject?.modulePath)
       d.showAndWait()
    }
    
