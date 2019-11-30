@@ -27,7 +27,7 @@ class FlagArgument(name: String) : Argument {
    /**
     * Used in building shell commands
     */
-   override fun toCommand(): String {
-      return name
+   override fun toCommand(): List<String> {
+      return listOf(name)
    }
 }

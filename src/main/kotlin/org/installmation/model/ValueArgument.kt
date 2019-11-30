@@ -30,7 +30,7 @@ class ValueArgument(short: String, value: String? = null) : Argument {
    /**
     * Used in building shell commands
     */
-   override fun toCommand(): String {
-      return "$name $value"
+   override fun toCommand(): List<String> {
+      return listOf(name, value)
    }
 }

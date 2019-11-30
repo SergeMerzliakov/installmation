@@ -28,8 +28,14 @@ class ArgumentList {
 
    /**
     * for use in shell script execution
+    * each flag and its value are distinct item in the list
     */
    fun toCommand(): List<String> {
-      return arguments.values.map { it.toCommand() }
+      val command = mutableListOf<String>()
+
+      for (a in arguments) {
+         command.addAll(a.value.toCommand())
+      }
+      return command
    }
 }

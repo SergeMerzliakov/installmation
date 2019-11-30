@@ -26,5 +26,5 @@ interface Argument {
    /**
     * Used in building shell commands
     */
-    fun toCommand(): String
+   fun toCommand(): List<String>
 }
