@@ -18,10 +18,10 @@
           <RowConstraints maxHeight="50.0" minHeight="40.0" prefHeight="50.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Installmation build 16" GridPane.columnSpan="3">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
+            <Label text="Installmation build 17" GridPane.columnSpan="3">
+                <GridPane.margin>
+                    <Insets right="5.0"/>
+                </GridPane.margin>
             </Label>
             <Button fx:id="okButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#close" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <padding>
