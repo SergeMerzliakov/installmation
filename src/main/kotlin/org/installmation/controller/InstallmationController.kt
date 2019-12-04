@@ -167,6 +167,7 @@ class InstallmationController(private val configuration: Configuration,
    fun saveProject() {
       val current = workspace.currentProject
       if (current != null) {
+         current.prepareForSave()
          configuration.eventBus.post(ProjectBeginSaveEvent(current))
          projectService.saveProject(current)
          configuration.eventBus.post(ProjectSavedEvent(current))

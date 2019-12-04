@@ -92,6 +92,14 @@ class InstallProject {
       return result
    }
 
+   /**
+    * Clear collections before state update and save
+    */
+   fun prepareForSave() {
+      modulePath.clear()
+      classPath.clear()
+   }
+
    private fun validateStringField(fieldName: String, field: String?, result: ValidationResult) {
       if (field == null || field.isNullOrBlank()) {
          result.success = false

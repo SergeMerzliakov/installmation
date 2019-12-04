@@ -124,23 +124,19 @@ class DependenciesController(private val configuration: Configuration,
       for (cp in e.project.classPath)
          classpathItems.add(cp.path)
 
-      if (e.project.modulePath.isNotEmpty())
-         for (m in e.project.modulePath)
-            moduleItems.add(m.path)
+      for (m in e.project.modulePath)
+         moduleItems.add(m.path)
    }
 
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
-
-      e.project.classPath.clear()
-      for (path in classPathListView.items) {
+      // do not clear project path collections - other event handlers will be adding things
+      // as well
+      for (path in classPathListView.items)
          e.project.classPath.add(File(path))
-      }
-
-      // TODO - module1
-      if (moduleItems.isNotEmpty())
-         e.project.modulePath.add(File(moduleItems[0]))
+      for (m in moduleItems)
+         e.project.modulePath.add(File(m))
    }
 
    @Subscribe

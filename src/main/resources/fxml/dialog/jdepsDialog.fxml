@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
 <GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <rowConstraints>
       <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
@@ -25,7 +11,7 @@
         <RowConstraints minHeight="90.0" prefHeight="120.0" />
         <RowConstraints minHeight="90.0" prefHeight="90.0" />
         <RowConstraints minHeight="36.0" prefHeight="36.0" />
-      <RowConstraints minHeight="36.0" prefHeight="36.0" />
+        <RowConstraints minHeight="78.0" prefHeight="78.0"/>
       <RowConstraints minHeight="36.0" prefHeight="36.0" />
       <RowConstraints minHeight="90.0" prefHeight="90.0" valignment="CENTER" vgrow="ALWAYS" />
       <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="NEVER" />
@@ -92,11 +78,6 @@
             <Insets left="10.0" />
          </GridPane.margin>
       </Label>
-      <TextField fx:id="generatedCommandText" GridPane.columnSpan="4" GridPane.rowIndex="5">
-         <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
-         </GridPane.margin>
-      </TextField>
       <Button fx:id="closeButton" cancelButton="true" mnemonicParsing="false" onAction="#close" styleClass="button-75" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="8" />
       <Button fx:id="runButton" mnemonicParsing="false" onAction="#run" styleClass="button-75" text="Run" GridPane.rowIndex="8" />
       <Label styleClass="title-2" text="Module Dependencies" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
@@ -138,16 +119,22 @@
             <Insets left="5.0" right="5.0" />
          </padding>
       </TabPane>
-      <Label text="JDK">
-         <GridPane.margin>
-            <Insets top="3.0" />
-         </GridPane.margin>
-      </Label>
-      <ComboBox fx:id="jdkComboBox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
-         <GridPane.margin>
-            <Insets top="3.0" />
-         </GridPane.margin>
-      </ComboBox>
+       <Label text="JDK">
+           <GridPane.margin>
+               <Insets top="3.0"/>
+           </GridPane.margin>
+       </Label>
+       <ComboBox fx:id="jdkComboBox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+           <GridPane.margin>
+               <Insets top="3.0"/>
+           </GridPane.margin>
+       </ComboBox>
+       <TextArea fx:id="generatedCommandText" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnSpan="4"
+                 GridPane.rowIndex="5">
+           <GridPane.margin>
+               <Insets left="5.0" right="5.0"/>
+           </GridPane.margin>
+       </TextArea>
    </children>
    <stylesheets>
       <URL value="@../../css/bootstrap3.css" />

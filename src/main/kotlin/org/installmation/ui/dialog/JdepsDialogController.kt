@@ -24,16 +24,15 @@ import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.stage.Stage
 import org.installmation.core.CollectionUtils
-import org.installmation.model.FlagArgument
-import org.installmation.model.ValueArgument
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDepsExecutable
+import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val mainJarFile: File?, classPathFiles: Collection<File>?, modulePathFiles: Collection<File>?) {
+class JdepsDialogController(private val jdkList: Collection<JDK>, private val mainJarFile: File?, classPathFiles: Collection<File>?, moduleLibs: Collection<File>?) {
 
    @FXML lateinit var mainJar: TextField
-   @FXML lateinit var generatedCommandText: TextField
+   @FXML lateinit var generatedCommandText: TextArea
    @FXML lateinit var classPathListView: ListView<String>
    @FXML lateinit var modulePathListView: ListView<String>
    @FXML lateinit var jdkComboBox: ComboBox<JDK>
@@ -52,8 +51,8 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
          for (f in classPathFiles)
             classPath.add(f.path)
       }
-      if (modulePathFiles != null) {
-         for (f in modulePathFiles)
+      if (moduleLibs != null) {
+         for (f in moduleLibs)
             modulePath.add(f.path)
       }
    }
@@ -72,19 +71,23 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
 
    @FXML
    fun run() {
-      jdkComboBox.selectionModel
       val jdeps = JDepsExecutable(jdkComboBox.selectionModel.selectedItem)
-      jdeps.parameters.addArgument(FlagArgument("-s"))
-      jdeps.parameters.addArgument(ValueArgument("--class-path", CollectionUtils.toPathList(classPath)))
-      jdeps.parameters.addArgument(ValueArgument("--module-path", CollectionUtils.toPathList(modulePath)))
-      jdeps.parameters.addArgument(FlagArgument(mainJar.text))
+      val modulePathString = CollectionUtils.toPathList(modulePath)
+      val classPathString = CollectionUtils.toPathList(classPath)
+
+      val mdg = ModuleDependenciesGenerator(jdeps, classPathString, modulePathString, mainJar.text)
+      val moduleDependencies = mdg.generate()
       generatedCommandText.text = jdeps.toString()
-      val output = jdeps.execute(15)
       moduleOutput.clear()
-      for (line in output) {
+      processOutput.clear()
+
+      for (line in mdg.output) {
          processOutput.add(line)
-         moduleOutput.add(line)
       }
+      for (d in moduleDependencies) {
+         moduleOutput.add(d)
+      }
+      dependencyTextArea.text = moduleDependencies.joinToString()
    }
 
    @FXML

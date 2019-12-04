@@ -228,9 +228,10 @@ class BinariesController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
+      // do not clear project path collections - other event handlers will be adding things
+      // as well
       e.project.installJDK = installJDKComboBox.selectionModel.selectedItem
       e.project.jpackageJDK = jpackageComboBox.selectionModel.selectedItem
-      e.project.modulePath.clear()
       e.project.javaFXLib = moduleLibComboBox.selectionModel.selectedItem
       e.project.javaFXMods = moduleJmodComboBox.selectionModel.selectedItem
       e.project.modulePath.add(moduleJmodComboBox.selectionModel.selectedItem.path)
