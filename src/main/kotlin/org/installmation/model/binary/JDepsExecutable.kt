@@ -16,8 +16,6 @@
 
 package org.installmation.model.binary
 
-import java.io.File
-
 /**
  * runs JDK jdeps command
  */
