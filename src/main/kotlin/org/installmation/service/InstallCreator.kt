@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.CollectionUtils
+import org.installmation.core.OperatingSystem
 import org.installmation.core.UserMessageEvent
 import org.installmation.io.FileFilters
 import org.installmation.model.InstallProject
@@ -97,7 +98,8 @@ class InstallCreator(private val configuration: Configuration) {
       val output = packager.execute(30)
       for (line in output)
          progressMessage(line)
-      progressMessage("Image created successfully in ${project.imageBuildDirectory!!.path}")
+      
+      progressMessage("Image ${project.name + OperatingSystem.imageFileExtension()} created successfully in ${project.imageBuildDirectory!!.path}")
    }
 
    /**
