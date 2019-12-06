@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="500.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar fx:id="applicationMenuBar">
             <menus>
@@ -87,44 +87,39 @@
             </ToolBar>
             <SplitPane dividerPositions="0.8" layoutY="43.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
                <items>
-                      <SplitPane dividerPositions="0.1" prefHeight="160.0" prefWidth="200.0">
-                          <items>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: red;">
-                                  <children>
-                                      <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                          <tabs>
-                                              <Tab text="Project Info">
-                                                  <content>
-                                                      <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                              </Tab>
-                                    <Tab text="Install Location">
-                                      <content>
-                                        <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
-                                      </content>
-                                    </Tab>
-                                              <Tab text="Java Binaries">
-                                                  <content>
-                                                      <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                              </Tab>
-                                              <Tab text=" Application Executable">
-                                                  <content>
-                                                      <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                              </Tab>
-                                              <Tab text="Dependencies">
-                                                  <content>
-                                                      <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                              </Tab>
-                                          </tabs>
-                                      </TabPane>
-                                  </children>
-                              </AnchorPane>
-                          </items>
-                      </SplitPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: red;">
+                            <children>
+                                <TabPane layoutX="58.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <tabs>
+                                        <Tab text="Project Info">
+                                            <content>
+                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            </content>
+                                        </Tab>
+                              <Tab text="Install Location">
+                                <content>
+                                  <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                                        <Tab text="Java Binaries">
+                                            <content>
+                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            </content>
+                                        </Tab>
+                                        <Tab text=" Application Executable">
+                                            <content>
+                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Dependencies">
+                                            <content>
+                                                <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </children>
+                        </AnchorPane>
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
