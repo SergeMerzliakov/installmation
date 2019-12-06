@@ -112,6 +112,27 @@ class ProjectService(val configuration: Configuration) {
       }
    }
 
+   fun generateInstaller(p: InstallProject) {
+      try {
+         log.info("Generate Installer  - Validating configuration")
+         val validationResult = p.validateConfiguration()
+         if (!validationResult.success) {
+            val d = ItemListDialog("Errors", "Issues", validationResult.errors)
+            d.showNonModal()
+            return
+         }
+
+         log.info("Generate Installer  - Generating Image")
+         val creator = InstallCreator(configuration)
+         creator.createInstaller(p)
+         log.info("Generate Installer  - Image created successfully")
+         HelpDialog.showAndWait("Installer Created","Image created at ${p.installerDirectory}")
+      } catch (e: Exception) {
+         log.info("Generate Installer  - Failed with error: ${e.message}", e)
+         ErrorDialog.showAndWait("Installer Creation Error", e.toString())
+      }
+   }
+
    private fun projectBaseDirectory(): File {
       return File(configuration.baseDirectory, Constant.PROJECT_DIR)
    }

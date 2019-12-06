@@ -209,17 +209,7 @@ class InstallmationController(private val configuration: Configuration,
          HelpDialog.showAndWait("Cannot Generate Installer", "No project selected, created or loaded. Cannot generate an installer.")
          return
       }
-
-      try {
-         log.info("Generate Installer  - Validating configuration")
-
-
-         log.info("Generate Installer  - Generating Image")
-
-         log.info("Generate Installer  - Installer created successfully")
-      } catch (e: Exception) {
-         log.info("Generate Installer  - Failed with error: ${e.message}", e)
-      }
+      projectService.generateInstaller(workspace.currentProject!!)
    }
 
    /**

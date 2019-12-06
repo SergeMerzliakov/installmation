@@ -40,22 +40,7 @@ class InstallCreator(private val configuration: Configuration) {
    }
 
    /**
-    * rm -rf ../../image-build     ==> temporary dir
-   rm -rf ../../image-input     ==> temporary dir. put artefacts here
-   cd ../..
-   gradlew imageJar             ==> action create main jar file
-   gradlew lib                  ==> copy dependencies here
-   cd installer/mac
-   export JPACKAGE=/Users/foo/tools/jpackage49/Contents/Home/bin/jpackage
-   $JPACKAGE
-   --package-type app-image
-   -d ../../image-build
-   -i ../../image-input
-   -n demo1
-   --module-path /Library/Java/javafx/13.0/jmods
-   --add-modules java.base,javafx.controls,javafx.fxml,javafx.graphics
-   --main-jar javafx-kotlin-demo-1.0.0.jar
-   --main-class org.epistatic.kotlindemo.DemoApp
+    * Create image (.exe or .app file), but not the installer
     */
    fun createImage(project: InstallProject) {
       checkNotNull(project.imageBuildDirectory)
@@ -66,6 +51,60 @@ class InstallCreator(private val configuration: Configuration) {
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Image creation started....")
 
+      val output = doCreateImage(project)
+      for (line in output)
+         progressMessage(line)
+
+      progressMessage("Image ${project.name + OperatingSystem.imageFileExtension()} created successfully in ${project.imageBuildDirectory!!.path}")
+   }
+
+
+   /**
+    * Create complete installer
+    */
+   fun createInstaller(project: InstallProject) {
+      checkNotNull(project.installerDirectory)
+      checkNotNull(project.jpackageJDK)
+      checkNotNull(project.mainJar)
+      checkNotNull(project.javaFXLib?.path)
+
+      configuration.eventBus.post(ClearMessagesEvent())
+      progressMessage("Installer creation started....")
+
+      // Step 1 create image as well
+      var output = doCreateImage(project)
+      for (line in output)
+         progressMessage(line)
+
+      progressMessage("*** APPLICATION IMAGE CREATED SUCCESSFULLY. STARTING INSTALLER CREATION ***")
+      // Step 2 - create installer based on image created in Step 1
+
+      output = doCreateInstaller(project)
+      for (line in output)
+         progressMessage(line)
+
+      progressMessage("Installer creation completed successfully in ${project.installerDirectory!!.path}")
+   }
+
+   /**
+    * Create Installer
+    */
+   private fun doCreateInstaller(project: InstallProject): List<String> {
+      project.installerDirectory?.mkdirs()
+
+      val packager = JPackageExecutable(project.jpackageJDK!!)
+      packager.parameters.addArgument(ValueArgument("--package-type", "pkg"))
+      packager.parameters.addArgument(ValueArgument("-d", project.installerDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-n", project.name))
+      val appImage = File(project.imageBuildDirectory!!.path, project.name + OperatingSystem.imageFileExtension())
+      packager.parameters.addArgument(ValueArgument("--app-image", appImage.path))
+      return packager.execute(30)
+   }
+
+   /**
+    * This is called by installer creation process and returns the command output
+    */
+   private fun doCreateImage(project: InstallProject): List<String> {
       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
       createImageContent(project)
 
@@ -89,17 +128,10 @@ class InstallCreator(private val configuration: Configuration) {
       packager.parameters.addArgument(ValueArgument("--main-jar", project.mainJar?.name))
       packager.parameters.addArgument(ValueArgument("--main-class", project.mainClass))
 
-      // log entire command for debugging
       val fullCommand = packager.toString()
       log.info("command: $fullCommand")
       progressMessage("command: $fullCommand")
-
-      // pick a suitably long timeout, but don't wait forever
-      val output = packager.execute(30)
-      for (line in output)
-         progressMessage(line)
-      
-      progressMessage("Image ${project.name + OperatingSystem.imageFileExtension()} created successfully in ${project.imageBuildDirectory!!.path}")
+      return packager.execute(30)
    }
 
    /**
@@ -132,14 +164,6 @@ class InstallCreator(private val configuration: Configuration) {
          }
       }
    }
-
-   fun createInstaller() {
-      configuration.eventBus.post(ClearMessagesEvent())
-      progressMessage("Installer creation started....")
-      // TODO
-      progressMessage("Installer creation completed successfully")
-   }
-
 
    private fun deleteDirectories(d: File) {
       d.deleteRecursively()
