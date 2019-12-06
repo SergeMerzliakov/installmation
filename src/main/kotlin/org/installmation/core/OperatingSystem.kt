@@ -21,22 +21,39 @@ package org.installmation.core
  */
 object OperatingSystem {
 
-	enum class Type {
+   enum class Type {
       Windows,
       OSX,
       Linux
-	}
+   }
 
-	fun os(): Type {
-		val name = System.getProperty("os.name").trim().toLowerCase()
-		val version = System.getProperty("os.version").trim().toLowerCase()
+   /**
+    * Return current os as an enumerated type
+    */
+   fun os(): Type {
+      val name = System.getProperty("os.name").trim().toLowerCase()
+      val version = System.getProperty("os.version").trim().toLowerCase()
 
-		when {
-			name.startsWith("mac")     -> return Type.OSX
-			name.startsWith("windows") -> return Type.Windows
-			name.startsWith("linux")   -> return Type.Linux
-		}
+      when {
+         name.startsWith("mac") -> return Type.OSX
+         name.startsWith("windows") -> return Type.Windows
+         name.startsWith("linux") -> return Type.Linux
+      }
 
-		throw RuntimeException("Unknown operating system - $name $version")
-	}
+      throw RuntimeException("Unknown operating system - $name $version")
+   }
+
+   /**
+    * Return image extension for each OS
+    */
+   fun imageFileExtension(): String {
+      val name = System.getProperty("os.name").trim().toLowerCase()
+
+      when {
+         name.startsWith("mac") -> return ".app"
+         name.startsWith("windows") -> return ".exe"
+         name.startsWith("linux") -> return ""
+      }
+      throw RuntimeException("Unknown operating system - $name ${System.getProperty("os.version").trim().toLowerCase()}")
+   }
 }
