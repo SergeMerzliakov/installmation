@@ -97,7 +97,7 @@ class InstallCreator(private val configuration: Configuration) {
       val output = packager.execute(30)
       for (line in output)
          progressMessage(line)
-      progressMessage("Image creation completed successfully in ${project.imageBuildDirectory!!.path}")
+      progressMessage("Image created successfully in ${project.imageBuildDirectory!!.path}")
    }
 
    /**

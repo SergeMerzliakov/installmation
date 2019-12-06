@@ -19,6 +19,7 @@ package org.installmation.model.binary
 import com.google.gson.*
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.core.OperatingSystem
 import java.io.File
 import java.lang.reflect.Type
 import kotlin.random.Random

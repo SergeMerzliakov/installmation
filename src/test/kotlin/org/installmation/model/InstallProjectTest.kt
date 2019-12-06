@@ -20,10 +20,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.binary.JDKFactory
-import org.installmation.model.binary.JPackageExecutable
-import org.installmation.model.binary.OperatingSystem
+import org.installmation.core.OperatingSystem
 import org.junit.AfterClass
-import org.junit.BeforeClass
 import org.junit.Test
 import java.io.File
 

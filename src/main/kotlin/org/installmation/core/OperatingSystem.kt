@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.installmation.model.binary
+package org.installmation.core
 
+/**
+ * Utilities for OS-dependent variables or parameters
+ */
 object OperatingSystem {
 
 	enum class Type {

@@ -16,6 +16,7 @@
 
 package org.installmation.model.binary
 
+import org.installmation.core.OperatingSystem
 import java.io.File
 
 /**

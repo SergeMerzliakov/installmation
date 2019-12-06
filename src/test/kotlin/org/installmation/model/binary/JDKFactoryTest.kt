@@ -17,6 +17,7 @@
 package org.installmation.model.binary
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.core.OperatingSystem
 import org.junit.Test
 import java.io.File
 

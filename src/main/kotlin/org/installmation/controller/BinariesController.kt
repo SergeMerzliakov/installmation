@@ -31,7 +31,7 @@ import org.installmation.javafx.ComboUtils
 import org.installmation.model.*
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
-import org.installmation.model.binary.OperatingSystem
+import org.installmation.core.OperatingSystem
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent

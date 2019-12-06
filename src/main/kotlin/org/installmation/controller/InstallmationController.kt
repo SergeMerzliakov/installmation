@@ -38,7 +38,7 @@ import org.installmation.core.RunningAsTestEvent
 import org.installmation.core.UserMessageEvent
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.*
-import org.installmation.model.binary.OperatingSystem
+import org.installmation.core.OperatingSystem
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
 
