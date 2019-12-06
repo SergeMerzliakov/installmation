@@ -15,19 +15,27 @@
  */
 package org.installmation.service
 
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.CollectionUtils
 import org.installmation.core.UserMessageEvent
 import org.installmation.model.InstallProject
 import org.installmation.model.ValueArgument
+import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.JPackageExecutable
+import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
 /**
  * Generates images and installers
  */
 class InstallCreator(private val configuration: Configuration, private val project: InstallProject) {
+
+   companion object {
+      val log: Logger = LogManager.getLogger(InstallCreator::class.java)
+   }
 
    /**
     * rm -rf ../../image-build     ==> temporary dir
@@ -48,12 +56,17 @@ class InstallCreator(private val configuration: Configuration, private val proje
    --main-class org.epistatic.kotlindemo.DemoApp
     */
    fun createImage() {
-      // paranoia
       checkNotNull(project.imageBuildDirectory)
       checkNotNull(project.jpackageJDK)
+      checkNotNull(project.mainJar)
+
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Image creation started....")
+
+      // STEP 1 - make sure lib/ and main jar in imageContentDirectory
+      deleteDirectories(project.imageContentDirectory!!)
       
+      // Step 2 - Generate Image in imageBuildDirectory
       deleteDirectories(project.imageBuildDirectory!!)
       project.imageBuildDirectory!!.mkdir()
 
@@ -62,13 +75,26 @@ class InstallCreator(private val configuration: Configuration, private val proje
       packager.parameters.addArgument(ValueArgument("-i", project.imageContentDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-d", project.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", project.name))
-      // TODO add jdeps modules here
-      packager.parameters.addArgument(ValueArgument("--module-path", CollectionUtils.toPathList(project.modulePath.map { it.path })))
+
+      val modulePathString = CollectionUtils.toPathList(project.modulePath.map { it.path })
+      val classPathString = CollectionUtils.toPathList(project.classPath.map { it.path })
+      val jdeps = JDepsExecutable(project.jpackageJDK!!)
+      val mm = ModuleDependenciesGenerator(jdeps, classPathString, modulePathString, project.mainJar?.path!!)
+      val modules = mm.generate().joinToString()
+      packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+      packager.parameters.addArgument(ValueArgument("--module-path", modulePathString))
       packager.parameters.addArgument(ValueArgument("--main-jar", project.mainJar?.name))
       packager.parameters.addArgument(ValueArgument("--main-class", project.mainClass))
+
+      // log entire command for debugging
+      val fullCommand = packager.toString()
+      log.info("command: $fullCommand")
+      progressMessage("command: $fullCommand")
       
       // pick a suitably long timeout, but don't wait forever
-      //packager.execute(100)
+      val output = packager.execute(100)
+      for (line in output)
+         progressMessage(line)
       progressMessage("Image creation completed successfully in ${project.imageBuildDirectory!!.path}")
    }
 

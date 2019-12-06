@@ -39,7 +39,6 @@ class ProjectService(val configuration: Configuration) {
 
    fun newProject(name: String): InstallProject {
       val p = InstallProject()
-      p.imageStructure = SimpleImageStructure()
       p.name = name
       return p
    }

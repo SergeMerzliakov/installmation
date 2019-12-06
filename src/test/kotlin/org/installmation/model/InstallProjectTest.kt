@@ -45,7 +45,6 @@ class InstallProjectTest {
 
       val p = InstallProject()
       p.name = name
-      p.imageStructure = SimpleImageStructure()
 
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p)
@@ -54,7 +53,6 @@ class InstallProjectTest {
       val p2 = reader.load()
 
       assertThat(p2.name).isEqualTo(p.name)
-      assertThat(p2.imageStructure).isInstanceOf(SimpleImageStructure::class.java)
    }
 
 
@@ -65,10 +63,6 @@ class InstallProjectTest {
       val p = InstallProject()
       p.name = name
       p.version = version
-      p.imageStructure = SimpleImageStructure()
-      p.imageStructure as SimpleImageStructure
-      p.imageStructure!!.addFile("file1.txt")
-      p.imageStructure!!.addDirectory("dir1")
       p.modulePath = mutableSetOf(File("module1"))
       p.imageBuildDirectory = File("image")
       p.imageContentDirectory = File("content")

@@ -60,7 +60,6 @@ class InstallProject {
    var javaFXLib: NamedDirectory? = null
    var javaFXMods: NamedDirectory? = null
    var installJDK: JDK? = null // JDK to install with application
-   var imageStructure: ImageStructure? = null
    var inputDirectory: File? = null
    var imageContentDirectory: File? = null  // application content defined by imageStructure
    var imageBuildDirectory: File? = null  //output
@@ -76,7 +75,6 @@ class InstallProject {
    }
 
    fun validateConfiguration(): ValidationResult {
-      checkNotNull(imageStructure)
       val result = ValidationResult(true)
       validateStringField("Project Name", name, result)
       validateStringField("Project Version", version, result)
@@ -144,7 +142,6 @@ class InstallProject {
       if (version != other.version) return false
       if (jpackageJDK != other.jpackageJDK) return false
       if (modulePath != other.modulePath) return false
-      if (imageStructure != other.imageStructure) return false
       if (imageContentDirectory != other.imageContentDirectory) return false
       if (imageBuildDirectory != other.imageBuildDirectory) return false
       if (artefacts != other.artefacts) return false
@@ -157,7 +154,6 @@ class InstallProject {
       result = 31 * result + (version?.hashCode() ?: 0)
       result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
       result = 31 * result + modulePath.hashCode()
-      result = 31 * result + (imageStructure?.hashCode() ?: 0)
       result = 31 * result + (imageContentDirectory?.hashCode() ?: 0)
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)
       result = 31 * result + artefacts.hashCode()
