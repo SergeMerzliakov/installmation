@@ -65,7 +65,7 @@ class InstallProjectTest {
       p.version = version
       p.modulePath = mutableSetOf(File("module1"))
       p.imageBuildDirectory = File("image")
-      p.imageContentDirectory = File("content")
+      p.installerDirectory = File("installer")
       p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
       
       // directory and file artefacts

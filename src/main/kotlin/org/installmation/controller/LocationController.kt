@@ -123,8 +123,8 @@ class LocationController(private val configuration: Configuration,
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
       checkNotNull(e.project)
       inputDirectoryText.text = e.project.inputDirectory?.path
-      installerDirectoryText.text = e.project.imageContentDirectory?.path
       imageBuildDirectoryText.text = e.project.imageBuildDirectory?.path
+      installerDirectoryText.text = e.project.installerDirectory?.path
    }
 
    @Subscribe
@@ -134,11 +134,11 @@ class LocationController(private val configuration: Configuration,
       if (inputDirectoryText.text != null)
          e.project.inputDirectory = File(inputDirectoryText.text)
 
-      if (installerDirectoryText.text != null)
-         e.project.imageContentDirectory = File(installerDirectoryText.text)
-
       if (imageBuildDirectoryText.text != null)
          e.project.imageBuildDirectory = File(imageBuildDirectoryText.text)
+
+      if (installerDirectoryText.text != null)
+         e.project.installerDirectory = File(installerDirectoryText.text)
    }
 
    @Subscribe

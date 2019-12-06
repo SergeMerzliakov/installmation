@@ -102,8 +102,8 @@ class ProjectService(val configuration: Configuration) {
          }
 
          log.info("Generate Image  - Generating Image")
-         val creator = InstallCreator(configuration, p)
-         creator.createImage()
+         val creator = InstallCreator(configuration)
+         creator.createImage(p)
          log.info("Generate Image  - Image created successfully")
          HelpDialog.showAndWait("Image Created","Image created at ${p.imageBuildDirectory}")
       } catch (e: Exception) {

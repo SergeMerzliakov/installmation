@@ -13,21 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * Copyright 2019 Serge Merzliakov
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.installmation.model
 
@@ -61,8 +46,8 @@ class InstallProject {
    var javaFXMods: NamedDirectory? = null
    var installJDK: JDK? = null // JDK to install with application
    var inputDirectory: File? = null
-   var imageContentDirectory: File? = null  // application content defined by imageStructure
    var imageBuildDirectory: File? = null  //output
+   var installerDirectory: File? = null  //output
    var modulePath = mutableSetOf<File>()
    var classPath = mutableSetOf<File>()
 
@@ -80,8 +65,8 @@ class InstallProject {
       validateStringField("Project Version", version, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
-      validateFutureFileField("Image Content", imageContentDirectory, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
+      validateFutureFileField("Installer Directory", installerDirectory, result)
       for (m in modulePath)
          validateExistingFileField("Module Path Item", m, result)
       for (cp in classPath)
@@ -142,10 +127,9 @@ class InstallProject {
       if (version != other.version) return false
       if (jpackageJDK != other.jpackageJDK) return false
       if (modulePath != other.modulePath) return false
-      if (imageContentDirectory != other.imageContentDirectory) return false
+      if (installerDirectory != other.installerDirectory) return false
       if (imageBuildDirectory != other.imageBuildDirectory) return false
       if (artefacts != other.artefacts) return false
-
       return true
    }
 
@@ -154,8 +138,8 @@ class InstallProject {
       result = 31 * result + (version?.hashCode() ?: 0)
       result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
       result = 31 * result + modulePath.hashCode()
-      result = 31 * result + (imageContentDirectory?.hashCode() ?: 0)
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)
+      result = 31 * result + (installerDirectory?.hashCode() ?: 0)
       result = 31 * result + artefacts.hashCode()
       return result
    }
