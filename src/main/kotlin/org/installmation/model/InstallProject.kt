@@ -39,6 +39,7 @@ class InstallProject {
    var version: String? = null
    var mainClass: String? = null
    var mainJar: File? = null
+   var installerType: String? = null
    var copyright: String? = null
    var jpackageJDK: JDK? = null
    // for JavaFX only - TODO

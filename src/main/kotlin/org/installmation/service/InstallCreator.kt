@@ -93,7 +93,7 @@ class InstallCreator(private val configuration: Configuration) {
       project.installerDirectory?.mkdirs()
 
       val packager = JPackageExecutable(project.jpackageJDK!!)
-      packager.parameters.addArgument(ValueArgument("--package-type", "pkg"))
+      packager.parameters.addArgument(ValueArgument("--package-type", project.installerType))
       packager.parameters.addArgument(ValueArgument("-d", project.installerDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", project.name))
       val appImage = File(project.imageBuildDirectory!!.path, project.name + OperatingSystem.imageFileExtension())
@@ -153,7 +153,7 @@ class InstallCreator(private val configuration: Configuration) {
       libs.mkdirs()
 
       // main jar
-      p.mainJar?.copyTo(File(destination, p.mainJar?.name), true)
+      p.mainJar?.copyTo(File(destination, p.mainJar!!.name), true)
 
       // classpath
       for (cp in p.classPath) {

@@ -17,12 +17,15 @@
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
+import javafx.collections.FXCollections
 import javafx.fxml.FXML
+import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.core.OperatingSystem
 import org.installmation.model.Workspace
 import org.installmation.service.*
 
@@ -39,6 +42,7 @@ class GeneralInfoController(private val configuration: Configuration,
    @FXML private lateinit var projectNameField: TextField
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
+   @FXML private lateinit var installerTypeCombo: ComboBox<String>
 
    init {
       configuration.eventBus.register(this)
@@ -46,6 +50,7 @@ class GeneralInfoController(private val configuration: Configuration,
 
    @FXML
    fun initialize() {
+      installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
    }
 
    //-------------------------------------------------------
@@ -55,6 +60,7 @@ class GeneralInfoController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
       projectNameField.text = e.project.name
+      installerTypeCombo.selectionModel.select(0)
    }
 
    @Subscribe
@@ -63,6 +69,7 @@ class GeneralInfoController(private val configuration: Configuration,
       e.project.name = projectNameField.text
       e.project.version = applicationVersionField.text ?: "1.0-SNAPSHOT"
       e.project.copyright = copyrightField.text
+      e.project.installerType = installerTypeCombo.selectionModel.selectedItem
    }
 
    @Subscribe
@@ -71,6 +78,7 @@ class GeneralInfoController(private val configuration: Configuration,
       projectNameField.text = e.project.name
       applicationVersionField.text = e.project.version
       copyrightField.text = e.project.copyright
+      installerTypeCombo.selectionModel.select(e.project.installerType)
    }
    
    @Subscribe
@@ -78,6 +86,7 @@ class GeneralInfoController(private val configuration: Configuration,
       projectNameField.text = null
       copyrightField.text = null
       applicationVersionField.text = null
+      //do not clear installer type for now
    }
 
 }

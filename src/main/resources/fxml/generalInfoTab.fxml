@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
 <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
-        <ColumnConstraints hgrow="NEVER" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="22.0" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Label text="Project Name" />
@@ -34,6 +41,11 @@
                 <Insets left="5.0" right="5.0" />
             </GridPane.margin>
         </TextField>
+      <Label text="Installer Type" GridPane.rowIndex="4" />
+      <ComboBox fx:id="installerTypeCombo" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="5.0" right="5.0" />
+         </GridPane.margin></ComboBox>
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />
