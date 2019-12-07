@@ -21,9 +21,9 @@
         <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="32.0" minHeight="36.0" prefHeight="32.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="2.0" minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="2.0" minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="2.0" minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
     </rowConstraints>
    <children>
       <Label maxWidth="1.7976931348623157E308" minWidth="70.0" styleClass="title-2" text="Classpath">
@@ -39,7 +39,7 @@
               <ContextMenu fx:id="classpathListContextMenu" />
           </contextMenu>
       </ListView>
-      <ListView fx:id="moduleListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+      <ListView fx:id="moduleListView" disable="true" opacity="0.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="5.0" right="5.0" />
          </GridPane.margin>
@@ -52,19 +52,19 @@
             <Insets right="10.0" />
          </GridPane.margin>
       </Button>
-      <Button fx:id="addModuleButton" mnemonicParsing="false" onAction="#addModuleItem" text="Add Path" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+      <Button fx:id="addModuleButton" disable="true" maxHeight="2.0" maxWidth="2.0" minHeight="2.0" minWidth="2.0" mnemonicParsing="false" onAction="#addModuleItem" opacity="0.0" prefHeight="2.0" prefWidth="2.0" text="Add Path" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
       </Button>
       <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
          <children>
-            <Label styleClass="title-2" text="Modules">
+            <Label opacity="0.0" styleClass="title-2" text="Modules">
                <FlowPane.margin>
                   <Insets left="10.0" />
                </FlowPane.margin>
             </Label>
-            <Button fx:id="showModulesHelpButton" mnemonicParsing="false" onAction="#helpModules" text="?">
+            <Button fx:id="showModulesHelpButton" disable="true" mnemonicParsing="false" onAction="#helpModules" opacity="0.0" text="?">
                <FlowPane.margin>
                   <Insets left="10.0" />
                </FlowPane.margin>
