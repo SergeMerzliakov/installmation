@@ -56,4 +56,18 @@ object OperatingSystem {
       }
       throw RuntimeException("Unknown operating system - $name ${System.getProperty("os.version").trim().toLowerCase()}")
    }
+
+   /**
+    * Return image extension for each OS
+    */
+   fun installerType(): List<String> {
+      val name = System.getProperty("os.name").trim().toLowerCase()
+
+      when {
+         name.startsWith("mac") -> return listOf("dmg", "pkg")
+         name.startsWith("windows") -> return listOf("exe", "msi")
+         name.startsWith("linux") -> return listOf("TODO")
+      }
+      throw RuntimeException("Unknown operating system - $name ${System.getProperty("os.version").trim().toLowerCase()}")
+   }
 }
