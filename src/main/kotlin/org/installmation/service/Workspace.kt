@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package org.installmation.model
+package org.installmation.service
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
+import org.installmation.io.ApplicationJsonWriter
+import org.installmation.model.InstallProject
+import org.installmation.model.JsonParserFactory
 import java.io.File
 
 /**
@@ -29,7 +33,8 @@ import java.io.File
  * Not a concept that is visible to the user, so they will
  * never 'see' workspaces
  */
-class Workspace {
+class Workspace(var configuration: Configuration? = null,
+                @Transient var projectService: ProjectService? = null) {
 
    companion object {
       val log: Logger = LogManager.getLogger(Workspace::class.java)
@@ -60,6 +65,22 @@ class Workspace {
          log.debug("Project '${currentProject!!.name}' closed")
          // TODO more
          currentProject = null
+      }
+   }
+
+   fun saveProject() {
+      if (currentProject != null) {
+         currentProject!!.prepareForSave()
+         configuration?.eventBus?.post(ProjectBeginSaveEvent(currentProject!!))
+         projectService?.saveProject(currentProject!!)
+         configuration?.eventBus?.post(ProjectSavedEvent(currentProject!!))
+
+         // save workspace as well
+         // workspace
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(), JsonParserFactory.configurationParser())
+         workspaceWriter.save(this)
+      } else {
+         // TODO - prompt to create project possibly
       }
    }
 

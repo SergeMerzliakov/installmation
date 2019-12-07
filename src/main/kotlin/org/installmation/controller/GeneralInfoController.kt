@@ -24,16 +24,11 @@ import javafx.scene.control.TextField
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
-import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
-import org.installmation.model.Workspace
 import org.installmation.service.*
 
 
-class GeneralInfoController(private val configuration: Configuration,
-                            private val userHistory: UserHistory,
-                            private val workspace: Workspace,
-                            private val projectService: ProjectService) {
+class GeneralInfoController(configuration: Configuration, private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(GeneralInfoController::class.java)
@@ -53,6 +48,12 @@ class GeneralInfoController(private val configuration: Configuration,
       installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
    }
 
+   
+   @FXML
+   fun changeInstallerType() {
+      workspace.saveProject()
+   }
+   
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
@@ -88,7 +89,6 @@ class GeneralInfoController(private val configuration: Configuration,
       applicationVersionField.text = null
       //do not clear installer type for now
    }
-
 }
 
 

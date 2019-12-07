@@ -25,7 +25,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.model.Workspace
+import org.installmation.service.Workspace
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent

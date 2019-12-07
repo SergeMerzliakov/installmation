@@ -30,11 +30,9 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.model.ModuleJmodDeselectedEvent
 import org.installmation.model.ModuleJmodSelectedEvent
-import org.installmation.model.Workspace
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
@@ -42,9 +40,7 @@ import java.io.File
 
 
 class DependenciesController(private val configuration: Configuration,
-                             private val userHistory: UserHistory,
-                             private val workspace: Workspace,
-                             private val projectService: ProjectService) {
+                             private val userHistory: UserHistory) {
 
    companion object {
       val log: Logger = LogManager.getLogger(DependenciesController::class.java)

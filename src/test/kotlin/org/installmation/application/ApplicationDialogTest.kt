@@ -21,12 +21,11 @@ import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
 import org.installmation.core.RunningAsTestEvent
-import org.installmation.model.Workspace
+import org.installmation.service.Workspace
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.framework.junit.ApplicationTest
 import org.testfx.matcher.base.NodeMatchers
-import org.testfx.util.WaitForAsyncUtils
 
 /**
  * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents
@@ -39,8 +38,7 @@ class ApplicationDialogTest : ApplicationTest() {
       super.start(stage)
       val bus = EventBus()
       val configuration = Configuration(bus)
-      val workspace = Workspace()
-      application.startApplication(stage!!, configuration, workspace, bus)
+      application.startApplication(stage!!, configuration, bus)
       bus.post(RunningAsTestEvent())
    }
 

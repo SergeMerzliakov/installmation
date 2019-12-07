@@ -32,13 +32,8 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.core.ClearMessagesEvent
-import org.installmation.core.DateUtils
-import org.installmation.core.RunningAsTestEvent
-import org.installmation.core.UserMessageEvent
-import org.installmation.io.ApplicationJsonWriter
+import org.installmation.core.*
 import org.installmation.model.*
-import org.installmation.core.OperatingSystem
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
 
@@ -68,31 +63,18 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var generateImageTooltip :Tooltip
    @FXML private lateinit var generateInstallerTooltip : Tooltip
 
-   private var dependenciesController = DependenciesController(configuration,
-         userHistory,
-         workspace,
-         projectService)
+   private var dependenciesController = DependenciesController(configuration, userHistory)
    
    private var locationController = LocationController(configuration,
          userHistory,
          workspace,
          projectService)
 
-   private var binariesController = BinariesController(configuration,
-         userHistory,
-         workspace,
-         projectService)
+   private var binariesController = BinariesController(configuration, userHistory)
 
-   private var generalInfoController = GeneralInfoController(configuration,
-         userHistory,
-         workspace,
-         projectService)
+   private var generalInfoController = GeneralInfoController(configuration, workspace)
 
-   private var executeController = ExecutableController(configuration,
-         userHistory,
-         workspace,
-         projectService)
-
+   private var executeController = ExecutableController(configuration, userHistory)
 
    // models
    private val userMessages: ObservableList<String> = FXCollections.observableArrayList<String>() 
@@ -165,20 +147,7 @@ class InstallmationController(private val configuration: Configuration,
    
    @FXML
    fun saveProject() {
-      val current = workspace.currentProject
-      if (current != null) {
-         current.prepareForSave()
-         configuration.eventBus.post(ProjectBeginSaveEvent(current))
-         projectService.saveProject(current)
-         configuration.eventBus.post(ProjectSavedEvent(current))
-
-         // save workspace as well
-         // workspace
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(), JsonParserFactory.configurationParser())
-         workspaceWriter.save(workspace)
-      } else {
-         // TODO - prompt to create project possibly
-      }
+     workspace.saveProject()
    }
 
    @FXML

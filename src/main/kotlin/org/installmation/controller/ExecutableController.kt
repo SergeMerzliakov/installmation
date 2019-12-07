@@ -24,17 +24,14 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.model.Workspace
 import org.installmation.service.*
 import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import java.io.File
 
 
-class ExecutableController(private val configuration: Configuration,
-                           private val userHistory: UserHistory,
-                           private val workspace: Workspace,
-                           private val projectService: ProjectService) {
+class ExecutableController(configuration: Configuration,
+                           private val userHistory: UserHistory) {
 
    companion object {
       val log: Logger = LogManager.getLogger(ExecutableController::class.java)
@@ -43,7 +40,6 @@ class ExecutableController(private val configuration: Configuration,
    @FXML private lateinit var mainJarField: TextField
    @FXML private lateinit var mainClassField: TextField
 
-   
    init {
       configuration.eventBus.register(this)
    }

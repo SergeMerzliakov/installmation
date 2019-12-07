@@ -19,6 +19,7 @@ package org.installmation.model
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.installmation.model.binary.*
+import org.installmation.service.Workspace
 
 /**
  * Functionality shared by configuration readers and writers

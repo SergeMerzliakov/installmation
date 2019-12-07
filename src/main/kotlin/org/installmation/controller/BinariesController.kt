@@ -41,9 +41,7 @@ import org.installmation.ui.dialog.HelpDialog
 
 
 class BinariesController(private val configuration: Configuration,
-                         private val userHistory: UserHistory,
-                         private val workspace: Workspace,
-                         private val projectService: ProjectService) {
+                         private val userHistory: UserHistory) {
 
    companion object {
       val log: Logger = LogManager.getLogger(BinariesController::class.java)

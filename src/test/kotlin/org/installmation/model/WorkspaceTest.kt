@@ -3,6 +3,7 @@ package org.installmation.model
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
+import org.installmation.service.Workspace
 import org.junit.AfterClass
 import org.junit.Test
 import java.io.File
