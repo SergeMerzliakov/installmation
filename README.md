@@ -32,8 +32,8 @@ You can run the latest version (rudimentary so far) with the gradle command (und
  
     gradlew runApp
 
-Application starts and currently does very little.
-
+Builds 19+ can build installers for OSX applications, but with specific limitations. 
+Not yet ready for general release.
 
 ### Prequisites
 
