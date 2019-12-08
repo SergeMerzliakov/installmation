@@ -27,21 +27,25 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.core.OperatingSystem
 import org.installmation.javafx.ComboUtils
-import org.installmation.model.*
+import org.installmation.model.JDKListUpdatedEvent
+import org.installmation.model.ModuleJmodUpdatedEvent
+import org.installmation.model.ModuleLibUpdatedEvent
+import org.installmation.model.NamedDirectory
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
-import org.installmation.core.OperatingSystem
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
+import org.installmation.service.Workspace
 import org.installmation.ui.dialog.BinaryArtefactDialog
 import org.installmation.ui.dialog.HelpDialog
 
 
 class BinariesController(private val configuration: Configuration,
-                         private val userHistory: UserHistory) {
+                         private val userHistory: UserHistory,
+                         private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(BinariesController::class.java)
@@ -82,7 +86,6 @@ class BinariesController(private val configuration: Configuration,
    @FXML
    fun initialize() {
       initializeConfiguredBinaries()
-      initializeListeners()
    }
 
    /**
@@ -104,27 +107,11 @@ class BinariesController(private val configuration: Configuration,
       moduleJmodComboBox.converter = StringConverterFactory.namedItemConverter(moduleJmodComboBox.items)
    }
 
-   /**
-    * Selection and other listeners
-    */
-   private fun initializeListeners() {
-      moduleJmodComboBox.selectionModel.selectedItemProperty()
-            .addListener { _, old, new ->
-               if (old != null)
-                  configuration.eventBus.post(ModuleJmodDeselectedEvent(old))
-               if (new != null)
-                  configuration.eventBus.post(ModuleJmodSelectedEvent(new))
-            }
-
-      moduleLibComboBox.selectionModel.selectedItemProperty()
-            .addListener { _, old, new ->
-               if (old != null)
-                  configuration.eventBus.post(ModuleLibDeselectedEvent(old))
-               if (new != null)
-                  configuration.eventBus.post(ModuleLibSelectedEvent(new))
-            }
+   @FXML
+   fun updateProject() {
+      workspace.saveProject()
    }
-   
+
    @FXML
    fun configureModuleLibraries() {
       val dialog = moduleLibraryDialog()

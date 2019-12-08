@@ -21,7 +21,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.installmation.configuration.Configuration
 import org.installmation.model.InstallProject
-import org.installmation.model.NamedDirectory
 import org.junit.After
 import org.junit.Test
 import java.io.File
@@ -38,7 +37,7 @@ class ProjectServiceTest {
    }
 
    @Test
-   fun shouldSaveProject() {
+   fun shouldWriteProjectToFile() {
       val p = InstallProject()
       p.name = "project1"
       p.version = "1.0"
@@ -46,7 +45,7 @@ class ProjectServiceTest {
       
       // save
       val service = ProjectService(config)
-      service.saveProject(p)
+      service.writeToFile(p)
       
       assertThat(p.projectFile(baseDirectory)).exists()
       assertThat(p.projectFile(baseDirectory).readText()).isNotEmpty()
@@ -61,10 +60,10 @@ class ProjectServiceTest {
 
       // save
       val service = ProjectService(config)
-      service.saveProject(p)
+      service.writeToFile(p)
 
       // load and check 
-      val loaded = service.loadProject(p.name!!)
+      val loaded = service.load(p.name!!)
       assertThat(loaded).isEqualToComparingFieldByField(p)
    }
 
@@ -72,6 +71,6 @@ class ProjectServiceTest {
    fun shouldNotSaveEmptyProject() {
       val p = InstallProject()
       val service = ProjectService(config)
-      assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy { service.saveProject(p) }
+      assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy { service.save(p) }
    }
 }

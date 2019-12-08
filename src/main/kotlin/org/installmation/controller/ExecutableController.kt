@@ -31,7 +31,8 @@ import java.io.File
 
 
 class ExecutableController(configuration: Configuration,
-                           private val userHistory: UserHistory) {
+                           private val userHistory: UserHistory,
+                           private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(ExecutableController::class.java)
@@ -54,6 +55,11 @@ class ExecutableController(configuration: Configuration,
       if (result.ok) {
          mainJarField.text = result.data!!.path
       }
+   }
+
+   @FXML
+   fun updateProject() {
+      workspace.saveProject()
    }
 
    //-------------------------------------------------------

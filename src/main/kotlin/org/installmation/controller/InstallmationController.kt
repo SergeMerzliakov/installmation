@@ -33,11 +33,15 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.*
-import org.installmation.model.*
+import org.installmation.model.JDKListUpdatedEvent
+import org.installmation.model.ModuleJmodUpdatedEvent
+import org.installmation.model.NamedDirectory
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
 
-
+/**
+ * Main Application controller, with nested controllers
+ */
 class InstallmationController(private val configuration: Configuration,
                               private val userHistory: UserHistory,
                               private val workspace: Workspace,
@@ -63,18 +67,17 @@ class InstallmationController(private val configuration: Configuration,
    @FXML private lateinit var generateImageTooltip :Tooltip
    @FXML private lateinit var generateInstallerTooltip : Tooltip
 
-   private var dependenciesController = DependenciesController(configuration, userHistory)
+   private var dependenciesController = DependenciesController(configuration, userHistory, workspace)
    
    private var locationController = LocationController(configuration,
          userHistory,
-         workspace,
-         projectService)
+         workspace)
 
-   private var binariesController = BinariesController(configuration, userHistory)
+   private var binariesController = BinariesController(configuration, userHistory, workspace)
 
    private var generalInfoController = GeneralInfoController(configuration, workspace)
 
-   private var executeController = ExecutableController(configuration, userHistory)
+   private var executeController = ExecutableController(configuration, userHistory, workspace)
 
    // models
    private val userMessages: ObservableList<String> = FXCollections.observableArrayList<String>() 
@@ -135,19 +138,20 @@ class InstallmationController(private val configuration: Configuration,
       val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
 
       if (result.ok) {
-         val p = projectService.loadProject(result.data!!.nameWithoutExtension)
+         val p = projectService.load(result.data!!.nameWithoutExtension)
          workspace.setCurrentProject(p)
       }
    }
 
    @FXML
    fun closeProject() {
-      projectService.closeProject(workspace.currentProject)
+      projectService.close(workspace.currentProject)
    }
    
    @FXML
    fun saveProject() {
-     workspace.saveProject()
+      workspace.saveProject()
+      workspace.writeToFile()
    }
 
    @FXML
@@ -263,7 +267,8 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun jdepsDialog() {
       //combined JFX mods with other mods
-      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, workspace.currentProject?.mainJar, workspace.currentProject?.classPath, workspace.currentProject?.modulePath)
+      val p = workspace.currentProject
+      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p?.javaFXLib!!.path, p.mainJar, p.classPath)
       d.showAndWait()
    }
    

@@ -42,91 +42,94 @@ class InstallCreator(private val configuration: Configuration) {
    /**
     * Create image (.exe or .app file), but not the installer
     */
-   fun createImage(project: InstallProject) {
-      checkNotNull(project.imageBuildDirectory)
-      checkNotNull(project.jpackageJDK)
-      checkNotNull(project.mainJar)
-      checkNotNull(project.javaFXLib?.path)
+   fun createImage(prj: InstallProject) {
+      checkNotNull(prj.imageBuildDirectory)
+      checkNotNull(prj.jpackageJDK)
+      checkNotNull(prj.mainJar)
+      checkNotNull(prj.javaFXLib?.path)
 
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Image creation started....")
 
-      val output = doCreateImage(project)
+      val output = doCreateImage(prj)
       for (line in output)
          progressMessage(line)
 
-      progressMessage("Image ${project.name + OperatingSystem.imageFileExtension()} created successfully in ${project.imageBuildDirectory!!.path}")
+      progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
    }
 
 
    /**
     * Create complete installer
     */
-   fun createInstaller(project: InstallProject) {
-      checkNotNull(project.installerDirectory)
-      checkNotNull(project.jpackageJDK)
-      checkNotNull(project.mainJar)
-      checkNotNull(project.javaFXLib?.path)
+   fun createInstaller(prj: InstallProject) {
+      checkNotNull(prj.installerDirectory)
+      checkNotNull(prj.jpackageJDK)
+      checkNotNull(prj.mainJar)
+      checkNotNull(prj.javaFXLib?.path)
 
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Installer creation started....")
 
       // Step 1 create image as well
-      var output = doCreateImage(project)
+      var output = doCreateImage(prj)
       for (line in output)
          progressMessage(line)
 
       progressMessage("*** APPLICATION IMAGE CREATED SUCCESSFULLY. STARTING INSTALLER CREATION ***")
       // Step 2 - create installer based on image created in Step 1
 
-      output = doCreateInstaller(project)
+      output = doCreateInstaller(prj)
       for (line in output)
          progressMessage(line)
 
-      progressMessage("Installer creation completed successfully in ${project.installerDirectory!!.path}")
+      progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
    }
 
    /**
     * Create Installer
     */
-   private fun doCreateInstaller(project: InstallProject): List<String> {
-      project.installerDirectory?.mkdirs()
+   private fun doCreateInstaller(prj: InstallProject): List<String> {
+      prj.installerDirectory?.mkdirs()
 
-      val packager = JPackageExecutable(project.jpackageJDK!!)
-      packager.parameters.addArgument(ValueArgument("--package-type", project.installerType))
-      packager.parameters.addArgument(ValueArgument("-d", project.installerDirectory!!.path))
-      packager.parameters.addArgument(ValueArgument("-n", project.name))
-      val appImage = File(project.imageBuildDirectory!!.path, project.name + OperatingSystem.imageFileExtension())
+      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      packager.parameters.addArgument(ValueArgument("--package-type", prj.installerType))
+      packager.parameters.addArgument(ValueArgument("-d", prj.installerDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-n", prj.name))
+      val appImage = File(prj.imageBuildDirectory!!.path, prj.name + OperatingSystem.imageFileExtension())
       packager.parameters.addArgument(ValueArgument("--app-image", appImage.path))
+      val fullCommand = packager.toString()
+      log.info("command: $fullCommand")
+      progressMessage("command: $fullCommand")
       return packager.execute(30)
    }
 
    /**
     * This is called by installer creation process and returns the command output
     */
-   private fun doCreateImage(project: InstallProject): List<String> {
+   private fun doCreateImage(prj: InstallProject): List<String> {
       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
-      createImageContent(project)
+      createImageContent(prj)
 
       // Step 2 - Generate Image in imageBuildDirectory
       progressMessage("Deleting old image content....")
-      deleteDirectories(project.imageBuildDirectory!!)
-      project.imageBuildDirectory!!.mkdir()
+      deleteDirectories(prj.imageBuildDirectory!!)
+      prj.imageBuildDirectory!!.mkdir()
 
-      val packager = JPackageExecutable(project.jpackageJDK!!)
+      val packager = JPackageExecutable(prj.jpackageJDK!!)
       packager.parameters.addArgument(ValueArgument("--package-type", "app-image"))
-      packager.parameters.addArgument(ValueArgument("-i", project.inputDirectory!!.path))
-      packager.parameters.addArgument(ValueArgument("-d", project.imageBuildDirectory!!.path))
-      packager.parameters.addArgument(ValueArgument("-n", project.name))
+      packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-d", prj.imageBuildDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-      val modulePathString = CollectionUtils.toPathList(project.modulePath.map { it.path })
+      val modulePathString = CollectionUtils.toPathList(prj.modulePath.map { it.path })
       packager.parameters.addArgument(ValueArgument("--module-path", modulePathString))
 
-      val modules = generateModuleDependencies(project)
+      val modules = generateModuleDependencies(prj)
       packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
-      packager.parameters.addArgument(ValueArgument("--main-jar", project.mainJar?.name))
-      packager.parameters.addArgument(ValueArgument("--main-class", project.mainClass))
+      packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
+      packager.parameters.addArgument(ValueArgument("--main-class", prj.mainClass))
 
       val fullCommand = packager.toString()
       log.info("command: $fullCommand")
@@ -137,26 +140,32 @@ class InstallCreator(private val configuration: Configuration) {
    /**
     * Run jdeps tool to get a list of JDK modules used by the target application
     */
-   private fun generateModuleDependencies(project: InstallProject): String {
-      val classPathString = CollectionUtils.toPathList(project.classPath.map { it.path })
-      val jdeps = JDepsExecutable(project.jpackageJDK!!)
-      val mm = ModuleDependenciesGenerator(jdeps, classPathString, project.javaFXLib?.path!!.path, project.mainJar?.path!!)
+   private fun generateModuleDependencies(prj: InstallProject): String {
+      checkNotNull(prj.jpackageJDK)
+      checkNotNull(prj.javaFXLib)
+      checkNotNull(prj.mainJar)
+
+      val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
+      val jdeps = JDepsExecutable(prj.jpackageJDK!!)
+      val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
       return mm.generate().joinToString(",")
    }
 
-   private fun createImageContent(p: InstallProject) {
-      checkNotNull(p.inputDirectory)
-      val destination = p.inputDirectory!!
+   private fun createImageContent(prj: InstallProject) {
+      checkNotNull(prj.inputDirectory)
+      checkNotNull(prj.mainJar)
+
+      val destination = prj.inputDirectory!!
       progressMessage("Creating all Image Content in ${destination.path}")
       deleteDirectories(destination)
       val libs = File(destination, "lib")
       libs.mkdirs()
 
       // main jar
-      p.mainJar?.copyTo(File(destination, p.mainJar!!.name), true)
+      prj.mainJar?.copyTo(File(destination, prj.mainJar!!.name), true)
 
       // classpath
-      for (cp in p.classPath) {
+      for (cp in prj.classPath) {
          val jarFiles = cp.listFiles(FileFilters.jarFileFilter)
          if (jarFiles != null) {
             for (jar in jarFiles)

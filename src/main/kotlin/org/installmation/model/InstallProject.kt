@@ -49,6 +49,7 @@ class InstallProject {
    var inputDirectory: File? = null
    var imageBuildDirectory: File? = null  //output
    var installerDirectory: File? = null  //output
+   // not used now - in future for modular applications
    var modulePath = mutableSetOf<File>()
    var classPath = mutableSetOf<File>()
 

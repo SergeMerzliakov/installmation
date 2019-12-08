@@ -46,7 +46,7 @@ class ProjectService(val configuration: Configuration) {
    /**
     * Load from file
     */
-   fun loadProject(projectName: String): InstallProject {
+   fun load(projectName: String): InstallProject {
       val projectFileName = InstallProject.projectFileName(projectName)
       val baseDir = projectBaseDirectory()
       val matches = baseDir.listFiles { pathName -> pathName.name == projectFileName }
@@ -65,17 +65,36 @@ class ProjectService(val configuration: Configuration) {
       }
    }
 
-   fun closeProject(p: InstallProject?) {
+   fun close(p: InstallProject?) {
       if (p == null)
          return
       //save then close
-      saveProject(p)
+      save(p)
       configuration.eventBus.post(ProjectSavedEvent(p))
       configuration.eventBus.post(ProjectClosedEvent(p))
       log.info("Project '${p.name}' closed")
    }
+
+   /**
+    * Fire events for all controllers to add their updates to the current
+    * project. Nothing actually done here
+    */
+   fun save(p: InstallProject) {
+      check(p.name != null && p.name!!.isNotEmpty())
+      try {
+         p.prepareForSave()
+         configuration.eventBus.post(ProjectBeginSaveEvent(p))
+         configuration.eventBus.post(ProjectSavedEvent(p))
+         log.debug("Updated project ${p.name}")
+      } catch (e: Exception) {
+         throw SaveDataException("Error saving project ${p.name}", e)
+      }
+   }
    
-   fun saveProject(p: InstallProject) {
+   /**
+    * Write to file
+    */
+   fun writeToFile(p: InstallProject) {
       check(p.name != null && p.name!!.isNotEmpty())
 
       try {
@@ -84,9 +103,10 @@ class ProjectService(val configuration: Configuration) {
          writer.save(p)
          log.debug("Saved project ${p.name} to file")
       } catch (e: Exception) {
-         throw SaveDataException("Error saving project ${p.name} to file", e)
+         throw SaveDataException("Error writing project ${p.name} to file", e)
       }
    }
+   
 
    /**
     * Generates an image which contains all the parts required for an installer

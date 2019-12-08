@@ -25,13 +25,13 @@ import java.io.File
 /**
  * Run Jdeps utility to generate module dependencies. Only useful for modular JDK 9+ applications
  */
-class JdepsDialog(parentStage: Stage, jdkList: Collection<JDK>, mainJar: File?, classpath: Collection<File>?, moduleLibs: Collection<File>?) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
+class JdepsDialog(parentStage: Stage, jdkList: Collection<JDK>, javaFXLibs: File, mainJar: File?, classpath: Collection<File>?) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
 
    private var controller: JdepsDialogController
 
    init {
       val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/jdepsDialog.fxml"))
-      controller = JdepsDialogController(jdkList, mainJar, classpath, moduleLibs)
+      controller = JdepsDialogController(jdkList, javaFXLibs, mainJar, classpath)
       loader.setController(controller)
       val root = loader.load<Pane>()
       stage.scene = Scene(root)

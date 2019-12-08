@@ -63,25 +63,29 @@ class Workspace(var configuration: Configuration? = null,
    fun closeCurrentProject() {
       if (currentProject != null) {
          log.debug("Project '${currentProject!!.name}' closed")
-         // TODO more
          currentProject = null
       }
    }
 
+   /*
+    * Save to project model in memory only
+    */
    fun saveProject() {
       if (currentProject != null) {
-         currentProject!!.prepareForSave()
-         configuration?.eventBus?.post(ProjectBeginSaveEvent(currentProject!!))
-         projectService?.saveProject(currentProject!!)
-         configuration?.eventBus?.post(ProjectSavedEvent(currentProject!!))
-
-         // save workspace as well
-         // workspace
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(), JsonParserFactory.configurationParser())
-         workspaceWriter.save(this)
+         projectService?.save(currentProject!!)
       } else {
          // TODO - prompt to create project possibly
       }
    }
 
+   /**
+    * Save current project to file
+    */
+   fun writeToFile() {
+      if (currentProject != null) {
+         projectService?.writeToFile(currentProject!!)
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(), JsonParserFactory.configurationParser())
+         workspaceWriter.save(this)
+      }
+   }
 }

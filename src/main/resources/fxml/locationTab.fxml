@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="130.0" />
@@ -34,14 +28,14 @@
             <Tooltip fx:id="inputDirTooltip1" styleClass="tooltip-helptext" text="Empty" />
          </tooltip>
       </Label>
-      <TextField fx:id="inputDirectoryText" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
-         </GridPane.margin>
-         <tooltip>
-            <Tooltip fx:id="inputDirTooltip2" styleClass="tooltip-helptext" text="Empty" />
-         </tooltip>
-      </TextField>
+       <TextField fx:id="inputDirectoryText" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="1">
+           <GridPane.margin>
+               <Insets left="5.0" right="5.0"/>
+           </GridPane.margin>
+           <tooltip>
+               <Tooltip fx:id="inputDirTooltip2" styleClass="tooltip-helptext" text="Empty"/>
+           </tooltip>
+       </TextField>
       <Button fx:id="helpInputDirectoryButton" mnemonicParsing="false" onAction="#helpInputDirectory" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="2.0" />
@@ -55,14 +49,16 @@
             <Tooltip fx:id="imgBuildDirTooltip1" styleClass="tooltip-helptext" text="Path where generated image files are placed. If empty, will default to the current working directory.Path where generated image files are placed. If empty, will default to the current working directory." />
          </tooltip>
       </Label>
-      <TextField fx:id="imageBuildDirectoryText" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
-         </GridPane.margin>
-         <tooltip>
-            <Tooltip fx:id="imgBuildDirTooltip2" styleClass="tooltip-helptext" text="Path where generated image files are placed. If empty, will default to the current working directory.Path where generated image files are placed. If empty, will default to the current working directory." textAlignment="RIGHT" />
-         </tooltip>
-      </TextField>
+       <TextField fx:id="imageBuildDirectoryText" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="3">
+           <GridPane.margin>
+               <Insets left="5.0" right="5.0"/>
+           </GridPane.margin>
+           <tooltip>
+               <Tooltip fx:id="imgBuildDirTooltip2" styleClass="tooltip-helptext"
+                        text="Path where generated image files are placed. If empty, will default to the current working directory.Path where generated image files are placed. If empty, will default to the current working directory."
+                        textAlignment="RIGHT"/>
+           </tooltip>
+       </TextField>
       <Button fx:id="helpImageBuildDirectoryButton" mnemonicParsing="false" onAction="#helpImageBuildDirectory" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="2.0" />
@@ -86,14 +82,14 @@
             <Tooltip fx:id="installerDirTooltip1" text="help.installer.directory" />
          </tooltip>
       </Label>
-      <TextField fx:id="installerDirectoryText" GridPane.columnIndex="1" GridPane.rowIndex="4">
-         <GridPane.margin>
-            <Insets left="5.0" right="5.0" />
-         </GridPane.margin>
-         <tooltip>
-            <Tooltip fx:id="installerDirTooltip2" text="help.installer.directory" />
-         </tooltip>
-      </TextField>
+       <TextField fx:id="installerDirectoryText" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="4">
+           <GridPane.margin>
+               <Insets left="5.0" right="5.0"/>
+           </GridPane.margin>
+           <tooltip>
+               <Tooltip fx:id="installerDirTooltip2" text="help.installer.directory"/>
+           </tooltip>
+       </TextField>
       <Button fx:id="helpInstallerDirectoryButton" mnemonicParsing="false" onAction="#helpInstallerDirectory" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="2.0" />

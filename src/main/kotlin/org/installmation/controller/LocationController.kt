@@ -25,11 +25,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.service.Workspace
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
+import org.installmation.service.Workspace
 import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
 import java.io.File
@@ -37,8 +36,7 @@ import java.io.File
 
 class LocationController(private val configuration: Configuration,
                          private val userHistory: UserHistory,
-                         private val workspace: Workspace,
-                         private val projectService: ProjectService) {
+                         private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(LocationController::class.java)
@@ -114,7 +112,12 @@ class LocationController(private val configuration: Configuration,
    fun helpInstallerDirectory() {
       HelpDialog.showAndWait("Installer Directory", configuration.resourceBundle.getString(PROPERTY_HELP_INSTALLER_DIR))
    }
-   
+
+   @FXML
+   fun updateProject() {
+      workspace.saveProject()
+   }
+
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------

@@ -48,9 +48,8 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
       installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
    }
 
-   
    @FXML
-   fun changeInstallerType() {
+   fun updateProject() {
       workspace.saveProject()
    }
    

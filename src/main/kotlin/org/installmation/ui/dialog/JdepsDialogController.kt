@@ -29,12 +29,11 @@ import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val mainJarFile: File?, classPathFiles: Collection<File>?, moduleLibs: Collection<File>?) {
+class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File, private val mainJarFile: File?, classPathFiles: Collection<File>?) {
 
    @FXML lateinit var mainJar: TextField
    @FXML lateinit var generatedCommandText: TextArea
    @FXML lateinit var classPathListView: ListView<String>
-   @FXML lateinit var modulePathListView: ListView<String>
    @FXML lateinit var jdkComboBox: ComboBox<JDK>
    @FXML lateinit var processOutputView: ListView<String>
    @FXML lateinit var dependencyListView: ListView<String>
@@ -42,7 +41,6 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
 
    // model
    private val classPath: ObservableList<String> = FXCollections.observableArrayList()
-   private val modulePath: ObservableList<String> = FXCollections.observableArrayList()
    private val moduleOutput: ObservableList<String> = FXCollections.observableArrayList()
    private val processOutput: ObservableList<String> = FXCollections.observableArrayList()
 
@@ -51,17 +49,12 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
          for (f in classPathFiles)
             classPath.add(f.path)
       }
-      if (moduleLibs != null) {
-         for (f in moduleLibs)
-            modulePath.add(f.path)
-      }
    }
 
    @FXML
    fun initialize() {
       mainJar.text = mainJarFile?.path
       classPathListView.items = classPath.sorted()
-      modulePathListView.items = modulePath.sorted()
       dependencyListView.items = moduleOutput.sorted()
       processOutputView.items = processOutput.sorted()
       for (jdk in jdkList)
@@ -72,10 +65,9 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
    @FXML
    fun run() {
       val jdeps = JDepsExecutable(jdkComboBox.selectionModel.selectedItem)
-      val modulePathString = CollectionUtils.toPathList(modulePath)
       val classPathString = CollectionUtils.toPathList(classPath)
 
-      val mdg = ModuleDependenciesGenerator(jdeps, classPathString, modulePathString, mainJar.text)
+      val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJar.text)
       val moduleDependencies = mdg.generate()
       generatedCommandText.text = jdeps.toString()
       moduleOutput.clear()
@@ -100,9 +92,6 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ma
    fun addClassPath() {
    }
 
-   @FXML
-   fun addModulePath() {
-   }
 
    @FXML
    fun clearClassPath() {

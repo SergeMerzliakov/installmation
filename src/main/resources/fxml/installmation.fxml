@@ -31,8 +31,8 @@
                 <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
                         <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
-                        <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
-                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
+                        <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
+                        <MenuItem fx:id="openProjectMenuItem"  accelerator="Shortcut+O" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
                         <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
