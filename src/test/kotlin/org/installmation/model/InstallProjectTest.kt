@@ -66,10 +66,6 @@ class InstallProjectTest {
       p.installerDirectory = File("installer")
       p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
       
-      // directory and file artefacts
-      p.artefacts["classpathLib"] = DirectoryArtefact("classpathLib", File("/myapp/lib"))
-      p.artefacts["mainJar"] = FileArtefact("mainJar", File("/myapp/app.jar"))
-      
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p)
 
@@ -77,20 +73,5 @@ class InstallProjectTest {
       val p2 = reader.load()
 
       assertThat(p2).isEqualToComparingFieldByField(p)
-   }
-
-   @Test
-   fun shouldCreateImage() {
-      // TODO
-   }
-
-   //   export JPACKAGE=/Users/foo/tools/jpackage49/Contents/Home/bin/jpackage
-   //   $JPACKAGE --package-type pkg 
-   //   -d ../../image-build 
-   //   --name demoApplication1 
-   //   --app-image ../../image-build/demo1.app
-   @Test
-   fun shouldCreatePackage() {
-      //TODO
    }
 }

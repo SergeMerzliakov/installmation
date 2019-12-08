@@ -53,8 +53,6 @@ class InstallProject {
    var modulePath = mutableSetOf<File>()
    var classPath = mutableSetOf<File>()
 
-   val artefacts = mutableMapOf<String, InstallArtefact>()
-
    fun projectFile(baseDirectory: File = Constant.DEFAULT_BASE_DIR): File {
       checkNotNull(name)
       val baseDir = File(baseDirectory, Constant.PROJECT_DIR)
@@ -131,7 +129,6 @@ class InstallProject {
       if (modulePath != other.modulePath) return false
       if (installerDirectory != other.installerDirectory) return false
       if (imageBuildDirectory != other.imageBuildDirectory) return false
-      if (artefacts != other.artefacts) return false
       return true
    }
 
@@ -142,7 +139,6 @@ class InstallProject {
       result = 31 * result + modulePath.hashCode()
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)
       result = 31 * result + (installerDirectory?.hashCode() ?: 0)
-      result = 31 * result + artefacts.hashCode()
       return result
    }
 }
