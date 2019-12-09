@@ -54,8 +54,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
-                  <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                <MenuItem fx:id="removeClassPathItemMenuItem" onAction="#removeClassPathItem" mnemonicParsing="false" text="Remove" />
               </items>
             </ContextMenu>
          </contextMenu>
@@ -76,7 +75,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                <MenuItem fx:id="removeModulePathItemMenuItem" onAction="#removeModulePathItem" mnemonicParsing="false" text="Remove" />
               </items>
             </ContextMenu>
          </contextMenu>

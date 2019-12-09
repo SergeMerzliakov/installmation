@@ -23,17 +23,25 @@ import javafx.scene.control.ListView
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.stage.Stage
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import org.installmation.configuration.UserHistory
 import org.installmation.core.CollectionUtils
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File, private val mainJarFile: File?, classPathFiles: Collection<File>?) {
+class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
+
+   companion object {
+      val log: Logger = LogManager.getLogger(JdepsDialogController::class.java)
+   }
 
    @FXML lateinit var mainJar: TextField
    @FXML lateinit var generatedCommandText: TextArea
    @FXML lateinit var classPathListView: ListView<String>
+   @FXML lateinit var modulePathListView: ListView<String>
    @FXML lateinit var jdkComboBox: ComboBox<JDK>
    @FXML lateinit var processOutputView: ListView<String>
    @FXML lateinit var dependencyListView: ListView<String>
@@ -41,6 +49,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    // model
    private val classPath: ObservableList<String> = FXCollections.observableArrayList()
+   private val modulePath: ObservableList<String> = FXCollections.observableArrayList()
    private val moduleOutput: ObservableList<String> = FXCollections.observableArrayList()
    private val processOutput: ObservableList<String> = FXCollections.observableArrayList()
 
@@ -49,12 +58,14 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
          for (f in classPathFiles)
             classPath.add(f.path)
       }
+      modulePath.add(javaFXLibs.path)
    }
 
    @FXML
    fun initialize() {
       mainJar.text = mainJarFile?.path
       classPathListView.items = classPath.sorted()
+      modulePathListView.items = modulePath.sorted()
       dependencyListView.items = moduleOutput.sorted()
       processOutputView.items = processOutput.sorted()
       for (jdk in jdkList)
@@ -90,10 +101,43 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    @FXML
    fun addClassPath() {
+      val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory)
+      if (result.ok) {
+         classPath.add(result.data!!.path)
+         log.debug("Added ${result.data.path} to classpath")
+      }
    }
-
 
    @FXML
    fun clearClassPath() {
+      classPath.clear()
+   }
+
+   @FXML
+   fun addModulePath() {
+      val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Module Path Item", userHistory)
+      if (result.ok) {
+         modulePath.add(result.data!!.path)
+         log.debug("Added ${result.data.path} to module path")
+      }
+   }
+
+   @FXML
+   fun clearModulePath() {
+      modulePath.clear()
+   }
+
+   @FXML
+   fun removeClassPathItem() {
+      if (classPathListView.selectionModel.isEmpty)
+         return
+      classPath.remove(classPathListView.selectionModel.selectedItem)
+   }
+   
+   @FXML
+   fun removeModulePathItem() {
+      if (modulePathListView.selectionModel.isEmpty)
+          return
+      modulePath.remove(modulePathListView.selectionModel.selectedItem)
    }
 }

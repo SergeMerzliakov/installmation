@@ -104,7 +104,6 @@ class InstallmationController(private val configuration: Configuration,
       generateInstallerTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_INSTALLER)
    }
    
-   
    private fun initializeChildControllers() {
       // load file list UI and insert into it's pane in the application
       setupChildController("/fxml/dependenciesTab.fxml", dependenciesController, dependenciesPane)
@@ -268,7 +267,7 @@ class InstallmationController(private val configuration: Configuration,
    fun jdepsDialog() {
       //combined JFX mods with other mods
       val p = workspace.currentProject
-      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p?.javaFXLib!!.path, p.mainJar, p.classPath)
+      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p?.javaFXLib!!.path, p.mainJar, p.classPath, userHistory)
       d.showAndWait()
    }
    
@@ -317,7 +316,6 @@ class InstallmationController(private val configuration: Configuration,
    fun handleClearMessage(e: ClearMessagesEvent) {
       userMessages.clear()
    }
-
 }
 
 
