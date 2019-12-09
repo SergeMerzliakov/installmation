@@ -83,8 +83,8 @@
       </ListView>
       <FlowPane orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
-            <Button fx:id="addModulePathButton" mnemonicParsing="false" styleClass="button-60" text="Add" />
-            <Button fx:id="clearModulePathButton" mnemonicParsing="false" styleClass="button-60" text="Clear" />
+            <Button fx:id="addModulePathButton" mnemonicParsing="false" onAction="#addModulePath" styleClass="button-60" text="Add" />
+            <Button fx:id="clearModulePathButton" mnemonicParsing="false" onAction="#clearModulePath" styleClass="button-60" text="Clear" />
          </children>
       </FlowPane>
       <Label text="Generated Command" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
@@ -123,7 +123,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea fx:id="dependencyTextArea" layoutX="-17.0" layoutY="-86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                        <TextArea fx:id="dependencyTextArea" editable="false" layoutX="-17.0" layoutY="-86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
                      </children>
                   </AnchorPane>
             </content>
