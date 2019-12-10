@@ -13,6 +13,7 @@ class ModuleDependenciesGenerator(val jdeps: JDepsExecutable, val classPath: Str
     */
    fun generate(): List<String> {
       jdeps.parameters.addArgument(FlagArgument("-s"))
+      jdeps.parameters.addArgument(ValueArgument("--multi-release", "11"))
       jdeps.parameters.addArgument(ValueArgument("--module-path", javaFxLibs.path))
       jdeps.parameters.addArgument(ValueArgument("-classpath", classPath))
       jdeps.parameters.addArgument(FlagArgument(mainJar))
