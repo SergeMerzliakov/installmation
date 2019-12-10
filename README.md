@@ -41,3 +41,13 @@ Not yet ready for general release.
     2. OpenJFX 11+
     3. gradle 5+
 
+
+### Setup
+
+#### Unit Testing
+The unit tests run lots of Testfx tests, some of which requiring running JDK tools like jdeps. JAVA_HOME is not assumed to 
+be set, so JDK and JavaFX paths need to be added to the OS-specific file:
+
+    resources/test-config-linux.properties
+    resources/test-config-osx.properties
+    resources/test-config-windows.properties
