@@ -1,0 +1,2 @@
+to run:
+java -cp lib/*:tiny-java-app-1.0.jar org.tinydemo.Application
