@@ -54,7 +54,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem fx:id="removeClassPathItemMenuItem" onAction="#removeClassPathItem" mnemonicParsing="false" text="Remove" />
+                <MenuItem fx:id="removeClassPathItemMenuItem" mnemonicParsing="false" onAction="#removeClassPathItem" text="Remove" />
               </items>
             </ContextMenu>
          </contextMenu>
@@ -75,7 +75,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem fx:id="removeModulePathItemMenuItem" onAction="#removeModulePathItem" mnemonicParsing="false" text="Remove" />
+                <MenuItem fx:id="removeModulePathItemMenuItem" mnemonicParsing="false" onAction="#removeModulePathItem" text="Remove" />
               </items>
             </ContextMenu>
          </contextMenu>
@@ -100,7 +100,7 @@
       </Label>
       <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="compressed-tab" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="4" GridPane.rowIndex="7">
         <tabs>
-            <Tab text="Command Output">
+            <Tab fx:id="outputTab" text="Command Output">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -109,7 +109,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-          <Tab text="List">
+          <Tab fx:id="listTab" text="List">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -118,7 +118,7 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Text">
+          <Tab fx:id="textTab" text="Text">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
