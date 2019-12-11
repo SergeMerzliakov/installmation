@@ -16,8 +16,6 @@
 
 package org.installmation.ui.dialog
 
-import io.mockk.every
-import io.mockk.mockk
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.VBox
@@ -38,12 +36,10 @@ class JdepsDialogTest : ApplicationTest() {
    companion object {
       const val DIALOG_BUTTON = "button1"
       const val JDK_NAME = "jdk1"
-      val RESOURCE_ROOT = File("src/test/resources/").absolutePath
+      private val RESOURCE_ROOT = File("src/test/resources/").absolutePath
       val LIB1_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-core-2.12.1.jar")
       val LIB2_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-api-2.12.1.jar")
       val MAIN_JAR = File(RESOURCE_ROOT, "/tiny-app/tiny-java-app-1.0.jar")
-      val CLASS_PATH_1 = File("/mydir/some.jar")
-      val MODULE_PATH_1 = File("/jfx/lib")
       
       @BeforeClass
       @JvmStatic
