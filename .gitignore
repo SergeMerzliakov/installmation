@@ -6,5 +6,7 @@ out/
 $configuration/
 *.class
 
+testconfig/
+
 # Log file
 *.log

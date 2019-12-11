@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.core.OperatingSystem
 import java.io.File
+import java.io.FileReader
 import java.util.*
 
 /**
@@ -35,16 +36,39 @@ object TestingBootstrap {
    
    fun checkBinariesInstalled() {
       try {
-         // if config is OK, stop there
          val config = getTestConfiguration()
+               ?: throw BootstrapException("Empty test config files created at <repo>/testconfig/test-config-XXX.properties. This needs to be configured first. Fill in all properties as absolute paths before running unit tests")
+
+         // we have a configuration - check it
          if (invalidTestConfiguration(config)) {
-               throw BootstrapException("missing binaries (JDK or JavaFX). Check error log for details, as the test-config-XXX.properties may not be configured")
+            throw BootstrapException("missing binaries (JDK or JavaFX). Check error log for details, as the test-config-XXX.properties may not be configured")
          }
       } catch (e: Throwable) {
          throw BootstrapException("Error checking this systems JDK and JavaFX requirements for testing", e)
       }
    }
 
+   /**
+    * On first clone, create empty directories for user to fill in their JDK and JavaFX details.
+    * Try and use JDK if JAVA_HOME is configured
+    */
+   private fun createEmptyConfiguration(config: File) {
+      config.parentFile.mkdirs()
+
+      // try use JAVA_HOME to at least get a JDK
+      val jh = System.getProperty("java.home")
+      if (jh.isNotEmpty()) {
+         val homePath = File(jh)
+         if (homePath.exists()) {
+            config.writeText("$PROPERTY_TEST_JDK=${homePath.path}\n$PROPERTY_TEST_JFX=\n")
+         }
+      } else
+         config.writeText("$PROPERTY_TEST_JDK=\n$PROPERTY_TEST_JFX=\n")
+   }
+
+   /*
+     We have a configuration, now test that the file paths are valid
+    */
    private fun invalidTestConfiguration(config: Properties): Boolean {
       var invalid = false
       jdk = File(config.getProperty(PROPERTY_TEST_JDK))
@@ -62,13 +86,20 @@ object TestingBootstrap {
       return invalid
    }
 
-   private fun getTestConfiguration(): Properties {
+   private fun getTestConfiguration(): Properties? {
       val file = when (OperatingSystem.os()) {
-         OperatingSystem.Type.OSX -> "/test-config-osx.properties"
-         OperatingSystem.Type.Windows -> "/test-config-windows.properties"
-         OperatingSystem.Type.Linux -> "/test-config-linux.properties"
+         OperatingSystem.Type.OSX -> "testconfig/test-config-osx.properties"
+         OperatingSystem.Type.Windows -> "testconfig/test-config-windows.properties"
+         OperatingSystem.Type.Linux -> "testconfig/test-config-linux.properties"
       }
-      val iss = TestingBootstrap::class.java.getResourceAsStream(file)
+      val configFile = File(file)
+      if (!configFile.exists()) {
+         // first time tests are run
+         createEmptyConfiguration(configFile)
+         return null
+      }
+
+      val iss = FileReader(configFile)
       val props = Properties()
       props.load(iss)
       return props
