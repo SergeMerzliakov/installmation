@@ -24,6 +24,8 @@ import org.installmation.core.OperatingSystem
 import org.installmation.core.UserMessageEvent
 import org.installmation.io.FileFilters
 import org.installmation.model.InstallProject
+import org.installmation.model.ShellScript
+import org.installmation.model.ShellScriptFactory
 import org.installmation.model.ValueArgument
 import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.JPackageExecutable
@@ -51,13 +53,32 @@ class InstallCreator(private val configuration: Configuration) {
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Image creation started....")
 
-      val output = doCreateImage(prj)
+      val packager = initializeImagePackager(prj)
+      val fullCommand = packager.toString()
+      log.info("command: $fullCommand")
+      progressMessage("command: $fullCommand")
+      val output = packager.execute(30)
       for (line in output)
          progressMessage(line)
 
       progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
    }
 
+   fun createImageScript(prj: InstallProject): ShellScript {
+      val packager = initializeImagePackager(prj)
+      val fullCommand = packager.toString()
+      val script = ShellScriptFactory.createScript("generate_image")
+      script.addLine(fullCommand)
+      return script
+   }
+
+   fun createInstallerScript(prj: InstallProject): ShellScript {
+      val packager = initializeInstallerPackager(prj)
+      val fullCommand = packager.toString()
+      val script = ShellScriptFactory.createScript("generate_installer")
+      script.addLine(fullCommand)
+      return script
+   }
 
    /**
     * Create complete installer
@@ -72,14 +93,16 @@ class InstallCreator(private val configuration: Configuration) {
       progressMessage("Installer creation started....")
 
       // Step 1 create image as well
-      var output = doCreateImage(prj)
-      for (line in output)
-         progressMessage(line)
+      createImage(prj)
 
       progressMessage("*** APPLICATION IMAGE CREATED SUCCESSFULLY. STARTING INSTALLER CREATION ***")
+      
       // Step 2 - create installer based on image created in Step 1
-
-      output = doCreateInstaller(prj)
+      val packager = initializeInstallerPackager(prj)
+      val fullCommand = packager.toString()
+      log.info("command: $fullCommand")
+      progressMessage("command: $fullCommand")
+      val output = packager.execute(30)
       for (line in output)
          progressMessage(line)
 
@@ -89,7 +112,7 @@ class InstallCreator(private val configuration: Configuration) {
    /**
     * Create Installer
     */
-   private fun doCreateInstaller(prj: InstallProject): List<String> {
+   private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
       prj.installerDirectory?.mkdirs()
 
       val packager = JPackageExecutable(prj.jpackageJDK!!)
@@ -98,16 +121,13 @@ class InstallCreator(private val configuration: Configuration) {
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
       val appImage = File(prj.imageBuildDirectory!!.path, prj.name + OperatingSystem.imageFileExtension())
       packager.parameters.addArgument(ValueArgument("--app-image", appImage.path))
-      val fullCommand = packager.toString()
-      log.info("command: $fullCommand")
-      progressMessage("command: $fullCommand")
-      return packager.execute(30)
+      return packager
    }
 
    /**
     * This is called by installer creation process and returns the command output
     */
-   private fun doCreateImage(prj: InstallProject): List<String> {
+   private fun initializeImagePackager(prj: InstallProject): JPackageExecutable {
       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
       createImageContent(prj)
 
@@ -130,11 +150,7 @@ class InstallCreator(private val configuration: Configuration) {
 
       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
       packager.parameters.addArgument(ValueArgument("--main-class", prj.mainClass))
-
-      val fullCommand = packager.toString()
-      log.info("command: $fullCommand")
-      progressMessage("command: $fullCommand")
-      return packager.execute(30)
+      return packager
    }
 
    /**

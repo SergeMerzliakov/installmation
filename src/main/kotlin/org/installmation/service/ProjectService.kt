@@ -22,7 +22,10 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
-import org.installmation.model.*
+import org.installmation.model.InstallProject
+import org.installmation.model.JsonParserFactory
+import org.installmation.model.LoadDataException
+import org.installmation.model.SaveDataException
 import org.installmation.ui.dialog.ErrorDialog
 import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.ItemListDialog
@@ -125,7 +128,6 @@ class ProjectService(val configuration: Configuration) {
          val creator = InstallCreator(configuration)
          creator.createImage(p)
          log.info("Generate Image  - Image created successfully")
-         HelpDialog.showAndWait("Image Created","Image created at ${p.imageBuildDirectory}")
       } catch (e: Exception) {
          log.info("Generate Image  - Failed with error: ${e.message}", e)
          ErrorDialog.showAndWait("Image Creation Error", e.toString())
@@ -146,11 +148,36 @@ class ProjectService(val configuration: Configuration) {
          val creator = InstallCreator(configuration)
          creator.createInstaller(p)
          log.info("Generate Installer  - Image created successfully")
-         HelpDialog.showAndWait("Installer Created","Image created at ${p.installerDirectory}")
       } catch (e: Exception) {
          log.info("Generate Installer  - Failed with error: ${e.message}", e)
          ErrorDialog.showAndWait("Installer Creation Error", e.toString())
       }
+   }
+
+   fun generateScripts(p: InstallProject): ScriptSet? {
+      try {
+         log.info("Generate Scripts  - Validating configuration")
+         val validationResult = p.validateConfiguration()
+         if (!validationResult.success) {
+            val d = ItemListDialog("Errors", "Issues", validationResult.errors)
+            d.showNonModal()
+            return null
+         }
+
+         log.info("Generate Scripts  - Generating Image Script")
+         val creator = InstallCreator(configuration)
+         val imageScript = creator.createImageScript(p)
+         log.info("Generate Scripts  - Image created successfully")
+
+         log.info("Generate Scripts  - Generating Installer Script")
+         val installerScript = creator.createInstallerScript(p)
+         log.info("Generate Scripts  - Image created successfully")
+         return ScriptSet(imageScript, installerScript)
+      } catch (e: Exception) {
+         log.info("Generate Scripts  - Failed with error: ${e.message}", e)
+         ErrorDialog.showAndWait("Installer Creation Error", e.toString())
+      }
+      return null
    }
 
    private fun projectBaseDirectory(): File {

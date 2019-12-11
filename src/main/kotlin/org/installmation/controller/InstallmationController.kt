@@ -38,6 +38,7 @@ import org.installmation.model.ModuleJmodUpdatedEvent
 import org.installmation.model.NamedDirectory
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
+import java.io.File
 
 /**
  * Main Application controller, with nested controllers
@@ -170,6 +171,7 @@ class InstallmationController(private val configuration: Configuration,
          return
       }
       projectService.generateImage(workspace.currentProject!!)
+      HelpDialog.showAndWait("Image Created","Image created at ${workspace.currentProject!!.imageBuildDirectory}")
    }
 
    /*
@@ -182,11 +184,12 @@ class InstallmationController(private val configuration: Configuration,
          return
       }
       projectService.generateInstaller(workspace.currentProject!!)
+      HelpDialog.showAndWait("Installer Created", "Image created at ${workspace.currentProject!!.installerDirectory}")
    }
 
    /**
     * Generate scripts of creating images and installers for
-    * Mac/Linux and Windows
+    * Mac/Linux and Windows. Returns the scripts generated
     */
    @FXML
    fun generateScripts() {
@@ -195,13 +198,20 @@ class InstallmationController(private val configuration: Configuration,
          return
       }
       try {
+         val scripts = projectService.generateScripts(workspace.currentProject!!)
+         if (scripts != null) {
+            val result = ChooseDirectoryDialog.showAndWait(applicationStage(),"Script Destination", userHistory)
+            if (result.ok){
+               val imagePath = File(result.data, scripts.imageScript.fileName)
+               imagePath.parentFile.mkdirs()
+               imagePath.writeText(scripts.imageScript.toString())
 
-         log.info("Generate Scripts  - Validating configuration")
-         //workspace.currentProject.
-
-         log.info("Generate Scripts  - Generating Scripts")
-
-         log.info("Generate Scripts  - Scripts created successfully")
+               val installerPath = File(result.data, scripts.installerScript.fileName)
+               installerPath.parentFile.mkdirs()
+               installerPath.writeText(scripts.installerScript.toString())
+               HelpDialog.showAndWait("Scripts Created", "All scripts created at ${result.data?.path}")
+            }
+         }
       } catch (e: Exception) {
          log.info("Generate Scripts  - Failed with error: ${e.message}", e)
       }

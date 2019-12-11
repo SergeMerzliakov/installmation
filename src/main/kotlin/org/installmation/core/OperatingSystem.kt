@@ -60,6 +60,21 @@ object OperatingSystem {
    /**
     * Return image extension for each OS
     */
+   fun scriptExtension(): String {
+      val name = System.getProperty("os.name").trim().toLowerCase()
+
+      when {
+         name.startsWith("mac") -> return ".sh"
+         name.startsWith("windows") -> return ".bat"
+         name.startsWith("linux") -> return ".sh"
+      }
+      throw RuntimeException("Unknown operating system - $name ${System.getProperty("os.version").trim().toLowerCase()}")
+   }
+   
+   
+   /**
+    * Return image extension for each OS
+    */
    fun installerType(): List<String> {
       val name = System.getProperty("os.name").trim().toLowerCase()
 
