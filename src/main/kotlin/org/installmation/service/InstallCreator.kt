@@ -142,11 +142,15 @@ class InstallCreator(private val configuration: Configuration) {
       packager.parameters.addArgument(ValueArgument("-d", prj.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-      val modulePathString = CollectionUtils.toPathList(prj.modulePath.map { it.path })
-      packager.parameters.addArgument(ValueArgument("--module-path", modulePathString))
+      if (prj.modulePath.isNotEmpty()) {
+         val modulePathString = CollectionUtils.toPathList(prj.modulePath.map { it.path })
+         packager.parameters.addArgument(ValueArgument("--module-path", modulePathString))
+      }
 
+      // check if modular application
       val modules = generateModuleDependencies(prj)
-      packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+      if (modules.isNotEmpty())
+         packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
       packager.parameters.addArgument(ValueArgument("--main-class", prj.mainClass))
@@ -157,10 +161,13 @@ class InstallCreator(private val configuration: Configuration) {
     * Run jdeps tool to get a list of JDK modules used by the target application
     */
    private fun generateModuleDependencies(prj: InstallProject): String {
+      if (prj.classPath.isEmpty())
+         return ""
+
       checkNotNull(prj.jpackageJDK)
       checkNotNull(prj.javaFXLib)
       checkNotNull(prj.mainJar)
-
+      
       val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
       val jdeps = JDepsExecutable(prj.jpackageJDK!!)
       val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
