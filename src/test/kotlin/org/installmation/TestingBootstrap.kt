@@ -60,7 +60,8 @@ object TestingBootstrap {
       if (jh.isNotEmpty()) {
          val homePath = File(jh)
          if (homePath.exists()) {
-            config.writeText("$PROPERTY_TEST_JDK=${homePath.path}\n$PROPERTY_TEST_JFX=\n")
+            val jdkPath = homePath.path.replace("/Contents/Home", "")
+            config.writeText("$PROPERTY_TEST_JDK=$jdkPath\n$PROPERTY_TEST_JFX=\n")
          }
       } else
          config.writeText("$PROPERTY_TEST_JDK=\n$PROPERTY_TEST_JFX=\n")

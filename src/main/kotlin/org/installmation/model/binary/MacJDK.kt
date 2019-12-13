@@ -21,7 +21,7 @@ import java.io.File
 
 class MacJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
 
-   override val binaryDirectory = "bin" 
+   override val binaryDirectory = "/Contents/Home/bin" 
    override val javaExecutableName = "java"
    override val jpackageExecutableName = "jpackage"
    override val jdepsExecutableName = "jdeps"
