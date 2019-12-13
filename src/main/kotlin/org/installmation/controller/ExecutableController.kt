@@ -28,6 +28,7 @@ import org.installmation.service.*
 import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import java.io.File
+import java.util.*
 
 
 class ExecutableController(configuration: Configuration,
@@ -74,7 +75,7 @@ class ExecutableController(configuration: Configuration,
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
 
-      e.project.mainJar = File(mainJarField.text)
+      Optional.ofNullable(mainJarField.text).ifPresent { e.project.mainJar = File(mainJarField.text) }
       e.project.mainClass = mainClassField.text
    }
 
