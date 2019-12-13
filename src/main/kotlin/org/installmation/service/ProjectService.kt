@@ -73,7 +73,6 @@ class ProjectService(val configuration: Configuration) {
          return
       //save then close
       save(p)
-      configuration.eventBus.post(ProjectSavedEvent(p))
       configuration.eventBus.post(ProjectClosedEvent(p))
       log.info("Project '${p.name}' closed")
    }
