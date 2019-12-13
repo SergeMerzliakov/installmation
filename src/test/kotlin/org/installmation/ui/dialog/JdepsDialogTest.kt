@@ -89,7 +89,7 @@ class JdepsDialogTest : ApplicationTest() {
 
       val generatedCommandText = lookup("#generatedCommandText").query<TextArea>()
       // test key elements of command present
-      assertThat(generatedCommandText.text).contains("jdeps", "--module-path", "--multi-release 11", "-classpath", 
+      assertThat(generatedCommandText.text).contains("jdeps", "--multi-release 11", "-classpath", 
             "test/resources/tiny-app/lib/log4j-core-2.12.1.jar", 
             "test/resources/tiny-app/lib/log4j-api-2.12.1.jar ", 
             "resources/tiny-app/tiny-java-app-1.0.jar")
