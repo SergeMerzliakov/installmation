@@ -17,6 +17,7 @@
 package org.installmation.model
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.binary.JDKFactory
@@ -25,7 +26,7 @@ import org.junit.AfterClass
 import org.junit.Test
 import java.io.File
 
-class InstallProjectTest {
+class InstallProjectModelTest {
 
    companion object {
       val SAVED_FILE = File("testdata", "project.json")
@@ -41,16 +42,16 @@ class InstallProjectTest {
    fun shouldSerializeMinimalProject() {
       val name = "project"
 
-      val p = InstallProject()
-      p.name = name
+      val p1 = InstallProject()
+      p1.name = name
 
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
-      writer.save(p)
+      writer.save(p1)
 
       val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, SAVED_FILE, JsonParserFactory.configurationParser())
       val p2 = reader.load()
 
-      assertThat(p2.name).isEqualTo(p.name)
+      assertThat(p2).isEqualToComparingFieldByField(p1)
    }
 
 
@@ -58,20 +59,20 @@ class InstallProjectTest {
    fun shouldSerializeProject() {
       val name = "project"
       val version = "1.0"
-      val p = InstallProject()
-      p.name = name
-      p.version = version
-      p.modulePath = mutableSetOf(File("module1"))
-      p.imageBuildDirectory = File("image")
-      p.installerDirectory = File("installer")
-      p.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
+      val p1 = InstallProject()
+      p1.name = name
+      p1.version = version
+      p1.modulePath = mutableSetOf(File("module1"))
+      p1.imageBuildDirectory = File("image")
+      p1.installerDirectory = File("installer")
+      p1.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
       
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
-      writer.save(p)
+      writer.save(p1)
 
       val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, SAVED_FILE, JsonParserFactory.configurationParser())
       val p2 = reader.load()
 
-      assertThat(p2).isEqualToComparingFieldByField(p)
+      assertThat(p2).isEqualToComparingFieldByField(p1)
    }
 }

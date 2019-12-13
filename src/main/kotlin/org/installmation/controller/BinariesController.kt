@@ -219,7 +219,8 @@ class BinariesController(private val configuration: Configuration,
       e.project.jpackageJDK = jpackageComboBox.selectionModel.selectedItem
       e.project.javaFXLib = moduleLibComboBox.selectionModel.selectedItem
       e.project.javaFXMods = moduleJmodComboBox.selectionModel.selectedItem
-      e.project.modulePath.add(moduleJmodComboBox.selectionModel.selectedItem.path)
+      if (!moduleJmodComboBox.selectionModel.isEmpty)
+         e.project.modulePath.add(moduleJmodComboBox.selectionModel.selectedItem.path)
    }
 
    @Subscribe

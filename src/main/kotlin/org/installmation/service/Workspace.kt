@@ -20,9 +20,9 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
-import org.installmation.model.JsonParserFactory
 import java.io.File
 
 /**
@@ -33,7 +33,7 @@ import java.io.File
  * Not a concept that is visible to the user, so they will
  * never 'see' workspaces
  */
-class Workspace(var configuration: Configuration? = null,
+class Workspace(@Transient var configuration: Configuration,
                 @Transient var projectService: ProjectService? = null) {
 
    companion object {
@@ -42,7 +42,7 @@ class Workspace(var configuration: Configuration? = null,
       /**
        * Full path, relative to base path
        */
-      fun workspaceFile(baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)): File {
+      fun workspaceFile(baseDirectory: File): File {
          return File(File(baseDirectory, Constant.WORKSPACE_DIR), Constant.WORKSPACE_FILE)
       }
    }
@@ -56,7 +56,7 @@ class Workspace(var configuration: Configuration? = null,
    fun setCurrentProject(p: InstallProject) {
       checkNotNull(p.name, { "Project must have a name before it can be used" })
       currentProject = p
-      projectHistory[p.name!!] = p.projectFile()
+      projectHistory[p.name!!] = p.projectFile(configuration!!.baseDirectory)
       log.debug("Workspace current project is set to '${p.name}'")
    }
 
@@ -84,7 +84,7 @@ class Workspace(var configuration: Configuration? = null,
    fun writeToFile() {
       if (currentProject != null) {
          projectService?.writeToFile(currentProject!!)
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(), JsonParserFactory.configurationParser())
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.configurationParser())
          workspaceWriter.save(this)
       }
    }

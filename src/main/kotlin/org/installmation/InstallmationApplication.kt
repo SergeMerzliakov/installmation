@@ -34,13 +34,12 @@ import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
-import org.installmation.model.JsonParserFactory
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.service.Workspace
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectCreatedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.ProjectService
-import java.io.File
 
 
 class InstallmationApplication : Application() {
@@ -66,7 +65,7 @@ class InstallmationApplication : Application() {
          configWriter.save(configuration)
 
          // workspace
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(), JsonParserFactory.configurationParser())
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
          workspaceWriter.save(workspace)
 
          InstallmationController.log.info("Installmation Application has shutdown")
@@ -74,17 +73,17 @@ class InstallmationApplication : Application() {
    }
    
    override fun start(primaryStage: Stage) {
-      applicationStage = primaryStage
       val configuration = loadConfiguration(eventBus)
       startApplication(primaryStage, configuration, eventBus)
    }
 
    /**
-    * Integration Test friendly entry point
+    * Integration Test friendly entry point. Need to setup Stage
     */
    fun startApplication(primaryStage: Stage, configuration: Configuration, eventBus: EventBus) {
+      applicationStage = primaryStage
       try {
-         log.info("Starting Installmation from ${File(".").canonicalPath}")
+         log.info("Starting Installmation from configuration root: ${configuration.baseDirectory.canonicalPath}")
          eventBus.register(this)
 
          val projectService = ProjectService(configuration)
@@ -136,11 +135,11 @@ class InstallmationApplication : Application() {
 
    private fun loadWorkspace(configuration: Configuration, projectService: ProjectService): Workspace {
       log.debug("Started loading workspace...")
-      val location = Workspace.workspaceFile()
+      val location = Workspace.workspaceFile(configuration.baseDirectory)
       if (location.exists()) {
          log.debug("Workspace file found. Loading from ${location.canonicalPath}")
 
-         val reader = ApplicationJsonReader<Workspace>(Workspace::class, location, JsonParserFactory.configurationParser())
+         val reader = ApplicationJsonReader<Workspace>(Workspace::class, location, JsonParserFactory.workspaceParser(configuration))
          val workspace = reader.load()
          workspace.configuration = configuration
          workspace.projectService = projectService

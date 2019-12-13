@@ -19,7 +19,6 @@ package org.installmation.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
-import org.installmation.model.JsonParserFactory
 import org.installmation.model.binary.MacJDK
 import org.junit.After
 import org.junit.Before

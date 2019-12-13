@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.installmation.model
+package org.installmation.configuration
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import org.installmation.model.WorkspaceSerializer
 import org.installmation.model.binary.*
 import org.installmation.service.Workspace
 
@@ -27,15 +28,20 @@ import org.installmation.service.Workspace
 object JsonParserFactory {
 
    /**
-    * for configuration files
+    * for configuration files only
     */
    fun configurationParser(): Gson {
       val builder = GsonBuilder()
-      builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(WindowsJDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
-      builder.registerTypeAdapter(Workspace::class.java, WorkspaceSerializer())
+      registerConfigurationAdapters(builder)
+      return builder.setPrettyPrinting().create()
+   }
+
+   /**
+    * for configuration files
+    */
+   fun workspaceParser(configuration: Configuration): Gson {
+      val builder = GsonBuilder()
+      builder.registerTypeAdapter(Workspace::class.java, WorkspaceSerializer(configuration))
       return builder.setPrettyPrinting().create()
    }
 
@@ -47,4 +53,11 @@ object JsonParserFactory {
       return builder.setPrettyPrinting().create()
    }
 
+
+   private fun registerConfigurationAdapters(builder:GsonBuilder) {
+      builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(WindowsJDK::class.java, JDKSerializer())
+      builder.registerTypeAdapter(LinuxJDK::class.java, JDKSerializer())
+   }
 }

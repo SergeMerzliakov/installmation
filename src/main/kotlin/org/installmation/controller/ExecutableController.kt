@@ -70,13 +70,15 @@ class ExecutableController(configuration: Configuration,
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
    }
-
+   
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
 
-      Optional.ofNullable(mainJarField.text).ifPresent { e.project.mainJar = File(mainJarField.text) }
-      e.project.mainClass = mainClassField.text
+      if (!mainJarField.text.isNullOrEmpty())
+         e.project.mainJar = File(mainJarField.text)
+      if (!mainClassField.text.isNullOrEmpty())
+         e.project.mainClass = mainClassField.text
    }
 
    @Subscribe

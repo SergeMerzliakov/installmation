@@ -134,13 +134,13 @@ class LocationController(private val configuration: Configuration,
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
 
-      if (inputDirectoryText.text != null)
+      if (!inputDirectoryText.text.isNullOrEmpty())
          e.project.inputDirectory = File(inputDirectoryText.text)
 
-      if (imageBuildDirectoryText.text != null)
+      if (!imageBuildDirectoryText.text.isNullOrEmpty())
          e.project.imageBuildDirectory = File(imageBuildDirectoryText.text)
 
-      if (installerDirectoryText.text != null)
+      if (!installerDirectoryText.text.isNullOrEmpty())
          e.project.installerDirectory = File(installerDirectoryText.text)
    }
 

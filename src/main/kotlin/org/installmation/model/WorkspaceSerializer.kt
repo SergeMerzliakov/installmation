@@ -19,6 +19,8 @@ package org.installmation.model
 import com.google.gson.*
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.configuration.Configuration
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.service.Workspace
 import java.io.File
@@ -27,7 +29,7 @@ import java.lang.reflect.Type
 /**
  * Custom serializer, ensuring current project is DESERed properly
  */
-class WorkspaceSerializer : JsonSerializer<Workspace>, JsonDeserializer<Workspace> {
+class WorkspaceSerializer(val configuration: Configuration) : JsonSerializer<Workspace>, JsonDeserializer<Workspace> {
 
    companion object {
       const val CURRENT_PROJECT_PATH = "current-project-path"
@@ -36,7 +38,7 @@ class WorkspaceSerializer : JsonSerializer<Workspace>, JsonDeserializer<Workspac
 
    override fun serialize(workspace: Workspace?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
       val json = JsonObject()
-      json.addProperty(CURRENT_PROJECT_PATH, workspace?.currentProject?.projectFile()?.canonicalPath)
+      json.addProperty(CURRENT_PROJECT_PATH, workspace?.currentProject?.projectFile(configuration.baseDirectory)?.canonicalPath)
       return json
    }
 
@@ -44,7 +46,7 @@ class WorkspaceSerializer : JsonSerializer<Workspace>, JsonDeserializer<Workspac
       val obj = json?.asJsonObject
       val path = obj?.get(CURRENT_PROJECT_PATH)?.asJsonPrimitive?.asString
       //load current project completely
-      val ws = Workspace()
+      val ws = Workspace(configuration)
       if (path != null) {
          val p = deserializeProject(path)
          if (p != null)

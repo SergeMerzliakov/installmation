@@ -53,7 +53,7 @@ class InstallProject {
    var modulePath = mutableSetOf<File>()
    var classPath = mutableSetOf<File>()
 
-   fun projectFile(baseDirectory: File = Constant.DEFAULT_BASE_DIR): File {
+   fun projectFile(baseDirectory:File): File {
       checkNotNull(name)
       val baseDir = File(baseDirectory, Constant.PROJECT_DIR)
       return File(baseDir, projectFileName(name!!))

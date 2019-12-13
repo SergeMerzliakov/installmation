@@ -23,11 +23,10 @@ import org.installmation.configuration.Constant
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
-import org.installmation.model.JsonParserFactory
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.model.LoadDataException
 import org.installmation.model.SaveDataException
 import org.installmation.ui.dialog.ErrorDialog
-import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.ItemListDialog
 import java.io.File
 
@@ -38,6 +37,8 @@ class ProjectService(val configuration: Configuration) {
 
    companion object {
       val log: Logger = LogManager.getLogger(ProjectService::class.java)
+
+
    }
 
    fun newProject(name: String): InstallProject {
