@@ -20,10 +20,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
-import org.installmation.configuration.JsonParserFactory
 import org.installmation.model.LoadDataException
 import org.installmation.model.SaveDataException
 import org.installmation.ui.dialog.ErrorDialog
@@ -109,7 +109,6 @@ class ProjectService(val configuration: Configuration) {
          throw SaveDataException("Error writing project ${p.name} to file", e)
       }
    }
-   
 
    /**
     * Generates an image which contains all the parts required for an installer

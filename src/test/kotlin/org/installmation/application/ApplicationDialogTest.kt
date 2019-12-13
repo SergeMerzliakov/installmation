@@ -21,7 +21,7 @@ import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
 import org.installmation.core.RunningAsTestEvent
-import org.installmation.service.Workspace
+import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.framework.junit.ApplicationTest
@@ -44,43 +44,43 @@ class ApplicationDialogTest : ApplicationTest() {
 
    @Test
    fun shouldOpenAboutDialog() {
-      clickOn("#aboutMenu").clickOn("#aboutMenuItem")
-      FxAssert.verifyThat("#aboutDialog", NodeMatchers.isVisible())
-      clickOn("#okButton")
+      clickOn(FXID.MENU_ABOUT).clickOn(FXID.MENUITEM_ABOUT)
+      FxAssert.verifyThat(FXID.DIALOG_ABOUT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_ABOUT_DLG_OK)
    }
 
    @Test
    fun shouldOpenNewProjectDialog() {
-      clickOn("#projectMenu").clickOn("#newProjectMenuItem")
-      FxAssert.verifyThat("#singleValueDialog", NodeMatchers.isVisible())
-      clickOn("#cancelButton")
+      clickOn(FXID.MENU_PROJECT).clickOn(FXID.MENUITEM_NEW_PROJECT)
+      FxAssert.verifyThat(FXID.DIALOG_SINGLEVAL_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_SINGLEVAL_DLG_CANCEL)
    }
 
    @Test
    fun shouldOpenJDKDialogFromMenu() {
-      clickOn("#libraryMenu").clickOn("#jpackageMenuItem")
-      FxAssert.verifyThat("#binaryArtefactDialog", NodeMatchers.isVisible())
-      clickOn("#cancelButton")
+      clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JPACKAGE)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
 
    @Test
    fun shouldOpenJavaFXDialogFromMenu() {
-      clickOn("#libraryMenu").clickOn("#javafxMenuItem")
-      FxAssert.verifyThat("#binaryArtefactDialog", NodeMatchers.isVisible())
-      clickOn("#cancelButton")
+      clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JFX)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
 
    @Test
    fun shouldOpenJDKDialogFromButton() {
-      clickOn("#jpackageButton")
-      FxAssert.verifyThat("#binaryArtefactDialog", NodeMatchers.isVisible())
-      clickOn("#cancelButton")
+      clickOn(FXID.TOOLBAR_BUTTON_JPACKAGE)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
 
    @Test
    fun shouldOpenJavaFXDialogFromButton() {
-      clickOn("#javafxButton")
-      FxAssert.verifyThat("#binaryArtefactDialog", NodeMatchers.isVisible())
-      clickOn("#cancelButton")
+      clickOn(FXID.TOOLBAR_BUTTON_JAVAFX)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
 }

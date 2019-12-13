@@ -24,6 +24,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.framework.junit.ApplicationTest
 
@@ -34,11 +35,6 @@ class SingleValueDialogTest : ApplicationTest() {
       const val DIALOG_TITLE = "Colour Picker"
       const val DIALOG_LABEL = "Choose Colour"
       const val DEFAULT_VALUE = "red"
-
-      const val LABEL_ID = "#itemLabel"
-      const val VALUE_ID = "#itemValue"
-      const val SAVE_BUTTON_ID = "#saveButton"
-      const val CANCEL_BUTTON_ID = "#cancelButton"
    }
 
    private lateinit var dialog: SingleValueDialog
@@ -63,11 +59,11 @@ class SingleValueDialogTest : ApplicationTest() {
       clickOn("#$SHOW_DIALOG_BUTTON")
       
       assertThat(dialog.stage.title).isEqualTo(DIALOG_TITLE)
-      
-      val label = lookup(LABEL_ID).query<Label>()
+
+      val label = lookup(FXID.LABEL_SINGLEVAL_DLG_ITEM).query<Label>()
       assertThat(label.text).isEqualTo(DIALOG_LABEL)
-      
-      val value = lookup(VALUE_ID).query<TextField>()
+
+      val value = lookup(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE).query<TextField>()
       assertThat(value.text).isEqualTo(DEFAULT_VALUE)
    }
    
@@ -75,13 +71,13 @@ class SingleValueDialogTest : ApplicationTest() {
    fun shouldSave() {
       clickOn("#$SHOW_DIALOG_BUTTON")
       val newColour = "green"
-      
-      val field = lookup(VALUE_ID).query<TextField>()
+
+      val field = lookup(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE).query<TextField>()
       doubleClickOn(field)
       write(newColour)
       type(KeyCode.TAB)
-      
-      clickOn(SAVE_BUTTON_ID)
+
+      clickOn(FXID.BUTTON_SINGLEVAL_DLG_SAVE)
       
       assertThat(result.ok).isTrue()
       assertThat(result.data).isEqualTo(newColour)
@@ -91,13 +87,13 @@ class SingleValueDialogTest : ApplicationTest() {
    fun shouldCancel() {
       clickOn("#$SHOW_DIALOG_BUTTON")
       val newColour = "green"
-      
-      val field = lookup(VALUE_ID).query<TextField>()
+
+      val field = lookup(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE).query<TextField>()
       doubleClickOn(field)
       write(newColour)
       type(KeyCode.TAB)
-      
-      clickOn(CANCEL_BUTTON_ID)
+
+      clickOn(FXID.BUTTON_SINGLEVAL_DLG_CANCEL)
       
       assertThat(result.ok).isFalse()
       assertThat(result.data).isNull()

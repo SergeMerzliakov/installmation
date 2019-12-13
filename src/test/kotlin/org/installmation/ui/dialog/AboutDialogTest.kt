@@ -20,6 +20,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
+import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.framework.junit.ApplicationTest
 
@@ -50,7 +51,7 @@ class AboutDialogTest : ApplicationTest() {
    @Test
    fun shouldShowDialog() {
       clickOn("#$DIALOG_BUTTON")
-      val ok = lookup("#okButton").query<Button>()
+      val ok = lookup(FXID.BUTTON_ABOUT_DLG_OK).query<Button>()
       clickOn(ok)
    }
 }

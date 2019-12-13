@@ -23,6 +23,7 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.framework.junit.ApplicationTest
 
@@ -32,8 +33,6 @@ class ItemListDialogTest : ApplicationTest() {
       const val SHOW_DIALOG_BUTTON = "button1"
       const val DIALOG_TITLE = "Project Errors"
       const val DIALOG_LABEL = "Errors"
-      const val LABEL_ID = "#listLabel"
-      const val LISTVIEW_ID = "#itemListView"
       const val MESSAGE_1 = "error1"
       const val MESSAGE_2 = "error2"
    }
@@ -63,15 +62,15 @@ class ItemListDialogTest : ApplicationTest() {
       assertThat(dialog.stage.title).isEqualTo(DIALOG_TITLE)
 
       //label
-      val label = lookup(LABEL_ID).query<Label>()
+      val label = lookup(FXID.LABEL_ITEMLIST_DLG).query<Label>()
       assertThat(label.text).isEqualTo(DIALOG_LABEL)
 
       // listview
-      val itemListView = lookup(LISTVIEW_ID).query<ListView<String>>()
+      val itemListView = lookup(FXID.LISTVIEW_ITEMLIST_DLG).query<ListView<String>>()
       assertThat(itemListView.items).hasSize(2)
       assertThat(itemListView.items[0]).isEqualTo(MESSAGE_1)
       assertThat(itemListView.items[1]).isEqualTo(MESSAGE_2)
 
-      clickOn("#okButton")
+      clickOn(FXID.BUTTON_ITEMLIST_DLG_OK)
    }
 }
