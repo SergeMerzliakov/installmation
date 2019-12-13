@@ -36,6 +36,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    companion object {
       val log: Logger = LogManager.getLogger(JdepsDialogController::class.java)
+      const val NO_DEPENDENCIES_MESSAGE = "<No module dependencies>"
    }
 
    @FXML lateinit var mainJar: TextField
@@ -67,7 +68,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       classPathListView.items = classPath.sorted()
       modulePathListView.items = modulePath.sorted()
       dependencyListView.items = moduleOutput.sorted()
-      processOutputView.items = processOutput.sorted()
+      processOutputView.items = processOutput
       for (jdk in jdkList)
          jdkComboBox.items.add(jdk)
       jdkComboBox.selectionModel.select(0)
@@ -80,17 +81,26 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
       val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJar.text)
       val moduleDependencies = mdg.generate()
+      displayResults(jdeps, mdg, moduleDependencies)
+   }
+
+   private fun displayResults(jdeps: JDepsExecutable, mdg: ModuleDependenciesGenerator, moduleDependencies: List<String>) {
       generatedCommandText.text = jdeps.toString()
       moduleOutput.clear()
       processOutput.clear()
 
-      for (line in mdg.output) {
-         processOutput.add(line)
+      if (mdg.output.isNotEmpty()) {
+         mdg.output.map { processOutput.add(it) }
       }
-      for (d in moduleDependencies) {
-         moduleOutput.add(d)
+
+      if (moduleDependencies.isNotEmpty()) {
+         moduleDependencies.map { moduleOutput.add(it) }
+         dependencyTextArea.text = moduleDependencies.joinToString()
+      } else {
+         moduleOutput.add(NO_DEPENDENCIES_MESSAGE)
+         dependencyTextArea.text = NO_DEPENDENCIES_MESSAGE
+         processOutput.add(NO_DEPENDENCIES_MESSAGE.replace(">", "") + " - java.base is not considered a module dependency>")
       }
-      dependencyTextArea.text = moduleDependencies.joinToString()
    }
 
    @FXML
