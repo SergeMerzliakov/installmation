@@ -56,6 +56,37 @@ object FXID {
    const val TEXT_COPYRIGHT = "#copyrightField"
    const val COMBO_INSTALLER_TYPE = "#installerTypeCombo"
 
+   // INSTALL LOCATION TAB
+   const val TEXT_INPUT_DIR = "#inputDirectoryText"
+   const val TEXT_IMAGE_BUILD_DIR = "#imageBuildDirectoryText"
+   const val TEXT_INSTALLER_DIR = "#installerDirectoryText"
+   const val BUTTON_INPUT_DIR = "#inputDirectoryButton"
+   const val BUTTON_IMAGE_BUILD = "#imageBuildDirectoryButton"
+   const val BUTTON_INSTALLER_DIR = "#installerDirectoryButton"
+
+   // JAVA BINARIES TAB
+   const val COMBO_JPACKAGE = "#jpackageComboBox"
+   const val BUTTON_JPACKAGE = "#configureJPackageButton"
+   const val COMBO_MODULE_LIB = "#moduleLibComboBox"
+   const val BUTTON_MODULE_LIB = "#configureModuleLibrariesButton"
+   const val COMBO_INSTALL_JDK = "#installJDKComboBox"
+   const val BUTTON_INSTALL_JDK = "#configureInstallJDKButton"
+   const val COMBO_MODULE_JMOD = "#moduleJmodComboBox"
+   const val BUTTON_MODULE_JMOD = "#configureModuleJmodButton"
+   const val BUTTON_FX_LIBRARIES = "#helpFXLibrariesButton"
+   const val BUTTON_FX_MODULES = "#helpFXModulesButton"
+   const val BUTTON_HELP_JPACKAGE = "#helpJpackageButton"
+   const val BUTTON_HELP_JDK = "#helpJDKButton"
+
+   // APPLICATION EXECUTABLE
+   const val TEXT_MAIN_JAR = "#mainJarField"
+   const val TEXT_MAIN_CLASS = "#mainClassField"
+   const val BUTTON_MAIN_JAR = "#mainJarButton"
+
+   // DEPENDENCIES TAB
+   const val LISTVIEW_CLASSPATH = "#classPathListView"
+   const val BUTTON_ADD_CLASSPATH = "#addClasspathButton"
+
    // ABOUT DIALOG
    const val DIALOG_ABOUT_ID = "#aboutDialog"
    const val BUTTON_ABOUT_DLG_OK = "#okButton"
