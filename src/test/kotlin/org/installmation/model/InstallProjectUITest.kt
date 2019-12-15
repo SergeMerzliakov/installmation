@@ -25,19 +25,25 @@ import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.io.ApplicationJsonReader
+import org.installmation.javafx.test.ComboHelper
 import org.installmation.javafx.test.FXID
-import org.installmation.javafx.test.JavaFxTest
+import org.installmation.javafx.test.ListViewHelper
+import org.installmation.javafx.test.TextInputHelper
 import org.installmation.model.binary.JDK
 import org.junit.AfterClass
 import org.junit.Test
+import org.testfx.framework.junit.ApplicationTest
 import java.io.File
 
 /**
  * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents
  */
-class InstallProjectUITest : JavaFxTest() {
+class InstallProjectUITest : ApplicationTest() {
 
    private val application = InstallmationApplication()
+   private val textHelper = TextInputHelper(this)
+   private val comboHelper = ComboHelper(this)
+   private val listHelper = ListViewHelper(this)
 
    companion object {
       val BASE_CONFIG_DIR = File("testrun")
@@ -93,10 +99,10 @@ class InstallProjectUITest : JavaFxTest() {
 
       // set single tab properties and save to disk
       clickOn(FXID.TAB_INFO)
-      writeTextField(FXID.TEXT_PROJECT_NAME, projectName)
-      writeTextField(FXID.TEXT_APP_VERSION, version)
-      writeTextField(FXID.TEXT_COPYRIGHT, copyrightMessage)
-      val installer = selectComboByIndex<String>(FXID.COMBO_INSTALLER_TYPE, 0)
+      textHelper.writeText(FXID.TEXT_PROJECT_NAME, projectName)
+      textHelper.writeText(FXID.TEXT_APP_VERSION, version)
+      textHelper.writeText(FXID.TEXT_COPYRIGHT, copyrightMessage)
+      val installer = comboHelper.selectByIndex<String>(FXID.COMBO_INSTALLER_TYPE, 0)
       saveCurrentProject()
 
       val project = loadCurrentProject(projectName)
@@ -130,9 +136,9 @@ class InstallProjectUITest : JavaFxTest() {
 
       // set single tab properties and save to disk
       clickOn(FXID.TAB_INSTALL)
-      writeTextField(FXID.TEXT_INPUT_DIR, inputDir)
-      writeTextField(FXID.TEXT_IMAGE_BUILD_DIR, imageBuildDir)
-      writeTextField(FXID.TEXT_INSTALLER_DIR, installerDir)
+      textHelper.writeText(FXID.TEXT_INPUT_DIR, inputDir)
+      textHelper.writeText(FXID.TEXT_IMAGE_BUILD_DIR, imageBuildDir)
+      textHelper.writeText(FXID.TEXT_INSTALLER_DIR, installerDir)
       saveCurrentProject()
 
       val project = loadCurrentProject(projectName)
@@ -165,17 +171,17 @@ class InstallProjectUITest : JavaFxTest() {
 
       createProject(projectName)
 
-      populateCombo(FXID.COMBO_JPACKAGE, jpackageJDK)
-      populateCombo(FXID.COMBO_INSTALL_JDK, installJDK)
-      populateCombo(FXID.COMBO_MODULE_LIB, moduleDir)
-      populateCombo(FXID.COMBO_MODULE_JMOD, jmodDir)
+      comboHelper.populateItems(FXID.COMBO_JPACKAGE, jpackageJDK)
+      comboHelper.populateItems(FXID.COMBO_INSTALL_JDK, installJDK)
+      comboHelper.populateItems(FXID.COMBO_MODULE_LIB, moduleDir)
+      comboHelper.populateItems(FXID.COMBO_MODULE_JMOD, jmodDir)
 
       // set single tab properties and save to disk
       clickOn(FXID.TAB_BINARIES)
-      selectComboByIndex<JDK>(FXID.COMBO_JPACKAGE, 0)
-      selectComboByIndex<JDK>(FXID.COMBO_INSTALL_JDK, 0)
-      selectComboByIndex<NamedDirectory>(FXID.COMBO_MODULE_LIB, 0)
-      selectComboByIndex<NamedDirectory>(FXID.COMBO_MODULE_JMOD, 0)
+      comboHelper.selectByIndex<JDK>(FXID.COMBO_JPACKAGE, 0)
+      comboHelper.selectByIndex<JDK>(FXID.COMBO_INSTALL_JDK, 0)
+      comboHelper.selectByIndex<NamedDirectory>(FXID.COMBO_MODULE_LIB, 0)
+      comboHelper.selectByIndex<NamedDirectory>(FXID.COMBO_MODULE_JMOD, 0)
 
       saveCurrentProject()
 
@@ -210,8 +216,8 @@ class InstallProjectUITest : JavaFxTest() {
 
       // set single tab properties and save to disk
       clickOn(FXID.TAB_EXECUTABLE)
-      writeTextField(FXID.TEXT_MAIN_JAR, mainJar)
-      writeTextField(FXID.TEXT_MAIN_CLASS, mainClass)
+      textHelper.writeText(FXID.TEXT_MAIN_JAR, mainJar)
+      textHelper.writeText(FXID.TEXT_MAIN_CLASS, mainClass)
 
       saveCurrentProject()
 
@@ -246,7 +252,7 @@ class InstallProjectUITest : JavaFxTest() {
 
       // set single tab properties and save to disk
       clickOn(FXID.TAB_DEPENDENCIES)
-      populateListView(FXID.LISTVIEW_CLASSPATH, classPathItem)
+      listHelper.populateItems(FXID.LISTVIEW_CLASSPATH, classPathItem)
 
       saveCurrentProject()
 
@@ -280,7 +286,7 @@ class InstallProjectUITest : JavaFxTest() {
 
    private fun createProject(projectName: String) {
       clickOn(FXID.MENU_PROJECT).clickOn(FXID.MENUITEM_NEW_PROJECT)
-      writeTextField(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE, projectName)
+      textHelper.writeText(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE, projectName)
       clickOn(FXID.BUTTON_SINGLEVAL_DLG_SAVE)
       saveCurrentProject()
    }
