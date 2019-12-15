@@ -15,10 +15,14 @@
  */
 package org.installmation.javafx.test
 
+import javafx.application.Platform
+import javafx.collections.FXCollections
 import javafx.scene.control.ComboBox
+import javafx.scene.control.ListView
 import javafx.scene.control.TextField
 import org.assertj.core.api.Assertions.assertThat
 import org.testfx.framework.junit.ApplicationTest
+import org.testfx.util.WaitForAsyncUtils
 
 /**
  * Contains useful helper methods, as we are forced to
@@ -37,15 +41,38 @@ abstract class JavaFxTest : ApplicationTest() {
    }
 
    fun <T> selectComboByIndex(id: String, index: Int): T {
+      var installerCombo: ComboBox<T>? = null
+      Platform.runLater {
+         val fxId = correctFxId(id)
+         clickOn(fxId)
+         installerCombo = lookup(fxId).query()
+         installerCombo?.selectionModel?.select(index)
+      }
+      // wait a bit for JavaFX Thread to execute. FXRobot is by design quite slow
+      WaitForAsyncUtils.waitForFxEvents(3)
+      return installerCombo?.selectionModel!!.selectedItem
+   }
+
+   fun <T> populateCombo(id: String, vararg item: T) {
+      val model = FXCollections.observableArrayList<T>()
       val fxId = correctFxId(id)
-      clickOn(fxId)
-      val installerCombo = lookup(fxId).query<ComboBox<T>>()
-      installerCombo.selectionModel.select(0)
-      return installerCombo.selectionModel.selectedItem
+      val combo = lookup(fxId).query<ComboBox<T>>()
+      combo.items = model
+      for (i in item)
+         model.add(i)
+   }
+
+   fun <T> populateListView(id: String, vararg item: T) {
+      val model = FXCollections.observableArrayList<T>()
+      val fxId = correctFxId(id)
+      val view = lookup(fxId).query<ListView<T>>()
+      view.items = model
+      for (i in item)
+         model.add(i)
    }
 
    /**
-    * Always return a complete fxID for TestFX, starts with '#' character
+    * Always return a complete fxID for TestFX, which starts with '#' character
     */
    private fun correctFxId(id: String): String {
       var fxId = id
