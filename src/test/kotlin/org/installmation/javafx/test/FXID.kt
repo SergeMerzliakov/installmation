@@ -43,6 +43,9 @@ object FXID {
    const val MENUITEM_JPACKAGE = "#jpackageMenuItem"
    const val MENUITEM_JFX = "#javafxMenuItem"
 
+   // TOOL menu
+   const val MENUITEM_JDEPS = "#jdepsMenuItem"
+   
    // ALL TABS
    const val TAB_INFO = "#infoTab"
    const val TAB_INSTALL = "#installTab"
@@ -111,6 +114,7 @@ object FXID {
    const val BUTTON_BINARTEFACT_ADD = "#addButton"
 
    // JDEPS DIALOG
+   const val DIALOG_JDEPS = "#jdepsDialog"
    const val BUTTON_JDEPS_DLG_RUN = "#runButton"
    const val BUTTON_JDEPS_DLG_CLOSE = "#closeButton"
    const val TEXT_JDEPS_DLG_MAINJAR = "#mainJar"

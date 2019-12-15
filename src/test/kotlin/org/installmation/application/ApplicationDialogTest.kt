@@ -83,4 +83,12 @@ class ApplicationDialogTest : ApplicationTest() {
       FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
+
+   @Test
+   fun shouldOpenJdepsDialog() {
+      clickOn(FXID.MENU_TOOL).clickOn(FXID.MENUITEM_JDEPS)
+      FxAssert.verifyThat(FXID.DIALOG_JDEPS, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_JDEPS_DLG_CLOSE)
+   }
+
 }
