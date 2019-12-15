@@ -67,7 +67,7 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
       e.project.name = projectNameField.text
-      e.project.version = applicationVersionField.text ?: "1.0-SNAPSHOT"
+      e.project.version = applicationVersionField.text ?: "1.0"
       e.project.copyright = copyrightField.text
       e.project.installerType = installerTypeCombo.selectionModel.selectedItem
    }
