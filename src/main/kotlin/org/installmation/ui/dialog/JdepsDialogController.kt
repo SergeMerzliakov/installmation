@@ -32,7 +32,7 @@ import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
+class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File?, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
 
    companion object {
       val log: Logger = LogManager.getLogger(JdepsDialogController::class.java)
@@ -59,7 +59,8 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
          for (f in classPathFiles)
             classPath.add(f.path)
       }
-      modulePath.add(javaFXLibs.path)
+      if (javaFXLibs != null)
+         modulePath.add(javaFXLibs.path)
    }
 
    @FXML
@@ -79,9 +80,13 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       val jdeps = JDepsExecutable(jdkComboBox.selectionModel.selectedItem)
       val classPathString = CollectionUtils.toPathList(classPath)
 
-      val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJar.text)
-      val moduleDependencies = mdg.generate()
-      displayResults(jdeps, mdg, moduleDependencies)
+      if (javaFXLibs != null) {
+         val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJar.text)
+         val moduleDependencies = mdg.generate()
+         displayResults(jdeps, mdg, moduleDependencies)
+      }
+      else
+         HelpDialog.showAndWait("JavaFX Not defined", "Please set location of JavaFX jar library files.")
    }
 
    private fun displayResults(jdeps: JDepsExecutable, mdg: ModuleDependenciesGenerator, moduleDependencies: List<String>) {

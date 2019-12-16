@@ -60,6 +60,19 @@ object OperatingSystem {
    /**
     * Return image extension for each OS
     */
+   fun testDirectory(): String {
+      val name = System.getProperty("os.name").trim().toLowerCase()
+
+      when {
+         name.startsWith("mac") -> return "mac"
+         name.startsWith("windows") -> return "win"
+         name.startsWith("linux") -> return "linux"
+      }
+      throw RuntimeException("Unknown operating system - $name ${System.getProperty("os.version").trim().toLowerCase()}")
+   }
+   /**
+    * Return image extension for each OS
+    */
    fun scriptExtension(): String {
       val name = System.getProperty("os.name").trim().toLowerCase()
 

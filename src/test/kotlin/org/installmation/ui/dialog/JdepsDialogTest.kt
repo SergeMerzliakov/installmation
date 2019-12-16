@@ -91,9 +91,9 @@ class JdepsDialogTest : ApplicationTest() {
       val generatedCommandText = lookup(FXID.TEXT_JDEPS_DLG_GENERATED_CMD).query<TextArea>()
       // test key elements of command present
       assertThat(generatedCommandText.text).contains("jdeps", "--multi-release 11", "-classpath",
-            "test/resources/tiny-app/lib/log4j-core-2.12.1.jar",
-            "test/resources/tiny-app/lib/log4j-api-2.12.1.jar ",
-            "resources/tiny-app/tiny-java-app-1.0.jar")
+            "log4j-core-2.12.1.jar",
+            "log4j-api-2.12.1.jar ",
+            "tiny-java-app-1.0.jar")
 
       clickOn(FXID.TAB_JDEPS_DLG_OUTPUT)
       val processOutputView = lookup(FXID.LISTVIEW_JDEPS_DLG_PROCESS_OUTPUT).query<ListView<String>>()

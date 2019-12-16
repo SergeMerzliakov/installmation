@@ -83,7 +83,7 @@ class InstallmationApplication : Application() {
    fun startApplication(primaryStage: Stage, configuration: Configuration, eventBus: EventBus) {
       applicationStage = primaryStage
       try {
-         log.info("Starting Installmation from configuration root: ${configuration.baseDirectory.canonicalPath}")
+         log.info("Starting Installmation from configuration root: ${configuration.baseDirectory.path}")
          eventBus.register(this)
 
          val projectService = ProjectService(configuration)

@@ -20,20 +20,23 @@ import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
+import org.installmation.core.OperatingSystem
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.framework.junit.ApplicationTest
 import org.testfx.matcher.base.NodeMatchers
+import org.testfx.util.WaitForAsyncUtils
 
-/**
- * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents
+/** org.installmation.application.ApplicationDialogTest
+ * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents.
+ * Note: Running tests in Windows with > 1 Intellij projects will fail on first test in this class.
+ * Shut down other projects, minimize IDEA window and then it works.
  */
 class ApplicationDialogTest : ApplicationTest() {
 
    private val application = InstallmationApplication()
-
    override fun start(stage: Stage?) {
       super.start(stage)
       val bus = EventBus()
@@ -86,7 +89,8 @@ class ApplicationDialogTest : ApplicationTest() {
 
    @Test
    fun shouldOpenJdepsDialog() {
-      clickOn(FXID.MENU_TOOL).clickOn(FXID.MENUITEM_JDEPS)
+      clickOn(FXID.MENU_TOOL)
+      clickOn(FXID.MENUITEM_JDEPS)
       FxAssert.verifyThat(FXID.DIALOG_JDEPS, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_JDEPS_DLG_CLOSE)
    }

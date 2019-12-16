@@ -26,7 +26,7 @@ import java.io.File
 /**
  * Run Jdeps utility to generate module dependencies. Only useful for modular JDK 9+ applications
  */
-class JdepsDialog(parentStage: Stage, jdkList: Collection<JDK>, javaFXLibs: File, mainJar: File?, classpath: Collection<File>?, userHistory: UserHistory) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
+class JdepsDialog(parentStage: Stage, jdkList: Collection<JDK>, javaFXLibs: File?, mainJar: File?, classpath: Collection<File>?, userHistory: UserHistory) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
 
    private var controller: JdepsDialogController
 

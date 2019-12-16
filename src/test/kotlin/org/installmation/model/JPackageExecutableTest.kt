@@ -34,7 +34,7 @@ class JPackageExecutableTest {
    
    @Test
    fun shouldGetVersionEarlyAccessJdk14() {
-      val jdk = JDKFactory.create(OperatingSystem.os(), "test", File("src/test/resources/mac/jpackage49"))
+      val jdk = JDKFactory.create(OperatingSystem.os(), "test", File("src/test/resources/${OperatingSystem.testDirectory()}/jpackage49"))
       val mockPackage = spyk(JPackageExecutable(jdk))
       every { mockPackage.execute() }.returns(listOf("WARNING: Using experimental tool jpackage", JDK_14_BUILD49))
       assertThat(mockPackage.queryVersion()).isEqualTo(JDK_14_BUILD49)

@@ -128,9 +128,9 @@ class InstallProjectUITest : ApplicationTest() {
    @Test
    fun shouldCreateAndSaveProjectInstallLocation() {
       val projectName = "locate"
-      val inputDir = "/input"
-      val imageBuildDir = "/image"
-      val installerDir = "/installer"
+      val inputDir = "input"
+      val imageBuildDir = "image"
+      val installerDir = "installer"
 
       createProject(projectName)
 
@@ -166,8 +166,8 @@ class InstallProjectUITest : ApplicationTest() {
       val projectName = "binaries"
       val jpackageJDK = TestJDKFactory.create("package-jdk")
       val installJDK = TestJDKFactory.create("install-jdk")
-      val moduleDir = NamedDirectory("module1", File("/module1"))
-      val jmodDir = NamedDirectory("jmod1", File("/jmod1"))
+      val moduleDir = NamedDirectory("module1", File("module1"))
+      val jmodDir = NamedDirectory("jmod1", File("jmod1"))
 
       createProject(projectName)
 
@@ -209,7 +209,7 @@ class InstallProjectUITest : ApplicationTest() {
    @Test
    fun shouldCreateAndSaveProjectApplicationExecutables() {
       val projectName = "exec"
-      val mainJar = "/usr/main.jar"
+      val mainJar = File("usr", "main.jar").path
       val mainClass = "org.Main"
 
       createProject(projectName)
@@ -246,7 +246,7 @@ class InstallProjectUITest : ApplicationTest() {
    @Test
    fun shouldCreateAndSaveProjectDependencies() {
       val projectName = "deps"
-      val classPathItem = "/usr/lib"
+      val classPathItem = File("usr","lib").path
 
       createProject(projectName)
 

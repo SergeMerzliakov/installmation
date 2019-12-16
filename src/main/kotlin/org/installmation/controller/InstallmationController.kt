@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.*
+import org.installmation.model.InstallProject
 import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.ModuleJmodUpdatedEvent
 import org.installmation.model.NamedDirectory
@@ -277,7 +278,11 @@ class InstallmationController(private val configuration: Configuration,
    fun jdepsDialog() {
       //combined JFX mods with other mods
       val p = workspace.currentProject
-      val d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p?.javaFXLib!!.path, p.mainJar, p.classPath, userHistory)
+      val d:JdepsDialog
+      if (p != null) {
+         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p.javaFXLib?.path, p.mainJar, p.classPath, userHistory)
+      }else
+         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, null, null, null, userHistory)
       d.showAndWait()
    }
    
