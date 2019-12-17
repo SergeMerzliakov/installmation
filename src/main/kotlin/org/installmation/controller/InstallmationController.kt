@@ -31,13 +31,11 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
-import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.core.*
-import org.installmation.io.ApplicationJsonWriter
-import org.installmation.model.InstallProject
 import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.ModuleJmodUpdatedEvent
+import org.installmation.model.ModuleLibUpdatedEvent
 import org.installmation.model.NamedDirectory
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
@@ -120,16 +118,8 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun shutdown() {
       applicationStage().close()
-      // configuration
-      val configWriter = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
-      configWriter.save(configuration)
-
-      // workspace
-      val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
-      workspaceWriter.save(workspace)
-
-      InstallmationController.log.info("Installmation Application has shutdown")
-      log.info("Shutting down Installmation Application")
+      configuration.save()
+      workspace.save()
    }
 
    @FXML
@@ -238,32 +228,70 @@ class InstallmationController(private val configuration: Configuration,
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
             configuration.eventBus.post(JDKListUpdatedEvent(updatedModel))
+            configuration.save()
          }
       }
    }
 
    @FXML
-   fun showAllJavaFX() {
-      val dialog = javaFXFDialog()
+   fun showAllJavaFXJars() {
+      val dialog = javaFXJarDialog()
+      val result = dialog.showAndWait()
+      if (result.ok) {
+         // update model
+         val updatedModel = dialog.updatedModel()
+         if (updatedModel != null) {
+            configuration.eventBus.post(ModuleLibUpdatedEvent(updatedModel))
+            configuration.save()
+         }
+      }
+   }
+
+   
+   @FXML
+   fun showAllJavaFXJmods() {
+      val dialog = javaFXJmodDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
          // update model
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
             configuration.eventBus.post(ModuleJmodUpdatedEvent(updatedModel))
+            configuration.save()
          }
       }
    }
 
+   /*
+   Show Jdeps tool dialog - for generic dependency generation
+   */
+   @FXML
+   fun jdepsDialog() {
+      // combined JFX mods with other mods
+      val p = workspace.currentProject
+      val d: JdepsDialog
+      if (p != null) {
+         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p.javaFXLib?.path, p.mainJar, p.classPath, userHistory)
+      } else
+         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, null, null, null, userHistory)
+      d.showAndWait()
+   }
+   
    private fun jdkDialog(): BinaryArtefactDialog {
       val items = configuration.jdkEntries.values.map { NamedDirectory(it.name, it.path) }
       return BinaryArtefactDialog(applicationStage(), "JPackager JDKs", items, userHistory)
    }
 
-   private fun javaFXFDialog(): BinaryArtefactDialog {
+   private fun javaFXJmodDialog(): BinaryArtefactDialog {
       val items = configuration.javafxModuleEntries.values.map { NamedDirectory(it.name, it) }
       return BinaryArtefactDialog(applicationStage(), "JavaFX Module Directories", items, userHistory)
    }
+
+   private fun javaFXJarDialog(): BinaryArtefactDialog {
+      val items = configuration.javafxLibEntries.values.map { NamedDirectory(it.name, it) }
+      return BinaryArtefactDialog(applicationStage(), "JavaFX Library Directories", items, userHistory)
+   }
+
    
    private fun applicationStage(): Stage {
       return applicationMenuBar.scene.window as Stage
@@ -282,21 +310,6 @@ class InstallmationController(private val configuration: Configuration,
       log.debug("Child controller initialized successfully - $fxmlPath")
    }
 
-   /*
-    Show Jdeps tool dialog - for generic dependency generation
-    */
-   @FXML
-   fun jdepsDialog() {
-      //combined JFX mods with other mods
-      val p = workspace.currentProject
-      val d:JdepsDialog
-      if (p != null) {
-         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p.javaFXLib?.path, p.mainJar, p.classPath, userHistory)
-      }else
-         d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, null, null, null, userHistory)
-      d.showAndWait()
-   }
-   
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------

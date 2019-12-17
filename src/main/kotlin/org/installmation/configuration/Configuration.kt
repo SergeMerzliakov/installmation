@@ -20,6 +20,7 @@ package org.installmation.configuration
 import com.google.common.eventbus.EventBus
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.binary.JDK
 import java.io.File
 import java.util.*
@@ -62,5 +63,10 @@ class Configuration(bus: EventBus? = null, val baseDirectory: File = File(Consta
     */
    fun initEventBus(bus: EventBus) {
       eventBus = bus
+   }
+
+   fun save() {
+      val configWriter = ApplicationJsonWriter<Configuration>(configurationFile(), JsonParserFactory.configurationParser())
+      configWriter.save(this)
    }
 }

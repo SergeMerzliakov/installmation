@@ -73,7 +73,7 @@ class ProjectService(val configuration: Configuration) {
       if (p == null)
          return
       //save then close
-      save(p)
+      collectUpdates(p)
       configuration.eventBus.post(ProjectClosedEvent(p))
       log.info("Project '${p.name}' closed")
    }
@@ -82,7 +82,7 @@ class ProjectService(val configuration: Configuration) {
     * Fire events for all controllers to add their updates to the current
     * project. Nothing actually done here
     */
-   fun save(p: InstallProject) {
+   fun collectUpdates(p: InstallProject) {
       check(p.name != null && p.name!!.isNotEmpty())
       try {
          p.prepareForSave()
@@ -97,7 +97,7 @@ class ProjectService(val configuration: Configuration) {
    /**
     * Write to file
     */
-   fun writeToFile(p: InstallProject) {
+   fun save(p: InstallProject) {
       check(p.name != null && p.name!!.isNotEmpty())
 
       try {

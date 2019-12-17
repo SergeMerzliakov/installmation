@@ -30,16 +30,11 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.io.ApplicationJsonReader
-import org.installmation.io.ApplicationJsonWriter
-import org.installmation.configuration.JsonParserFactory
-import org.installmation.service.Workspace
-import org.installmation.service.ProjectClosedEvent
-import org.installmation.service.ProjectCreatedEvent
-import org.installmation.service.ProjectLoadedEvent
-import org.installmation.service.ProjectService
+import org.installmation.service.*
 
 
 class InstallmationApplication : Application() {
@@ -78,6 +73,7 @@ class InstallmationApplication : Application() {
          val loader = FXMLLoader(javaClass.getResource("/fxml/installmation.fxml"))
          loader.setController(controller)
          val root = loader.load<Pane>()
+         setupEventHandlers(primaryStage, workspace, configuration)
          primaryStage.title = WINDOW_TITLE
          primaryStage.scene = Scene(root)
          primaryStage.show()
@@ -89,6 +85,14 @@ class InstallmationApplication : Application() {
       }
    }
 
+   private fun setupEventHandlers(stage: Stage, workspace: Workspace, configuration: Configuration) {
+      stage.setOnCloseRequest {
+         workspace.save()
+         configuration.save()
+         log.info("Installmation Application has shutdown")
+      }
+   }
+
    /**
     * After UI setup fire events to update UI from model
     */
@@ -96,6 +100,7 @@ class InstallmationApplication : Application() {
       if (workspace.currentProject != null)
          eventBus.post(ProjectLoadedEvent(workspace.currentProject!!))
    }
+
    /**
     * SHow for all fatal unexpected errors on start
     */

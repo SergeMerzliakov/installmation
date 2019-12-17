@@ -20,14 +20,12 @@ import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
-import org.installmation.core.OperatingSystem
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.javafx.test.FXID
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.framework.junit.ApplicationTest
 import org.testfx.matcher.base.NodeMatchers
-import org.testfx.util.WaitForAsyncUtils
 
 /** org.installmation.application.ApplicationDialogTest
  * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents.
@@ -67,8 +65,15 @@ class ApplicationDialogTest : ApplicationTest() {
    }
 
    @Test
-   fun shouldOpenJavaFXDialogFromMenu() {
-      clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JFX)
+   fun shouldOpenJavaFXJarDialogFromMenu() {
+      clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JFX_JAR)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
+   }
+
+   @Test
+   fun shouldOpenJavaFXJmodDialogFromMenu() {
+      clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JFX_JMOD)
       FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
@@ -81,8 +86,15 @@ class ApplicationDialogTest : ApplicationTest() {
    }
 
    @Test
-   fun shouldOpenJavaFXDialogFromButton() {
-      clickOn(FXID.TOOLBAR_BUTTON_JAVAFX)
+   fun shouldOpenJavaFXJmodDialogFromButton() {
+      clickOn(FXID.TOOLBAR_BUTTON_JAVAFX_JMOD)
+      FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
+      clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
+   }
+
+   @Test
+   fun shouldOpenJavaFXJarDialogFromButton() {
+      clickOn(FXID.TOOLBAR_BUTTON_JAVAFX_JAR)
       FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
@@ -94,5 +106,4 @@ class ApplicationDialogTest : ApplicationTest() {
       FxAssert.verifyThat(FXID.DIALOG_JDEPS, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_JDEPS_DLG_CLOSE)
    }
-
 }

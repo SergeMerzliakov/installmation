@@ -56,7 +56,7 @@ class Workspace(@Transient var configuration: Configuration,
    fun setCurrentProject(p: InstallProject) {
       checkNotNull(p.name, { "Project must have a name before it can be used" })
       currentProject = p
-      projectHistory[p.name!!] = p.projectFile(configuration!!.baseDirectory)
+      projectHistory[p.name!!] = p.projectFile(configuration.baseDirectory)
       log.debug("Workspace current project is set to '${p.name}'")
    }
 
@@ -67,12 +67,17 @@ class Workspace(@Transient var configuration: Configuration,
       }
    }
 
+   fun save() {
+      val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
+      workspaceWriter.save(this)
+   }
+
    /*
     * Save to project model in memory only
     */
    fun saveProject() {
       if (currentProject != null) {
-         projectService?.save(currentProject!!)
+         projectService?.collectUpdates(currentProject!!)
       } else {
          // TODO - prompt to create project possibly
       }
@@ -83,7 +88,7 @@ class Workspace(@Transient var configuration: Configuration,
     */
    fun writeToFile() {
       if (currentProject != null) {
-         projectService?.writeToFile(currentProject!!)
+         projectService?.save(currentProject!!)
          val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.configurationParser())
          workspaceWriter.save(this)
       }

@@ -45,7 +45,7 @@ class ProjectServiceTest {
       
       // save
       val service = ProjectService(config)
-      service.writeToFile(p)
+      service.save(p)
       
       assertThat(p.projectFile(baseDirectory)).exists()
       assertThat(p.projectFile(baseDirectory).readText()).isNotEmpty()
@@ -60,7 +60,7 @@ class ProjectServiceTest {
 
       // save
       val service = ProjectService(config)
-      service.writeToFile(p)
+      service.save(p)
 
       // load and check 
       val loaded = service.load(p.name!!)
@@ -71,6 +71,6 @@ class ProjectServiceTest {
    fun shouldNotSaveEmptyProject() {
       val p = InstallProject()
       val service = ProjectService(config)
-      assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy { service.save(p) }
+      assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy { service.collectUpdates(p) }
    }
 }

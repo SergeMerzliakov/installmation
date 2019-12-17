@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
 <VBox prefHeight="500.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar fx:id="applicationMenuBar">
@@ -17,15 +32,15 @@
                     <items>
                         <MenuItem fx:id="newProjectMenuItem" accelerator="Shortcut+N" mnemonicParsing="false" onAction="#newProject" text="New Project" />
                         <MenuItem fx:id="saveProjectMenuItem" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#saveProject" text="Save Current Project" />
-                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+O" mnemonicParsing="false" onAction="#openProject"
-                                  text="Open Project"/>
+                        <MenuItem fx:id="openProjectMenuItem" accelerator="Shortcut+O" mnemonicParsing="false" onAction="#openProject" text="Open Project" />
                         <MenuItem fx:id="closeProjectMenuItem" mnemonicParsing="false" onAction="#closeProject" text="Close Current Project" />
                     </items>
                 </Menu>
                 <Menu fx:id="libraryMenu" mnemonicParsing="false" text="Library">
                     <items>
                         <MenuItem fx:id="jpackageMenuItem" mnemonicParsing="false" onAction="#showAllJDK" text="JPackage Library" />
-                        <MenuItem fx:id="javafxMenuItem" mnemonicParsing="false" onAction="#showAllJavaFX" text="JavaFX Library" />
+                        <MenuItem fx:id="javafxJarMenuItem" mnemonicParsing="false" onAction="#showAllJavaFXJars" text="JavaFX Jar Paths" />
+                        <MenuItem fx:id="javafxModMenuItem" mnemonicParsing="false" onAction="#showAllJavaFXJmods" text="JavaFX Jmod Paths" />
                     </items>
                 </Menu>
                 <Menu fx:id="generateMenu" mnemonicParsing="false" text="Generate">
@@ -52,7 +67,8 @@
                 <ToolBar layoutY="-74.0" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                         <Button fx:id="jpackageButton" mnemonicParsing="false" onAction="#showAllJDK" styleClass="toolbar-button" text="JDK" />
-                        <Button fx:id="javafxButton" mnemonicParsing="false" onAction="#showAllJavaFX" styleClass="toolbar-button" text="JavaFX" />
+                        <Button fx:id="javafxJarButton" mnemonicParsing="false" onAction="#showAllJavaFXJars" text="JFX Jars" />
+                        <Button fx:id="javafxJmodButton" mnemonicParsing="false" onAction="#showAllJavaFXJmods" text="JFX Jmods" />
                     </items>
                 </ToolBar>
             <ToolBar maxWidth="1.7976931348623157E308" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -79,31 +95,27 @@
                                     <tabs>
                                         <Tab fx:id="infoTab" text="Project Info">
                                             <content>
-                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
+                                                <AnchorPane fx:id="generalInfoPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab fx:id="installTab" text="Install Location">
                                             <content>
-                                                <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT"
-                                                            prefHeight="180.0" prefWidth="200.0"/>
+                                                <AnchorPane fx:id="locationPane" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab fx:id="binariesTab" text="Java Binaries">
                                             <content>
-                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                                                <AnchorPane fx:id="binariesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab fx:id="executableTab" text=" Application Executable">
                                             <content>
-                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
+                                                <AnchorPane fx:id="executablePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                         <Tab fx:id="dependenciesTab" text="Dependencies">
                                             <content>
-                                                <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
+                                                <AnchorPane fx:id="dependenciesPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
                                         </Tab>
                                     </tabs>

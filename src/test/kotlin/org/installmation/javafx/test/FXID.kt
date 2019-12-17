@@ -30,7 +30,8 @@ object FXID {
 
    // toolbar buttons
    const val TOOLBAR_BUTTON_JPACKAGE  ="#jpackageButton"
-   const val TOOLBAR_BUTTON_JAVAFX  ="#javafxButton"
+   const val TOOLBAR_BUTTON_JAVAFX_JMOD  ="#javafxJmodButton"
+   const val TOOLBAR_BUTTON_JAVAFX_JAR  ="#javafxJarButton"
    
    // PROJECT MENU
    const val MENUITEM_SAVE_PROJECT = "#saveProjectMenuItem"
@@ -41,7 +42,8 @@ object FXID {
 
    // LIBRARY MENU
    const val MENUITEM_JPACKAGE = "#jpackageMenuItem"
-   const val MENUITEM_JFX = "#javafxMenuItem"
+   const val MENUITEM_JFX_JAR = "#javafxJarMenuItem"
+   const val MENUITEM_JFX_JMOD = "#javafxModMenuItem"
 
    // TOOL menu
    const val MENUITEM_JDEPS = "#jdepsMenuItem"
