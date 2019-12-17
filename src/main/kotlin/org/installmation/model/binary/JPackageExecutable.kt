@@ -16,6 +16,10 @@
 
 package org.installmation.model.binary
 
+import org.installmation.core.OperatingSystem
+import org.installmation.model.Argument
+import org.installmation.model.FlagArgument
+import org.installmation.model.ValueArgument
 import java.io.File
 
 /**
@@ -27,5 +31,31 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
 
    override fun queryVersion(): String {
       return fetchVersion("--version")
+   }
+   
+   
+   fun createImageParameter(): Argument {
+      return when(OperatingSystem.os()){
+         OperatingSystem.Type.OSX -> ValueArgument("--package-type", "app-image")
+         OperatingSystem.Type.Linux -> ValueArgument("--package-type", "app-image")
+         OperatingSystem.Type.Windows -> FlagArgument("create-image")
+      }
+   }
+
+   fun createInstallerParameter(installerType:String): Argument {
+      return when(OperatingSystem.os()){
+         OperatingSystem.Type.OSX -> ValueArgument("--package-type", installerType)
+         OperatingSystem.Type.Linux -> ValueArgument("--package-type", installerType)
+         OperatingSystem.Type.Windows -> ValueArgument("create-installer", installerType)
+      }
+   }
+   
+   
+   fun createMainClassParameter(mainClass:String):Argument{
+      return when(OperatingSystem.os()){
+         OperatingSystem.Type.OSX -> ValueArgument("--main-class", mainClass)
+         OperatingSystem.Type.Linux -> ValueArgument("--main-class", mainClass)
+         OperatingSystem.Type.Windows -> ValueArgument("--class", mainClass)
+      }
    }
 }

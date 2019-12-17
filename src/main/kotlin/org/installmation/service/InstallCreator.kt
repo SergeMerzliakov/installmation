@@ -88,6 +88,7 @@ class InstallCreator(private val configuration: Configuration) {
       checkNotNull(prj.jpackageJDK)
       checkNotNull(prj.mainJar)
       checkNotNull(prj.javaFXLib?.path)
+      checkNotNull(prj.installerType)
 
       configuration.eventBus.post(ClearMessagesEvent())
       progressMessage("Installer creation started....")
@@ -116,7 +117,7 @@ class InstallCreator(private val configuration: Configuration) {
       prj.installerDirectory?.mkdirs()
 
       val packager = JPackageExecutable(prj.jpackageJDK!!)
-      packager.parameters.addArgument(ValueArgument("--package-type", prj.installerType))
+      packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
       packager.parameters.addArgument(ValueArgument("-d", prj.installerDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
       val appImage = File(prj.imageBuildDirectory!!.path, prj.name + OperatingSystem.imageFileExtension())
@@ -128,6 +129,10 @@ class InstallCreator(private val configuration: Configuration) {
     * This is called by installer creation process and returns the command output
     */
    private fun initializeImagePackager(prj: InstallProject): JPackageExecutable {
+      checkNotNull(prj.inputDirectory)
+      checkNotNull(prj.mainJar)
+      checkNotNull(prj.mainClass)
+      
       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
       createImageContent(prj)
 
@@ -137,7 +142,7 @@ class InstallCreator(private val configuration: Configuration) {
       prj.imageBuildDirectory!!.mkdir()
 
       val packager = JPackageExecutable(prj.jpackageJDK!!)
-      packager.parameters.addArgument(ValueArgument("--package-type", "app-image"))
+      packager.parameters.addArgument(packager.createImageParameter())
       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-d", prj.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
@@ -153,7 +158,7 @@ class InstallCreator(private val configuration: Configuration) {
          packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
-      packager.parameters.addArgument(ValueArgument("--main-class", prj.mainClass))
+      packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
       return packager
    }
 
@@ -175,9 +180,6 @@ class InstallCreator(private val configuration: Configuration) {
    }
 
    private fun createImageContent(prj: InstallProject) {
-      checkNotNull(prj.inputDirectory)
-      checkNotNull(prj.mainJar)
-
       val destination = prj.inputDirectory!!
       progressMessage("Creating all Image Content in ${destination.path}")
       deleteDirectories(destination)
