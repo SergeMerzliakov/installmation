@@ -49,7 +49,7 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
    protected fun getJDKFile(fileRelativePath: String, fileName: String): File {
       val fullPath = File(File(path,fileRelativePath), fileName)
       if (!fullPath.exists())
-         throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found")
+         throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found. This may occur on JDK versions below 14 for some executables")
 
       return fullPath
    }
