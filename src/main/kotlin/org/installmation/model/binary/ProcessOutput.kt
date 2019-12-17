@@ -16,16 +16,15 @@
 
 package org.installmation.model.binary
 
-import org.installmation.core.OperatingSystem
-import java.io.File
+/**
+ * Output and Error Streams
+ */
+class ProcessOutput(process: Process) {
+    val output: List<String>
+    val errors: List<String>
 
-class WindowsJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, path) {
-
-   override val binaryDirectory = "bin"
-   override val javaExecutableName = "java.exe"
-   override val jpackageExecutableName = "jpackage.exe"
-   override val jdepsExecutableName = "jdeps.exe"
-   
-   override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.Windows
-
+    init {
+        output = process.inputStream.bufferedReader().readLines()
+        errors = process.errorStream.bufferedReader().readLines()
+    }
 }

@@ -38,7 +38,7 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
       return when(OperatingSystem.os()){
          OperatingSystem.Type.OSX -> ValueArgument("--package-type", "app-image")
          OperatingSystem.Type.Linux -> ValueArgument("--package-type", "app-image")
-         OperatingSystem.Type.Windows -> FlagArgument("create-image")
+         OperatingSystem.Type.Windows -> ValueArgument("--package-type", "app-image")
       }
    }
 
@@ -46,16 +46,23 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
       return when(OperatingSystem.os()){
          OperatingSystem.Type.OSX -> ValueArgument("--package-type", installerType)
          OperatingSystem.Type.Linux -> ValueArgument("--package-type", installerType)
-         OperatingSystem.Type.Windows -> ValueArgument("create-installer", installerType)
+         OperatingSystem.Type.Windows -> ValueArgument("--package-type", installerType)
       }
    }
-   
+
+   fun createOutputDirectoryParameter(dir:String): Argument {
+      return when(OperatingSystem.os()){
+         OperatingSystem.Type.OSX -> ValueArgument("-d", dir)
+         OperatingSystem.Type.Linux -> ValueArgument("-d", dir)
+         OperatingSystem.Type.Windows -> ValueArgument("-d", dir)
+      }
+   }
    
    fun createMainClassParameter(mainClass:String):Argument{
       return when(OperatingSystem.os()){
          OperatingSystem.Type.OSX -> ValueArgument("--main-class", mainClass)
          OperatingSystem.Type.Linux -> ValueArgument("--main-class", mainClass)
-         OperatingSystem.Type.Windows -> ValueArgument("--class", mainClass)
+         OperatingSystem.Type.Windows -> ValueArgument("--main-class", mainClass)
       }
    }
 }

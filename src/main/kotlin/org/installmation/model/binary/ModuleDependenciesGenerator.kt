@@ -18,8 +18,12 @@ class ModuleDependenciesGenerator(val jdeps: JDepsExecutable, val classPath: Str
       jdeps.parameters.addArgument(ValueArgument("-classpath", classPath))
       jdeps.parameters.addArgument(FlagArgument(mainJar))
       val processOutput = jdeps.execute(15)
-      output.addAll(processOutput)
-      val jpd = JDepsParser(output)
-      return jpd.dependencies.toList().sorted()
+      output.addAll(processOutput.output)
+      output.addAll(processOutput.errors)
+      if (processOutput.errors.isEmpty()) {
+         val jpd = JDepsParser(processOutput.output)
+         return jpd.dependencies.toList().sorted()
+      }
+      return listOf()
    }
 }

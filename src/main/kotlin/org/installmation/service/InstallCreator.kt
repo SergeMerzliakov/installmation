@@ -57,8 +57,10 @@ class InstallCreator(private val configuration: Configuration) {
       val fullCommand = packager.toString()
       log.info("command: $fullCommand")
       progressMessage("command: $fullCommand")
-      val output = packager.execute(30)
-      for (line in output)
+      val processOutput = packager.execute(30)
+      for (line in processOutput.output)
+         progressMessage(line)
+      for (line in processOutput.errors)
          progressMessage(line)
 
       progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
@@ -103,8 +105,10 @@ class InstallCreator(private val configuration: Configuration) {
       val fullCommand = packager.toString()
       log.info("command: $fullCommand")
       progressMessage("command: $fullCommand")
-      val output = packager.execute(30)
-      for (line in output)
+      val processOutput = packager.execute(30)
+      for (line in processOutput.output)
+         progressMessage(line)
+      for (line in processOutput.errors)
          progressMessage(line)
 
       progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
@@ -118,7 +122,7 @@ class InstallCreator(private val configuration: Configuration) {
 
       val packager = JPackageExecutable(prj.jpackageJDK!!)
       packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
-      packager.parameters.addArgument(ValueArgument("-d", prj.installerDirectory!!.path))
+      packager.parameters.addArgument(packager.createOutputDirectoryParameter(prj.installerDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
       val appImage = File(prj.imageBuildDirectory!!.path, prj.name + OperatingSystem.imageFileExtension())
       packager.parameters.addArgument(ValueArgument("--app-image", appImage.path))
@@ -144,7 +148,7 @@ class InstallCreator(private val configuration: Configuration) {
       val packager = JPackageExecutable(prj.jpackageJDK!!)
       packager.parameters.addArgument(packager.createImageParameter())
       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
-      packager.parameters.addArgument(ValueArgument("-d", prj.imageBuildDirectory!!.path))
+      packager.parameters.addArgument(packager.createOutputDirectoryParameter(prj.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
       if (prj.modulePath.isNotEmpty()) {

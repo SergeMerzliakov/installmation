@@ -31,19 +31,20 @@ abstract class AbstractExecutable(executable: File) : Executable {
    override val executable: File = executable
    val parameters = ArgumentList()
    
-   fun execute(timeoutSeconds: Long = 5L): List<String> {
+   fun execute(timeoutSeconds: Long = 5L): ProcessOutput {
       val fullCommand = mutableListOf<String>()
-      fullCommand.add(executable.name)
+      fullCommand.add(executable.path)
       val params = parameters.toCommand()
       fullCommand.addAll(params)
       log.debug("Executing command '$executable' with parameters [${params}]")
-      val proc = ProcessBuilder().directory(executable.parentFile).command(fullCommand).start()
+
+      val proc = ProcessBuilder().command(fullCommand).start()
       if (timeoutSeconds > -1)
          proc.waitFor(timeoutSeconds, TimeUnit.SECONDS)
       else
          proc.waitFor() // forever
 
-      return proc.inputStream.bufferedReader().readLines()
+      return ProcessOutput(proc)
    }
 
    override fun equals(other: Any?): Boolean {
@@ -67,12 +68,12 @@ abstract class AbstractExecutable(executable: File) : Executable {
     */
    protected fun fetchVersion(versionFlag: String): String {
       parameters.addArgument(FlagArgument(versionFlag))
-      val output = execute()
-      if (output.isEmpty())
+      val processOutput = execute()
+      if (processOutput.output.isEmpty())
          throw ExecutableException("No version info output from '${executable}'")
-      if (output.size == 1)
-         return output[0]
-      return output[1]
+      if (processOutput.output.size == 1)
+         return processOutput.output[0]
+      return processOutput.output[1]
    }
 
    override fun toString(): String {
