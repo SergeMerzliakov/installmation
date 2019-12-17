@@ -23,7 +23,7 @@ class WindowsJDK(usersJDKName: String, path: File) : AbstractJDK(usersJDKName, p
 
    override val binaryDirectory = "bin"
    override val javaExecutableName = "java.exe"
-   override val jpackageExecutableName = "jpackage.exe"
+   override val jpackageExecutableName = "jpackager.exe"
    override val jdepsExecutableName = "jdeps.exe"
    
    override val operatingSystem: OperatingSystem.Type = OperatingSystem.Type.Windows

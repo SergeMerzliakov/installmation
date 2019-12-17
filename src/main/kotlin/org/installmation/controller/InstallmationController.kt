@@ -31,8 +31,10 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.core.*
+import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
 import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.ModuleJmodUpdatedEvent
@@ -118,6 +120,15 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun shutdown() {
       applicationStage().close()
+      // configuration
+      val configWriter = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
+      configWriter.save(configuration)
+
+      // workspace
+      val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
+      workspaceWriter.save(workspace)
+
+      InstallmationController.log.info("Installmation Application has shutdown")
       log.info("Shutting down Installmation Application")
    }
 

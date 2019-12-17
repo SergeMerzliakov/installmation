@@ -57,21 +57,6 @@ class InstallmationApplication : Application() {
    private lateinit var applicationStage: Stage
    private val eventBus = EventBus("installmationApp")
    
-   private fun setupEventHandlers(stage: Stage, configuration: Configuration, workspace: Workspace) {
-
-      stage.setOnCloseRequest {
-         // configuration
-         val configWriter = ApplicationJsonWriter<Configuration>(Configuration.configurationFile(), JsonParserFactory.configurationParser())
-         configWriter.save(configuration)
-
-         // workspace
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(Workspace.workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
-         workspaceWriter.save(workspace)
-
-         InstallmationController.log.info("Installmation Application has shutdown")
-      }
-   }
-   
    override fun start(primaryStage: Stage) {
       val configuration = loadConfiguration(eventBus)
       startApplication(primaryStage, configuration, eventBus)
@@ -89,7 +74,6 @@ class InstallmationApplication : Application() {
          val projectService = ProjectService(configuration)
          val workspace = loadWorkspace(configuration, projectService)
          val controller = InstallmationController(configuration, UserHistory(), workspace, projectService)
-         setupEventHandlers(primaryStage, configuration, workspace)
 
          val loader = FXMLLoader(javaClass.getResource("/fxml/installmation.fxml"))
          loader.setController(controller)
