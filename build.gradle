@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
     jcenter()
     flatDir {
-        dirs "${JFX_INSTALL}/lib"
+        dirs "${JFX}/lib"
     }
 }
 
@@ -58,7 +58,7 @@ task runApp(type: JavaExec) {
     main = mainClassName
     doFirst {
         jvmArgs = [
-                '--module-path', "${JFX_INSTALL}/lib",
+                '--module-path', "${JFX}/lib",
                 '--add-modules', 'javafx.fxml,javafx.controls'
         ]
     }
