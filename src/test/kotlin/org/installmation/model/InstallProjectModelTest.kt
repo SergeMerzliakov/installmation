@@ -17,6 +17,7 @@
 package org.installmation.model
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.TestConstants
 import org.installmation.configuration.JsonParserFactory
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
@@ -29,7 +30,7 @@ import java.io.File
 class InstallProjectModelTest {
 
    companion object {
-      val SAVED_FILE = File("testdata", "project.json")
+      val SAVED_FILE = File(TestConstants.TEST_TEMP_DIR, "project.json")
 
       @AfterClass
       @JvmStatic

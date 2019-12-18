@@ -19,6 +19,7 @@ package org.installmation.service
 import com.google.common.eventbus.EventBus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.installmation.TestConstants
 import org.installmation.configuration.Configuration
 import org.installmation.model.InstallProject
 import org.junit.After
@@ -28,7 +29,7 @@ import java.io.File
 
 class ProjectServiceTest {
 
-   private val baseDirectory = File("testproject")
+   private val baseDirectory = File(TestConstants.TEST_TEMP_DIR)
    private val config = Configuration(EventBus(), baseDirectory)
    
    @After

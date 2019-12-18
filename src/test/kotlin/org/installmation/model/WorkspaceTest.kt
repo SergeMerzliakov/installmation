@@ -2,6 +2,7 @@ package org.installmation.model
 
 import com.google.common.eventbus.EventBus
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.TestConstants
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
@@ -16,9 +17,9 @@ import java.io.File
 class WorkspaceTest {
 
    companion object {
-      val SAVED_FILE = File("testdata", "workspace.json")
+      val SAVED_FILE = File(TestConstants.TEST_TEMP_DIR, "workspace.json")
       const val PROJECT_NAME = "WorkspaceTestProject"
-      val BASE_CONFIG_DIR = File("testrun")
+      val BASE_CONFIG_DIR = File(TestConstants.TEST_TEMP_DIR)
       val configuration = Configuration(EventBus(), BASE_CONFIG_DIR)
       // for now... projects try hard to save themselves in user.home directory - fix in future to make projects more test-friendly
       val SAVED_PROJECT_FILE = File(File(configuration.baseDirectory, Constant.PROJECT_DIR) , PROJECT_NAME +".json")

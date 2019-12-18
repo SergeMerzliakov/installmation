@@ -18,7 +18,6 @@ package org.installmation.model
 
 import org.junit.Test
 
-
 class JPackageExecutableTest {
 
    companion object {

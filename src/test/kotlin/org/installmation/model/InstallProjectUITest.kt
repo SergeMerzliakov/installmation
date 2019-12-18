@@ -20,6 +20,7 @@ import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.InstallmationApplication
+import org.installmation.TestConstants
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
@@ -46,7 +47,7 @@ class InstallProjectUITest : ApplicationTest() {
    private val listHelper = ListViewHelper(this)
 
    companion object {
-      val BASE_CONFIG_DIR = File("testrun")
+      val BASE_CONFIG_DIR = File(TestConstants.TEST_TEMP_DIR)
 
       @AfterClass
       @JvmStatic

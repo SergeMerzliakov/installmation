@@ -17,6 +17,7 @@
 package org.installmation.configuration
 
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.TestConstants
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.binary.MacJDK
@@ -27,12 +28,11 @@ import java.io.File
 
 class ConfigurationTest {
 
-   private val TEST_DIR = "configtest"
    private lateinit var configDir: File
 
    @Before
    fun setup() {
-      configDir = File(TEST_DIR)
+      configDir = File(TestConstants.TEST_TEMP_DIR)
       configDir.mkdirs()
    }
 

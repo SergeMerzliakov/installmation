@@ -6,7 +6,8 @@ out/
 $configuration/
 *.class
 
-testconfig/
+# testing temp files
+testrun/
 
 # Log file
 *.log
