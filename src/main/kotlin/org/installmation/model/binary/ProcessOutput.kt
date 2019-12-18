@@ -25,6 +25,17 @@ class ProcessOutput(process: Process) {
 
     init {
         output = process.inputStream.bufferedReader().readLines()
-        errors = process.errorStream.bufferedReader().readLines()
+        errors = process.errorStream.bufferedReader().readLines().filter { it != "null" }
+    }
+
+    /**
+     * Some warnings are returned as errors. Sigh
+     */
+     fun hasErrors(): Boolean {
+        if (errors.isEmpty())
+            return false
+
+        val realErrors = errors.filter { !it.contains("Windows Defender") }
+        return realErrors.isNotEmpty()
     }
 }

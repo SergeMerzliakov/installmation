@@ -50,6 +50,14 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
       }
    }
 
+    fun createImageBuildDirectory(buildDir: String, projectName:String):String{
+      return when(OperatingSystem.os()){
+         OperatingSystem.Type.OSX -> buildDir
+         OperatingSystem.Type.Linux -> buildDir
+         OperatingSystem.Type.Windows -> File(buildDir, projectName).path
+      }
+   }
+
    fun createOutputDirectoryParameter(dir:String): Argument {
       return when(OperatingSystem.os()){
          OperatingSystem.Type.OSX -> ValueArgument("-d", dir)

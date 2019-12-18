@@ -9,7 +9,7 @@ class RunningAsTestEvent
 /**
  * Generic message to be shown to user
  */
-class UserMessageEvent(val message: String)
+class UserMessageEvent(val message: String, val isError: Boolean = false)
 
 /**
  * Clear all user messages
