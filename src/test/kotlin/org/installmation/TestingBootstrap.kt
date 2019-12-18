@@ -17,8 +17,8 @@ package org.installmation
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.installmation.core.OperatingSystem
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileReader
 import java.util.*
 
@@ -28,81 +28,60 @@ import java.util.*
  */
 object TestingBootstrap {
 
-   private const val PROPERTY_TEST_JDK = "test.jdk"
-   private const val PROPERTY_TEST_JFX = "test.javafx"
+   private const val PROPERTY_TEST_JDK = "JDK"
+   private const val PROPERTY_TEST_JFX = "JFX"
    private val log: Logger = LogManager.getLogger(TestingBootstrap::class.java)
-   var jdk:File? = null
-   var javafx:File? = null
-   
+   var jdk: File? = null
+   var javafx: File? = null
+
    fun checkBinariesInstalled() {
       try {
          val config = getTestConfiguration()
-               ?: throw BootstrapException("Empty test config files created at <repo>/testconfig/test-config-XXX.properties. This needs to be configured first. Fill in all properties as absolute paths before running unit tests")
-
-         // we have a configuration - check it
-         if (invalidTestConfiguration(config)) {
-            throw BootstrapException("missing binaries (JDK or JavaFX). Check error log for details, as the test-config-XXX.properties may not be configured")
-         }
+         setupTestJDK(config)
+         setupTestJavaFX(config)
       } catch (e: Throwable) {
          throw BootstrapException("Error checking this systems JDK and JavaFX requirements for testing", e)
       }
    }
 
-   /**
-    * On first clone, create empty directories for user to fill in their JDK and JavaFX details.
-    * Try and use JDK if JAVA_HOME is configured
-    */
-   private fun createEmptyConfiguration(config: File) {
-      config.parentFile.mkdirs()
-
-      // try use JAVA_HOME to at least get a JDK
-      val jh = System.getProperty("java.home")
-      if (jh.isNotEmpty()) {
-         val homePath = File(jh)
-         if (homePath.exists()) {
-            val jdkPath = homePath.path.replace("/Contents/Home", "")
-            config.writeText("$PROPERTY_TEST_JDK=$jdkPath\n$PROPERTY_TEST_JFX=\n")
+   private fun setupTestJavaFX(config: Properties){
+      if (config[PROPERTY_TEST_JFX] != null) {
+         javafx = File(config.getProperty(PROPERTY_TEST_JFX))
+         if (!javafx!!.exists())
+            throw FileNotFoundException("JavaFX not found in gradle.properties property $PROPERTY_TEST_JFX. Value found: ${javafx?.path}")
+      }else
+         throw BootstrapException("JavaFX not configured in gradle.properties property $PROPERTY_TEST_JFX. Set this for Jdeps based unit tests to run.")
+   }
+      
+   // JDK property ovverides JAVA_HOME or system value
+   private fun setupTestJDK(config: Properties) {
+      if (config[PROPERTY_TEST_JDK] != null) {
+         jdk = File(config.getProperty(PROPERTY_TEST_JDK))
+         if (!jdk!!.exists())
+            throw FileNotFoundException("JDK not found in gradle.properties property $PROPERTY_TEST_JDK. Value found: ${jdk?.path}")
+      } else {
+         val jh = System.getProperty("java.home")
+         if (jh.isNotEmpty()) {
+            jdk = File(jh)
+            val v = getJDKMajorVersion()
+            if (v >= 11)
+               log.info("JDK for test - ${jdk?.path}")
+            else
+               throw BootstrapException("JAVA_HOME JDK not version 11+. JDK version is $v. Install another JDK 11+ and set gradle.properties $PROPERTY_TEST_JDK to point to that JDK")
          }
-      } else
-         config.writeText("$PROPERTY_TEST_JDK=\n$PROPERTY_TEST_JFX=\n")
+      }
    }
 
-   /*
-     We have a configuration, now test that the file paths are valid
-    */
-   private fun invalidTestConfiguration(config: Properties): Boolean {
-      var invalid = false
-      jdk = File(config.getProperty(PROPERTY_TEST_JDK))
-      if (!jdk!!.exists()) {
-         invalid = true
-         log.error("JDK not found at location [${jdk?.path}]. Check test-config-XXX.properties file has JDK details in test.jdk")
-      }
-
-      javafx = File(config.getProperty(PROPERTY_TEST_JFX))
-      if (!javafx!!.exists()) {
-         invalid = true
-         log.error("JavaFX not found at location [${javafx?.path}]. Check test-config-XXX.properties file has JavaFX details in test.javafx")
-      }
-
-      return invalid
-   }
-
-   private fun getTestConfiguration(): Properties? {
-      val file = when (OperatingSystem.os()) {
-         OperatingSystem.Type.OSX -> "testconfig/test-config-osx.properties"
-         OperatingSystem.Type.Windows -> "testconfig/test-config-windows.properties"
-         OperatingSystem.Type.Linux -> "testconfig/test-config-linux.properties"
-      }
-      val configFile = File(file)
-      if (!configFile.exists()) {
-         // first time tests are run
-         createEmptyConfiguration(configFile)
-         return null
-      }
-
+   private fun getTestConfiguration(): Properties {
+      val configFile = File("gradle.properties")
       val iss = FileReader(configFile)
       val props = Properties()
       props.load(iss)
       return props
+   }
+   
+   private fun getJDKMajorVersion(): Int{
+      val parts = System.getProperty("java.version").split(".")
+      return parts[0].toInt()
    }
 }

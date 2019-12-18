@@ -4,8 +4,6 @@ plugins {
 }
 
 def KOTLIN_VERSION = "1.3.61"
-def JFX_VERSION = "12"
-def JFX_INSTALL = 'C:\\jfx\\jfx-12'
 
 group 'org.epistatic'
 version '1.0.0'
