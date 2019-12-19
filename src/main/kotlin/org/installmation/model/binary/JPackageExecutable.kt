@@ -18,7 +18,6 @@ package org.installmation.model.binary
 
 import org.installmation.core.OperatingSystem
 import org.installmation.model.Argument
-import org.installmation.model.FlagArgument
 import org.installmation.model.ValueArgument
 import java.io.File
 
@@ -33,21 +32,12 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
       return fetchVersion("--version")
    }
    
-   
    fun createImageParameter(): Argument {
-      return when(OperatingSystem.os()){
-         OperatingSystem.Type.OSX -> ValueArgument("--package-type", "app-image")
-         OperatingSystem.Type.Linux -> ValueArgument("--package-type", "app-image")
-         OperatingSystem.Type.Windows -> ValueArgument("--package-type", "app-image")
-      }
+      return ValueArgument("--package-type", "app-image")
    }
 
    fun createInstallerParameter(installerType:String): Argument {
-      return when(OperatingSystem.os()){
-         OperatingSystem.Type.OSX -> ValueArgument("--package-type", installerType)
-         OperatingSystem.Type.Linux -> ValueArgument("--package-type", installerType)
-         OperatingSystem.Type.Windows -> ValueArgument("--package-type", installerType)
-      }
+      return ValueArgument("--package-type", installerType)
    }
 
     fun createImageBuildDirectory(buildDir: String, projectName:String):String{
@@ -56,21 +46,30 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
          OperatingSystem.Type.Linux -> buildDir
          OperatingSystem.Type.Windows -> File(buildDir, projectName).path
       }
+    }
+
+   fun createDestinationParameter(dir: String): Argument {
+      return ValueArgument("-d", dir)
    }
 
-   fun createDestinationParameter(dir:String): Argument {
-      return when(OperatingSystem.os()){
-         OperatingSystem.Type.OSX -> ValueArgument("-d", dir)
-         OperatingSystem.Type.Linux -> ValueArgument("-d", dir)
-         OperatingSystem.Type.Windows -> ValueArgument("-d", dir)
+   /**
+    * Creating installers has different os-specific values for the --app-image parameter
+    */
+   fun createInstallerAppImageParameter(projectName: String, imageBuildDir: String): Argument {
+      return when (OperatingSystem.os()) {
+         OperatingSystem.Type.OSX, OperatingSystem.Type.Linux -> {
+            val imageDir = createImageBuildDirectory(imageBuildDir, projectName)
+            val appImage = File(imageDir, projectName + OperatingSystem.imageFileExtension())
+            ValueArgument("--app-image", appImage.path)
+         }
+         OperatingSystem.Type.Windows -> {
+            val imageDir = createImageBuildDirectory(imageBuildDir, projectName)
+            ValueArgument("--app-image", imageDir)
+         }
       }
    }
-   
-   fun createMainClassParameter(mainClass:String):Argument{
-      return when(OperatingSystem.os()){
-         OperatingSystem.Type.OSX -> ValueArgument("--main-class", mainClass)
-         OperatingSystem.Type.Linux -> ValueArgument("--main-class", mainClass)
-         OperatingSystem.Type.Windows -> ValueArgument("--main-class", mainClass)
-      }
+
+   fun createMainClassParameter(mainClass: String): Argument {
+      return ValueArgument("--main-class", mainClass)
    }
 }

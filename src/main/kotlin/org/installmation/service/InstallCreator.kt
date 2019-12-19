@@ -133,30 +133,27 @@ class InstallCreator(private val configuration: Configuration) {
             progressMessage("Installer creation failed with errors:")
             result = GenerateResult(false, processOutput.errors)
             for (line in processOutput.errors) {
-                log.error(line)
-                progressErrorMessage(line)
+               log.error(line)
+               progressErrorMessage(line)
             }
         }
-        return result
+       return result
     }
 
-    /**
-     * Create Installer
-     */
-    private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
-        deleteDirectories(prj.installerDirectory)
-        prj.installerDirectory?.mkdirs()
+   /**
+    * Create Installer
+    */
+   private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
+      deleteDirectories(prj.installerDirectory)
+      prj.installerDirectory?.mkdirs()
 
-        val packager = JPackageExecutable(prj.jpackageJDK!!)
-        packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
-        packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
-        packager.parameters.addArgument(ValueArgument("-n", prj.name))
-        val imageDir = packager.createImageBuildDirectory(prj.imageBuildDirectory!!.path, prj.name!!)
-        // app-image is the directory with image created by jpackage
-        packager.parameters.addArgument(ValueArgument("--app-image", imageDir))
-        return packager
-    }
-
+      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
+      packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-n", prj.name))
+      packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
+      return packager
+   }
 
     /**
      * This is called by installer creation process and returns the command output
