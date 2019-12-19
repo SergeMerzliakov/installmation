@@ -149,11 +149,11 @@ class InstallCreator(private val configuration: Configuration) {
 
         val packager = JPackageExecutable(prj.jpackageJDK!!)
         packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
-        packager.parameters.addArgument(packager.createOutputDirectoryParameter(prj.installerDirectory!!.path))
+        packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
         packager.parameters.addArgument(ValueArgument("-n", prj.name))
         val imageDir = packager.createImageBuildDirectory(prj.imageBuildDirectory!!.path, prj.name!!)
-        val appImage = File(imageDir, prj.name + OperatingSystem.imageFileExtension())
-        packager.parameters.addArgument(ValueArgument("--app-image", appImage.path))
+        // app-image is the directory with image created by jpackage
+        packager.parameters.addArgument(ValueArgument("--app-image", imageDir))
         return packager
     }
 
@@ -177,7 +177,7 @@ class InstallCreator(private val configuration: Configuration) {
         val packager = JPackageExecutable(prj.jpackageJDK!!)
         packager.parameters.addArgument(packager.createImageParameter())
         packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
-        packager.parameters.addArgument(packager.createOutputDirectoryParameter(prj.imageBuildDirectory!!.path))
+        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
         packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
         if (prj.modulePath.isNotEmpty()) {

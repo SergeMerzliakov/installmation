@@ -102,10 +102,10 @@ class InstallProject {
     * A File to be created  - just path is valid path and nothing else
     */
    private fun validateFutureFileField(fieldName: String, field: File?, result: ValidationResult) {
-      val valid = PathValidator.isValidPath(field?.canonicalPath)
+      val valid = PathValidator.isValidPath(field?.path)
       if (!valid) {
          result.success = false
-         result.errors.add("$fieldName Error - Invalid Path String '${field?.canonicalPath}'")
+         result.errors.add("$fieldName Error - Invalid Path String '${field?.path}'")
       }
    }
 
@@ -115,7 +115,7 @@ class InstallProject {
          if (field == null)
             result.errors.add("$fieldName Error - File path empty")
          else
-            result.errors.add("$fieldName Error - File path not found '${field.canonicalPath}'")
+            result.errors.add("$fieldName Error - File path not found '${field.path}'")
       }
    }
 

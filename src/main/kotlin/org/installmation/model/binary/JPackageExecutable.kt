@@ -58,7 +58,7 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
       }
    }
 
-   fun createOutputDirectoryParameter(dir:String): Argument {
+   fun createDestinationParameter(dir:String): Argument {
       return when(OperatingSystem.os()){
          OperatingSystem.Type.OSX -> ValueArgument("-d", dir)
          OperatingSystem.Type.Linux -> ValueArgument("-d", dir)

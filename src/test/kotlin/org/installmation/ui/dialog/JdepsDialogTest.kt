@@ -30,6 +30,7 @@ import org.installmation.model.binary.JDKFactory
 import org.junit.BeforeClass
 import org.junit.Test
 import org.testfx.framework.junit.ApplicationTest
+import org.testfx.util.WaitForAsyncUtils
 import java.io.File
 
 class JdepsDialogTest : ApplicationTest() {
@@ -70,6 +71,7 @@ class JdepsDialogTest : ApplicationTest() {
    @Test
    fun shouldRunCommand() {
       clickOn("#$DIALOG_BUTTON")
+      WaitForAsyncUtils.waitForFxEvents(20) //sometimes the dialog is slow to appear
 
       val jdk = lookup(FXID.COMBO_JDEPS_DLG_JDK).query<ComboBox<JDK>>()
       assertThat(jdk.selectionModel.selectedItem.name).isEqualTo(JDK_NAME)
