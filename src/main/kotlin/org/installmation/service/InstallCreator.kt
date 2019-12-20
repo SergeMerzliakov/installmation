@@ -63,7 +63,7 @@ class InstallCreator(private val configuration: Configuration) {
             progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
             result = GenerateResult(true)
         } else {
-            progressMessage("Image creation failed with errors:")
+            progressErrorMessage("Image creation failed with errors:")
             result = GenerateResult(false, processOutput.errors)
             for (line in processOutput.errors) {
                 log.error(line)
@@ -150,6 +150,8 @@ class InstallCreator(private val configuration: Configuration) {
       val packager = JPackageExecutable(prj.jpackageJDK!!)
       packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
       packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
+      packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
       packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
       return packager
@@ -168,28 +170,29 @@ class InstallCreator(private val configuration: Configuration) {
 
         // Step 2 - Generate Image in imageBuildDirectory
         progressMessage("Deleting old image content....")
-        deleteDirectories(prj.imageBuildDirectory)
-        prj.imageBuildDirectory!!.mkdir()
+       deleteDirectories(prj.imageBuildDirectory)
+       prj.imageBuildDirectory!!.mkdir()
 
-        val packager = JPackageExecutable(prj.jpackageJDK!!)
-        packager.parameters.addArgument(packager.createImageParameter())
-        packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
-        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
-        packager.parameters.addArgument(ValueArgument("-n", prj.name))
+       val packager = JPackageExecutable(prj.jpackageJDK!!)
+       packager.parameters.addArgument(packager.createImageParameter())
+       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
+       packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
+       packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+       packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
+       packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-        if (prj.modulePath.isNotEmpty()) {
-            val modulePathString = CollectionUtils.toPathList(prj.modulePath.map { it.path })
-            packager.parameters.addArgument(ValueArgument("--module-path", modulePathString))
-        }
+       if (prj.javaFXMods?.path?.path != null) {
+          packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
+       }
 
-        // check if modular application
-        val modules = generateModuleDependencies(prj)
-        if (modules.isNotEmpty())
-            packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+       // check if modular application
+       val modules = generateModuleDependencies(prj)
+       if (modules.isNotEmpty())
+          packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
-        packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
-        packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
-        return packager
+       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
+       packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
+       return packager
     }
 
     /**
