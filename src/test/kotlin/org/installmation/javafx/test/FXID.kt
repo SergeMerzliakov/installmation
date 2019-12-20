@@ -121,8 +121,7 @@ object FXID {
    const val DIALOG_JDEPS = "#jdepsDialog"
    const val BUTTON_JDEPS_DLG_RUN = "#runButton"
    const val BUTTON_JDEPS_DLG_CLOSE = "#closeButton"
-   const val TEXT_JDEPS_DLG_MAINJAR = "#mainJar"
-   const val TEXT_JDEPS_DLG_MAINCLASS = "#mainClass"
+   const val TEXT_JDEPS_DLG_MAINJAR = "#mainJarText"
    const val COMBO_JDEPS_DLG_JDK = "#jdkComboBox"
    const val LISTVIEW_JDEPS_DLG_CLASSPATH = "#classPathListView"
    const val LISTVIEW_JDEPS_DLG_MODULEPATH = "#modulePathListView"
@@ -134,4 +133,5 @@ object FXID {
    const val TAB_JDEPS_DLG_OUTPUT = "#outputTab"
    const val TAB_JDEPS_DLG_LIST = "#listTab"
    const val TAB_JDEPS_DLG_TEXT = "#textTab"
+   const val BUTTON_JDEPS_MAIN_JAR = "#configureMainJarButton"
 }

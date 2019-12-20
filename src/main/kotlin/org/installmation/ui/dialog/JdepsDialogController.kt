@@ -18,19 +18,20 @@ package org.installmation.ui.dialog
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
-import javafx.scene.control.ComboBox
-import javafx.scene.control.ListView
-import javafx.scene.control.TextArea
-import javafx.scene.control.TextField
+import javafx.scene.control.*
+import javafx.stage.DirectoryChooser
+import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.UserHistory
 import org.installmation.core.CollectionUtils
+import org.installmation.model.NamedDirectory
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
+import kotlin.random.Random
 
 class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File?, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
 
@@ -39,7 +40,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       const val NO_DEPENDENCIES_MESSAGE = "<No module dependencies>"
    }
 
-   @FXML lateinit var mainJar: TextField
+   @FXML lateinit var mainJarText: TextField
    @FXML lateinit var generatedCommandText: TextArea
    @FXML lateinit var classPathListView: ListView<String>
    @FXML lateinit var modulePathListView: ListView<String>
@@ -47,7 +48,8 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
    @FXML lateinit var processOutputView: ListView<String>
    @FXML lateinit var dependencyListView: ListView<String>
    @FXML lateinit var dependencyTextArea: TextArea
-
+   @FXML private lateinit var configureMainJarButton: Button
+   
    // model
    private val classPath: ObservableList<String> = FXCollections.observableArrayList()
    private val modulePath: ObservableList<String> = FXCollections.observableArrayList()
@@ -65,7 +67,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    @FXML
    fun initialize() {
-      mainJar.text = mainJarFile?.path
+      mainJarText.text = mainJarFile?.path
       classPathListView.items = classPath.sorted()
       modulePathListView.items = modulePath.sorted()
       dependencyListView.items = moduleOutput.sorted()
@@ -81,7 +83,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       val classPathString = CollectionUtils.toPathList(classPath)
 
       if (javaFXLibs != null) {
-         val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJar.text)
+         val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJarText.text)
          val moduleDependencies = mdg.generate()
          displayResults(jdeps, mdg, moduleDependencies)
       }
@@ -154,5 +156,13 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       if (modulePathListView.selectionModel.isEmpty)
           return
       modulePath.remove(modulePathListView.selectionModel.selectedItem)
+   }
+   
+   @FXML
+   fun configureMainJar() {
+      val result = ChooseFileDialog.showAndWait(mainJarText.scene.window as Stage, "Select Main Application Jar File", userHistory, InstallmationExtensionFilters.jarFilter())
+      if (result.ok) {
+         mainJarText.text = result.data!!.path
+      }
    }
 }

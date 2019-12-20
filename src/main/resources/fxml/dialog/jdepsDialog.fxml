@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1">
     <rowConstraints>
       <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" />
@@ -34,7 +34,7 @@
       <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
       <ColumnConstraints hgrow="ALWAYS" minWidth="50.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="NEVER" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
-        <ColumnConstraints hgrow="NEVER" maxWidth="86.0" minWidth="86.0" prefWidth="86.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
     </columnConstraints>
    <children>
       <Label text="Main Jar" GridPane.rowIndex="1">
@@ -59,7 +59,7 @@
             </ContextMenu>
          </contextMenu>
       </ListView>
-      <TextField fx:id="mainJar" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+      <TextField fx:id="mainJarText" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -147,6 +147,7 @@
                <Insets left="5.0" right="5.0" />
            </GridPane.margin>
        </TextArea>
+      <Button fx:id="configureMainJarButton" mnemonicParsing="false" onAction="#configureMainJar" text="Configure" GridPane.columnIndex="3" GridPane.rowIndex="1" />
    </children>
    <stylesheets>
       <URL value="@../../css/bootstrap3.css" />
