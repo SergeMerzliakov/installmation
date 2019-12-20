@@ -34,7 +34,6 @@ class InstallProject {
       }
    }
 
-   // TODO - Should all these be String/Value/Label type artefacts? 
    var name: String? = null
    var version: String? = null
    var mainClass: String? = null
