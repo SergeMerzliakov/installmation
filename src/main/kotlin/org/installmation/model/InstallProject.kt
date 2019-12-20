@@ -49,7 +49,7 @@ class InstallProject {
    var imageBuildDirectory: File? = null  //output
    var installerDirectory: File? = null  //output
    // not used now - in future for modular applications
-   var modulePath = mutableSetOf<File>()
+   var customModules = mutableSetOf<String>()
    var classPath = mutableSetOf<File>()
 
    fun projectFile(baseDirectory:File): File {
@@ -66,8 +66,6 @@ class InstallProject {
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
       validateFutureFileField("Installer Directory", installerDirectory, result)
-      for (m in modulePath)
-         validateExistingFileField("Module Path Item", m, result)
       for (cp in classPath)
          validateExistingFileField("Class Path Item ", cp, result)
 
@@ -78,7 +76,7 @@ class InstallProject {
     * Clear collections before state update and save
     */
    fun prepareForSave() {
-      modulePath.clear()
+      customModules.clear()
       classPath.clear()
    }
 
@@ -125,7 +123,7 @@ class InstallProject {
       if (name != other.name) return false
       if (version != other.version) return false
       if (jpackageJDK != other.jpackageJDK) return false
-      if (modulePath != other.modulePath) return false
+      if (customModules != other.customModules) return false
       if (installerDirectory != other.installerDirectory) return false
       if (imageBuildDirectory != other.imageBuildDirectory) return false
       return true
@@ -135,7 +133,7 @@ class InstallProject {
       var result = name?.hashCode() ?: 0
       result = 31 * result + (version?.hashCode() ?: 0)
       result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
-      result = 31 * result + modulePath.hashCode()
+      result = 31 * result + customModules.hashCode()
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)
       result = 31 * result + (installerDirectory?.hashCode() ?: 0)
       return result

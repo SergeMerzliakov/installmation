@@ -91,6 +91,8 @@ object FXID {
    // DEPENDENCIES TAB
    const val LISTVIEW_CLASSPATH = "#classPathListView"
    const val BUTTON_ADD_CLASSPATH = "#addClasspathButton"
+   const val TEXT_MODULE_LIST = "#moduleListText"
+   const val BUTTON_HELP_EXTRA_MODULES = "#helpModulesButton"
 
    // ABOUT DIALOG
    const val DIALOG_ABOUT_ID = "#aboutDialog"

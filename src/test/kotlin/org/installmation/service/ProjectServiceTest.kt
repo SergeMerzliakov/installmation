@@ -42,7 +42,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project1"
       p.version = "1.0"
-      p.modulePath =  mutableSetOf(File("/some/dir"))
+      p.customModules = mutableSetOf("java.sql", "java.base")
       
       // save
       val service = ProjectService(config)
@@ -57,7 +57,7 @@ class ProjectServiceTest {
       val p = InstallProject()
       p.name = "project2"
       p.version = "2.0"
-      p.modulePath =  mutableSetOf(File("/other/dir"))
+      p.customModules = mutableSetOf("java.sql", "java.base")
 
       // save
       val service = ProjectService(config)

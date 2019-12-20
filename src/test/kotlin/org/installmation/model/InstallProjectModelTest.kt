@@ -63,7 +63,7 @@ class InstallProjectModelTest {
       val p1 = InstallProject()
       p1.name = name
       p1.version = version
-      p1.modulePath = mutableSetOf(File("module1"))
+      p1.customModules = mutableSetOf("java.sql", "java.management")
       p1.imageBuildDirectory = File("image")
       p1.installerDirectory = File("installer")
       p1.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))

@@ -23,6 +23,7 @@ import javafx.fxml.FXML
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.ListView
 import javafx.scene.control.MenuItem
+import javafx.scene.control.TextField
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -33,6 +34,7 @@ import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.Workspace
 import org.installmation.ui.dialog.ChooseDirectoryDialog
+import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
 import java.io.File
 
@@ -43,11 +45,12 @@ class DependenciesController(private val configuration: Configuration,
 
    companion object {
       val log: Logger = LogManager.getLogger(DependenciesController::class.java)
-      const val PROPERTY_HELP_MODULES = "help.modules"
+      const val PROPERTY_HELP_EXTRA_MODULES = "help.extra.modules"
    }
 
    @FXML lateinit var classPathListView: ListView<String>
    @FXML lateinit var classpathListContextMenu: ContextMenu
+   @FXML private lateinit var moduleListText: TextField
 
    // model
    private val classpathItems: ObservableList<String> = FXCollections.observableArrayList<String>()
@@ -79,6 +82,16 @@ class DependenciesController(private val configuration: Configuration,
       classpathListContextMenu.items.add(removeClassPathItem)
    }
 
+   @FXML
+   fun updateProject() {
+      workspace.saveProject()
+   }
+
+   @FXML
+   fun helpModules() {
+      HelpDialog.showAndWait("Extra Modules", configuration.resourceBundle.getString(PROPERTY_HELP_EXTRA_MODULES))
+   }
+   
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
@@ -90,6 +103,8 @@ class DependenciesController(private val configuration: Configuration,
 
       for (cp in e.project.classPath)
          classpathItems.add(cp.path)
+
+      moduleListText.text = e.project.customModules.joinToString(",")
    }
 
    @Subscribe
@@ -99,6 +114,11 @@ class DependenciesController(private val configuration: Configuration,
       // as well
       for (path in classPathListView.items)
          e.project.classPath.add(File(path))
+
+      var modules = moduleListText.text.trim().toLowerCase().split(",")
+      modules = modules.map { it.trim() }
+      for (module in modules)
+         workspace.currentProject?.customModules?.add(module)
    }
 
    @Subscribe

@@ -199,17 +199,22 @@ class InstallCreator(private val configuration: Configuration) {
      * Run jdeps tool to get a list of JDK modules used by the target application
      */
     private fun generateModuleDependencies(prj: InstallProject): String {
-        if (prj.classPath.isEmpty())
-            return ""
+       if (prj.classPath.isEmpty())
+          return ""
 
-        checkNotNull(prj.jpackageJDK)
-        checkNotNull(prj.javaFXLib)
-        checkNotNull(prj.mainJar)
+       checkNotNull(prj.jpackageJDK)
+       checkNotNull(prj.javaFXLib)
+       checkNotNull(prj.mainJar)
 
-        val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
-        val jdeps = JDepsExecutable(prj.jpackageJDK!!)
-        val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
-        return mm.generate().joinToString(",")
+       val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
+       val jdeps = JDepsExecutable(prj.jpackageJDK!!)
+       val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
+
+       // combine modules discovered plus custom modules specified by user
+       val total = mutableSetOf<String>()
+       total.addAll(prj.customModules)
+       total.addAll(mm.generate())
+       return total.joinToString(",")
     }
 
     private fun createImageContent(prj: InstallProject) {
