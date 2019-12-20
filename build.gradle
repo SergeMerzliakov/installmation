@@ -6,7 +6,7 @@ plugins {
 def KOTLIN_VERSION = "1.3.61"
 
 group 'org.epistatic'
-version '1.0.0'
+version '0.0.23'
 
 repositories {
     mavenCentral()
