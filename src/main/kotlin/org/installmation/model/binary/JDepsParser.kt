@@ -43,6 +43,7 @@ class JDepsParser(output: List<String>) {
             dependencies.add(parts[1])
       }
       dependencies.remove("not found")
+      dependencies.remove("jdk.unsupported")
       dependencies.remove("java.base") // implicit in all modular applications
    }
 }
