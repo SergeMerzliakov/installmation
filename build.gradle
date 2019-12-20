@@ -51,6 +51,11 @@ jar {
     manifest.attributes('Multi-Release': 'false')
 }
 
+task libs(type: Sync) {
+    from configurations.runtime
+    into "$buildDir/deplibs"
+}
+
 task runApp(type: JavaExec) {
     group = "Application"
     description = "Runs Installmation Application"
