@@ -20,14 +20,15 @@ You can run the latest version (rudimentary so far) with the gradle command (und
  
     gradlew runApp
 
-Builds 20+ can build installers for OSX applications, but with specific limitations. 
-Not yet ready for general release.
+These will build installers, but testing has been limited, so feedback would be welcome, as I am sure there 
+are use cases which I have not covered.
 
 ### Prequisites
 
     1. JDK 11+
     2. OpenJFX 11+
     3. gradle 5+
+    4. WiX Toolkit (windows only)
 
 
 ### Setup
@@ -37,7 +38,8 @@ Update gradle.properties file with JavaFX details. JavaFX is a separate download
 1. Download JavaFX SDK
 2. Download JavaFX jmods
 3. Install them together in the same root dir e.g. /somewhere/JavaFX/13.0
-4. Update gradle.properties with JFX version and path to root dir. Here is a sample
+4. (Windows) Download WiX toolset from https://github.com/wixtoolset/wix3/releases and add to PATH
+5. Update gradle.properties with JFX version and path to root dir. Here is a sample
 
         JFX_VERSION=13
         JFX=/Library/Java/javafx/13.0
