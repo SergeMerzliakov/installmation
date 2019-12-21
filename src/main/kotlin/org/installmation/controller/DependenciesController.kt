@@ -115,8 +115,9 @@ class DependenciesController(private val configuration: Configuration,
       for (path in classPathListView.items)
          e.project.classPath.add(File(path))
 
+      workspace.currentProject?.customModules?.clear()
       var modules = moduleListText.text.trim().toLowerCase().split(",")
-      modules = modules.map { it.trim() }
+      modules = modules.map { it.trim() }.filter{it.isNotEmpty()}
       for (module in modules)
          workspace.currentProject?.customModules?.add(module)
    }

@@ -197,7 +197,7 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.jpackageJDK).isEqualTo(jpackageJDK)
       assertThat(project.javaFXLib).isEqualTo(moduleDir)
       assertThat(project.javaFXMods).isEqualTo(jmodDir)
-      assertThat(project.customModules).hasSize(1)
+      assertThat(project.customModules).isEmpty()
 
       assertThat(project.inputDirectory).isNull()
       assertThat(project.imageBuildDirectory).isNull()
