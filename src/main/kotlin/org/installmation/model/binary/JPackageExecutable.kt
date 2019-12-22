@@ -33,11 +33,11 @@ class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
    }
    
    fun createImageParameter(): Argument {
-      return ValueArgument("--package-type", "app-image")
+      return ValueArgument("--type", "app-image")
    }
 
    fun createInstallerParameter(installerType:String): Argument {
-      return ValueArgument("--package-type", installerType)
+      return ValueArgument("--type", installerType)
    }
 
     fun createImageBuildDirectory(buildDir: String, projectName:String):String{
