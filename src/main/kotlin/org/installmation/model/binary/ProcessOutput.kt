@@ -19,23 +19,19 @@ package org.installmation.model.binary
 /**
  * Output and Error Streams
  */
-class ProcessOutput(process: Process) {
-    val output: List<String>
-    val errors: List<String>
+class ProcessOutput(val output: List<String>, val errors: List<String>) {
 
-    init {
-        output = process.inputStream.bufferedReader().readLines()
-        errors = process.errorStream.bufferedReader().readLines().filter { it != "null" }
-    }
 
-    /**
-     * Some warnings are returned as errors. Sigh
-     */
-     fun hasErrors(): Boolean {
-        if (errors.isEmpty())
-            return false
+   /**
+    * Some warnings are returned as errors. Sigh
+    */
+   fun hasErrors(): Boolean {
+      if (errors.isEmpty())
+         return false
 
-        val realErrors = errors.filter { !it.contains("Windows Defender") }
+      //null|(Windows Defender)|
+      val falseErrors = Regex("WARNING|null|Windows Defender")
+      val realErrors = errors.filter { !it.contains(falseErrors) }
         return realErrors.isNotEmpty()
     }
 }

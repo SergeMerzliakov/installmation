@@ -44,7 +44,8 @@ abstract class AbstractExecutable(executable: File) : Executable {
       else
          proc.waitFor() // forever
 
-      return ProcessOutput(proc)
+      // ? proc.exitValue()
+      return ProcessOutput(proc.inputStream.bufferedReader().readLines(), proc.errorStream.bufferedReader().readLines())
    }
 
    override fun equals(other: Any?): Boolean {
