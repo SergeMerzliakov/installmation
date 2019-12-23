@@ -204,7 +204,7 @@ class InstallmationController(private val configuration: Configuration,
         val result = projectService.generateInstaller(workspace.currentProject!!)
 
         if (result.successful)
-            HelpDialog.showAndWait("Installer Created", "Image created at ${workspace.currentProject!!.installerDirectory}")
+            HelpDialog.showAndWait("Installer Created", "Installer created at ${workspace.currentProject!!.installerDirectory}")
         else {
             val d = ItemListDialog("Installer Generation Errors", "Issues", result.errors)
             d.showNonModal()
