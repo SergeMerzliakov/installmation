@@ -1,12 +1,14 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version "1.3.61"
-    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.openjfx.javafxplugin' version "0.0.8"
 }
 
 def KOTLIN_VERSION = "1.3.61"
+def MAJOR_VERSION = 0
+def MINOR_VERSION = 1
 
 group 'org.epistatic'
-version '0.0.25'
+version  = 'undefined'
 
 repositories {
     mavenCentral()
@@ -38,6 +40,7 @@ dependencies {
     testCompile "io.mockk:mockk:1.9.3"
     testCompile "org.testfx:testfx-core:4.0.16-alpha"
     testCompile "org.testfx:testfx-junit:4.0.16-alpha"
+
 }
 
 compileKotlin {
@@ -49,6 +52,13 @@ compileTestKotlin {
 
 jar {
     manifest.attributes('Multi-Release': 'false')
+    doFirst {
+        version  = "$MAJOR_VERSION.$MINOR_VERSION." + ant.antProject.properties['build.number']
+    }
+}
+
+task compileKotlin.doFirst {
+    ant.buildnumber()
 }
 
 task libs(type: Sync) {
@@ -68,5 +78,3 @@ task runApp(type: JavaExec) {
         ]
     }
 }
-
-
