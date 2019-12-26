@@ -19,10 +19,10 @@ package org.installmation.model
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.TestConstants
 import org.installmation.configuration.JsonParserFactory
+import org.installmation.core.OperatingSystem
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.binary.JDKFactory
-import org.installmation.core.OperatingSystem
 import org.junit.AfterClass
 import org.junit.Test
 import java.io.File
@@ -67,7 +67,7 @@ class InstallProjectModelTest {
       p1.imageBuildDirectory = File("image")
       p1.installerDirectory = File("installer")
       p1.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
-      
+
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p1)
 

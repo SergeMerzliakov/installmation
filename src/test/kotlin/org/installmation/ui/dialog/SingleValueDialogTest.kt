@@ -57,7 +57,7 @@ class SingleValueDialogTest : ApplicationTest() {
    @Test
    fun showHaveCorrectTitleAndLabelAndDefault() {
       clickOn("#$SHOW_DIALOG_BUTTON")
-      
+
       assertThat(dialog.stage.title).isEqualTo(DIALOG_TITLE)
 
       val label = lookup(FXID.LABEL_SINGLEVAL_DLG_ITEM).query<Label>()
@@ -66,7 +66,7 @@ class SingleValueDialogTest : ApplicationTest() {
       val value = lookup(FXID.TEXT_SINGLEVAL_DLG_ITEM_VALUE).query<TextField>()
       assertThat(value.text).isEqualTo(DEFAULT_VALUE)
    }
-   
+
    @Test
    fun shouldSave() {
       clickOn("#$SHOW_DIALOG_BUTTON")
@@ -78,7 +78,7 @@ class SingleValueDialogTest : ApplicationTest() {
       type(KeyCode.TAB)
 
       clickOn(FXID.BUTTON_SINGLEVAL_DLG_SAVE)
-      
+
       assertThat(result.ok).isTrue()
       assertThat(result.data).isEqualTo(newColour)
    }
@@ -94,7 +94,7 @@ class SingleValueDialogTest : ApplicationTest() {
       type(KeyCode.TAB)
 
       clickOn(FXID.BUTTON_SINGLEVAL_DLG_CANCEL)
-      
+
       assertThat(result.ok).isFalse()
       assertThat(result.data).isNull()
    }

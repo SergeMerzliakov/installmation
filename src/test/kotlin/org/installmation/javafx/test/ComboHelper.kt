@@ -25,7 +25,7 @@ import org.testfx.util.WaitForAsyncUtils
  * JavaFX util functions for ComboBox
  */
 class ComboHelper(private val test: ApplicationTest) {
-   
+
    fun <T> selectByIndex(id: String, index: Int): T {
       var combo: ComboBox<T>? = null
       Platform.runLater {

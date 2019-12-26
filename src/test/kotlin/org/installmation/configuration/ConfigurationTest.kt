@@ -45,7 +45,7 @@ class ConfigurationTest {
    fun shouldPersistSingleFXLibConfig() {
       val conf = Configuration()
       val configFile = Configuration.configurationFile(configDir)
-      
+
       val label = "fx13"
       val fxlibs = "dir/javafx13/libs"
       conf.javafxLibEntries[label] = File(fxlibs)
@@ -53,18 +53,18 @@ class ConfigurationTest {
       // save
       val writer = ApplicationJsonWriter<Configuration>(configFile, JsonParserFactory.configurationParser())
       writer.save(conf)
-      
+
       assertThat(configFile).exists()
       assertThat(configFile.readText()).isNotEmpty()
-      
+
       // now read 
       val reader = ApplicationJsonReader<Configuration>(Configuration::class, configFile, JsonParserFactory.configurationParser())
       val loadedConf = reader.load()
-      
+
       assertThat(loadedConf.javafxLibEntries).hasSize(1)
       assertThat(loadedConf.javafxModuleEntries).hasSize(0)
       assertThat(loadedConf.jdkEntries).hasSize(0)
-      
+
       assertThat(loadedConf.javafxLibEntries[label]).isEqualTo(File(fxlibs))
    }
 
@@ -72,7 +72,7 @@ class ConfigurationTest {
    fun shouldPersistMultipleFXLibConfig() {
       val conf = Configuration()
       val configFile = Configuration.configurationFile(configDir)
-      
+
       // FX 12
       val label12 = "fx12"
       val fxlibs12 = "dir/javafx12/libs"
@@ -97,7 +97,7 @@ class ConfigurationTest {
       assertThat(loadedConf.javafxLibEntries).hasSize(2)
       assertThat(loadedConf.javafxModuleEntries).hasSize(0)
       assertThat(loadedConf.jdkEntries).hasSize(0)
-      
+
       assertThat(loadedConf.javafxLibEntries[label12]).isEqualTo(File(fxlibs12))
       assertThat(loadedConf.javafxLibEntries[label13]).isEqualTo(File(fxlibs13))
    }
@@ -106,7 +106,7 @@ class ConfigurationTest {
    fun shouldPersistFXModuleConfig() {
       val conf = Configuration()
       val configFile = Configuration.configurationFile(configDir)
-      
+
       val label = "fx13"
       val fxmods = "dir/javafx13/mods"
       conf.javafxModuleEntries[label] = File(fxmods)

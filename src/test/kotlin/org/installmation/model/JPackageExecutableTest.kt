@@ -23,7 +23,7 @@ class JPackageExecutableTest {
    companion object {
       const val JDK_14_BUILD49 = "14-jpackage"
    }
-   
+
    @Test
    fun shouldGetVersionEarlyAccessJdk14() {
 // TODO refactor with ProcessOutput

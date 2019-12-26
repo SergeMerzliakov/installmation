@@ -19,8 +19,8 @@ package org.installmation.testutil
 import java.io.File
 
 object TestFile {
-   
-   fun resourceFile(relativeResourcePath:String): File {
+
+   fun resourceFile(relativeResourcePath: String): File {
       return File(javaClass.classLoader.getResource(relativeResourcePath).file)
    }
 }

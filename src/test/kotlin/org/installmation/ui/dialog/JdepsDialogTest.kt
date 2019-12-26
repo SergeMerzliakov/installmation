@@ -42,7 +42,7 @@ class JdepsDialogTest : ApplicationTest() {
       val LIB1_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-core-2.12.1.jar")
       val LIB2_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-api-2.12.1.jar")
       val MAIN_JAR = File(RESOURCE_ROOT, "/tiny-app/tiny-java-app-1.0.jar")
-      
+
       @BeforeClass
       @JvmStatic
       fun setup() {

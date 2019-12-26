@@ -178,6 +178,7 @@ class InstallCreator(private val configuration: Configuration) {
        packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
        packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+       packager.parameters.addArgument(ValueArgument("--icon", File("/Users/loyaltyuser/Downloads/green.icns").path))
        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("-n", prj.name))
 

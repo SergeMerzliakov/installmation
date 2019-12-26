@@ -31,7 +31,7 @@ class ProjectServiceTest {
 
    private val baseDirectory = File(TestConstants.TEST_TEMP_DIR)
    private val config = Configuration(EventBus(), baseDirectory)
-   
+
    @After
    fun cleanup() {
       baseDirectory.deleteRecursively()
@@ -43,11 +43,11 @@ class ProjectServiceTest {
       p.name = "project1"
       p.version = "1.0"
       p.customModules = mutableSetOf("java.sql", "java.base")
-      
+
       // save
       val service = ProjectService(config)
       service.save(p)
-      
+
       assertThat(p.projectFile(baseDirectory)).exists()
       assertThat(p.projectFile(baseDirectory).readText()).isNotEmpty()
    }

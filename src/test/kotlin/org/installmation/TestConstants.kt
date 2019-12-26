@@ -16,6 +16,6 @@
 package org.installmation
 
 object TestConstants {
-   
+
    const val TEST_TEMP_DIR = "testrun" // created and deleted after every test run
 }

@@ -16,6 +16,9 @@ repositories {
     flatDir {
         dirs "${JFX}/lib"
     }
+    maven {
+        url "https://repository.mulesoft.org/nexus/content/repositories/public/"
+    }
 }
 
 apply plugin: 'application'
@@ -33,14 +36,14 @@ dependencies {
     
     compile "org.apache.logging.log4j:log4j-api:2.12.1"
     compile "org.apache.logging.log4j:log4j-core:2.12.1"
-
+    compile "com.github.imcdonagh:image4j:0.7.2"
+    
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$KOTLIN_VERSION"
     testCompile "junit:junit:4.12" // testfx does not support Junit 5
     testCompile "org.assertj:assertj-core:3.13.2"
     testCompile "io.mockk:mockk:1.9.3"
     testCompile "org.testfx:testfx-core:4.0.16-alpha"
     testCompile "org.testfx:testfx-junit:4.0.16-alpha"
-
 }
 
 compileKotlin {

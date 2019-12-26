@@ -47,7 +47,7 @@ class JDKSerializerTest {
       val loadedJdk = gson.fromJson(data, WindowsJDK::class.java)
       assertThat(loadedJdk).isEqualTo(jdk)
    }
-   
+
    @Test
    fun shouldSerializeLinux() {
       val gson = SerializationUtils.createAdapterGson(LinuxJDK::class.java)

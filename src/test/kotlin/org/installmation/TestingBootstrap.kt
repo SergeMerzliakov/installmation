@@ -44,15 +44,15 @@ object TestingBootstrap {
       }
    }
 
-   private fun setupTestJavaFX(config: Properties){
+   private fun setupTestJavaFX(config: Properties) {
       if (config[PROPERTY_TEST_JFX] != null) {
          javafx = File(config.getProperty(PROPERTY_TEST_JFX))
          if (!javafx!!.exists())
             throw FileNotFoundException("JavaFX not found in gradle.properties property $PROPERTY_TEST_JFX. Value found: ${javafx?.path}")
-      }else
+      } else
          throw BootstrapException("JavaFX not configured in gradle.properties property $PROPERTY_TEST_JFX. Set this for Jdeps based unit tests to run.")
    }
-      
+
    // JDK property ovverides JAVA_HOME or system value
    private fun setupTestJDK(config: Properties) {
       if (config[PROPERTY_TEST_JDK] != null) {
@@ -79,8 +79,8 @@ object TestingBootstrap {
       props.load(iss)
       return props
    }
-   
-   private fun getJDKMajorVersion(): Int{
+
+   private fun getJDKMajorVersion(): Int {
       val parts = System.getProperty("java.version").split(".")
       return parts[0].toInt()
    }

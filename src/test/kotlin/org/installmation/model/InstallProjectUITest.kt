@@ -247,7 +247,7 @@ class InstallProjectUITest : ApplicationTest() {
    @Test
    fun shouldCreateAndSaveProjectDependencies() {
       val projectName = "deps"
-      val classPathItem = File("usr","lib").path
+      val classPathItem = File("usr", "lib").path
 
       createProject(projectName)
 
