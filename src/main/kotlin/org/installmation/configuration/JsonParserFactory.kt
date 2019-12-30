@@ -45,15 +45,6 @@ object JsonParserFactory {
       return builder.setPrettyPrinting().create()
    }
 
-   /**
-    * For POJOs
-    */
-   fun basicParser(): Gson {
-      val builder = GsonBuilder()
-      return builder.setPrettyPrinting().create()
-   }
-
-
    private fun registerConfigurationAdapters(builder:GsonBuilder) {
       builder.registerTypeAdapter(JDK::class.java, JDKSerializer())
       builder.registerTypeAdapter(MacJDK::class.java, JDKSerializer())
