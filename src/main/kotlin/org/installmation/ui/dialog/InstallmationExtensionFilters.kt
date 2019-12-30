@@ -18,12 +18,16 @@ package org.installmation.ui.dialog
 import javafx.stage.FileChooser
 
 object InstallmationExtensionFilters {
-   
+
    fun projectFilter(): FileChooser.ExtensionFilter {
       return FileChooser.ExtensionFilter("Project Files (*.json)", "*.json")
    }
 
    fun jarFilter(): FileChooser.ExtensionFilter {
       return FileChooser.ExtensionFilter("Jar Files (*.jar)", "*.jar")
+   }
+
+   fun logoImageFilter(): FileChooser.ExtensionFilter {
+      return FileChooser.ExtensionFilter("Image Files (png, jpeg, ico, icns)", "*.png", "*.jpeg", "*.jpg", "*.ico", "*.icns")
    }
 }
