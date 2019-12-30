@@ -64,4 +64,12 @@ object ImageTool {
          throw ImageProcessingException("Error determine image dimensions of ${f.path}", e)
       }
    }
+
+   /**
+    * return true if the file is a real, non-empty image file
+    */
+   fun isValidImageFile(f: File): Boolean {
+      val validExtensions = Regex("png|jpeg|jpg|ico|icns")
+      return f.exists() && f.isFile && f.extension.matches(validExtensions) && f.length() > 0
+   }
 }

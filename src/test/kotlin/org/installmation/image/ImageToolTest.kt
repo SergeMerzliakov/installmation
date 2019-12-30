@@ -27,6 +27,7 @@ class ImageToolTest {
    companion object {
       val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
       val IMAGE = File("src/test/resources/image/green16.png")
+      val RED_IMAGE = File("src/test/resources/image/red32.jpg")
       const val TEST_IMAGE_SIZE = 16
    }
 
@@ -107,4 +108,25 @@ class ImageToolTest {
       assertThat(dim.width).isEqualTo(newSize)
       assertThat(dim.height).isEqualTo(newSize)
    }
+   
+   @Test
+   fun shouldRecognizeValidPNGFile(){
+      assertThat(ImageTool.isValidImageFile(IMAGE)).isTrue()
+   }
+
+   @Test
+   fun shouldRecognizeValidJPEGFile(){
+      assertThat(ImageTool.isValidImageFile(RED_IMAGE)).isTrue()
+   }
+
+   @Test
+   fun shouldRecognizeNonImageFile(){
+      assertThat(ImageTool.isValidImageFile(File("src/test/resources/generic/file2.txt"))).isFalse()
+   }
+
+   @Test
+   fun shouldRecognizeNonExistentImageFile(){
+      assertThat(ImageTool.isValidImageFile(File("does/not/exist.jpeg"))).isFalse()
+   }
+
 }
