@@ -21,14 +21,25 @@ import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
+import javafx.scene.image.ImageView
+import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
+import org.installmation.image.ImageTool
+import org.installmation.javafx.FileFieldUtils
 import org.installmation.service.*
+import org.installmation.ui.dialog.ChooseFileDialog
+import org.installmation.ui.dialog.ErrorDialog
+import org.installmation.ui.dialog.InstallmationExtensionFilters
+import java.io.File
 
 
-class GeneralInfoController(configuration: Configuration, private val workspace: Workspace) {
+class GeneralInfoController(configuration: Configuration,
+                            private val userHistory: UserHistory,
+                            private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(GeneralInfoController::class.java)
@@ -38,6 +49,9 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
    @FXML private lateinit var installerTypeCombo: ComboBox<String>
+   //path to simple image file like png or jpeg, or os specific like ico or icns file
+   @FXML private lateinit var logoPathField: TextField
+   @FXML private lateinit var logoView: ImageView
 
    init {
       configuration.eventBus.register(this)
@@ -51,8 +65,34 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
    @FXML
    fun updateProject() {
       workspace.saveProject()
+      updateLogoPreview(logoPathField.text)
    }
-   
+
+   @FXML
+   fun chooseLogo() {
+      val result = ChooseFileDialog.showAndWait(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory, InstallmationExtensionFilters.logoImageFilter())
+      if (result.ok) {
+         logoPathField.text = result.data?.path
+         updateLogoPreview(logoPathField.text)
+      }
+   }
+
+   // show logo chosen on screen
+   private fun updateLogoPreview(path: String?) {
+      try {
+         if (path.isNullOrEmpty()) {
+            logoView.image = null
+            return
+         }
+         val imagePath = File(path.trim())
+         if (ImageTool.isValidImageFile(imagePath))
+            logoView.image = ImageTool.createImage(imagePath)
+      } catch (e: Exception) {
+         log.error("Error Loading Application Logo", e)
+         ErrorDialog.showAndWait("Error Loading Application Logo", e.toString())
+      }
+   }
+
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
@@ -70,6 +110,7 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
       e.project.version = applicationVersionField.text ?: "1.0"
       e.project.copyright = copyrightField.text
       e.project.installerType = installerTypeCombo.selectionModel.selectedItem
+      e.project.applicationLogo = FileFieldUtils.getPath(logoPathField)
    }
 
    @Subscribe
@@ -79,6 +120,8 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
       applicationVersionField.text = e.project.version
       copyrightField.text = e.project.copyright
       installerTypeCombo.selectionModel.select(e.project.installerType)
+      logoPathField.text = e.project.applicationLogo?.path
+      updateLogoPreview(e.project.applicationLogo?.path)
    }
    
    @Subscribe
@@ -86,6 +129,8 @@ class GeneralInfoController(configuration: Configuration, private val workspace:
       projectNameField.text = null
       copyrightField.text = null
       applicationVersionField.text = null
+      logoPathField.text = null
+      logoView.image = null
       //do not clear installer type for now
    }
 }

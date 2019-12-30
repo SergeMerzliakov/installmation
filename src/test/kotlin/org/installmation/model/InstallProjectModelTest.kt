@@ -66,6 +66,7 @@ class InstallProjectModelTest {
       p1.customModules = mutableSetOf("java.sql", "java.management")
       p1.imageBuildDirectory = File("image")
       p1.installerDirectory = File("installer")
+      p1.applicationLogo = File("logo.png")
       p1.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
 
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())

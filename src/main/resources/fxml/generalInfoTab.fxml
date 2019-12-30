@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane hgap="5.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="44.0" minWidth="44.0" prefWidth="44.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
@@ -15,32 +25,43 @@
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="22.0" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="56.0" minHeight="56.0" prefHeight="56.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Label text="Project Name" />
         <Label text="Application Version" GridPane.rowIndex="1" />
-        <TextField fx:id="projectNameField" onAction="#updateProject" GridPane.columnIndex="1">
+        <TextField fx:id="projectNameField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.columnSpan="3">
             <GridPane.margin>
-                <Insets left="5.0" right="5.0"/>
+                <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
         <TextField fx:id="applicationVersionField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
-                <Insets left="5.0" right="5.0"/>
+                <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
         <Label text="Copyright Message" GridPane.rowIndex="2" />
-        <TextField fx:id="copyrightField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <TextField fx:id="copyrightField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
             <GridPane.margin>
-                <Insets left="5.0" right="5.0"/>
+                <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
       <Label text="Installer Type" GridPane.rowIndex="4" />
-        <ComboBox fx:id="installerTypeCombo" onAction="#updateProject" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <ComboBox fx:id="installerTypeCombo" onAction="#updateProject" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <GridPane.margin>
-                <Insets left="5.0" right="5.0"/>
+                <Insets right="5.0" />
             </GridPane.margin>
         </ComboBox>
+      <Label text="Application Logo" GridPane.rowIndex="5" />
+      <TextField fx:id="logoPathField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+      <Button fx:id="chooseLogoButton" mnemonicParsing="false" onAction="#chooseLogo" text="..." GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <Label text="Logo Preview" GridPane.rowIndex="6" />
+      <ImageView fx:id="logoView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </ImageView>
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />

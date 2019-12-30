@@ -74,8 +74,9 @@ class InstallProjectUITest : ApplicationTest() {
 
       assertThat(project.name).isEqualTo(projectName)
       assertThat(project.installerType).isNotEmpty() //OS specific default values
-      assertThat(project.version).isEmpty()
-      assertThat(project.copyright).isEmpty()
+      assertThat(project.version).isNullOrEmpty()
+      assertThat(project.copyright).isNullOrEmpty()
+      assertThat(project.applicationLogo).isNull()
       assertThat(project.imageBuildDirectory).isNull()
       assertThat(project.installerDirectory).isNull()
       assertThat(project.inputDirectory).isNull()
@@ -87,6 +88,7 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.javaFXLib).isNull()
       assertThat(project.javaFXMods).isNull()
       assertThat(project.jpackageJDK).isNull()
+      assertThat(project.applicationLogo).isNull()
    }
 
    @Test
@@ -95,6 +97,7 @@ class InstallProjectUITest : ApplicationTest() {
       val originalProjectName = "otherName"
       val version = "1"
       val copyrightMessage = "copyright"
+      val logoImagePath = "/image/logo.png"
 
       createProject(originalProjectName)
 
@@ -103,6 +106,7 @@ class InstallProjectUITest : ApplicationTest() {
       textHelper.writeText(FXID.TEXT_PROJECT_NAME, projectName)
       textHelper.writeText(FXID.TEXT_APP_VERSION, version)
       textHelper.writeText(FXID.TEXT_COPYRIGHT, copyrightMessage)
+      textHelper.writeText(FXID.TEXT_LOGO_PATH, logoImagePath)
       val installer = comboHelper.selectByIndex<String>(FXID.COMBO_INSTALLER_TYPE, 0)
       saveCurrentProject()
 
@@ -112,6 +116,7 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.installerType).isEqualTo(installer) //OS specific default values
       assertThat(project.version).isEqualTo(version)
       assertThat(project.copyright).isEqualTo(copyrightMessage)
+      assertThat(project.applicationLogo?.path).isEqualTo(logoImagePath)
 
       assertThat(project.imageBuildDirectory).isNull()
       assertThat(project.installerDirectory).isNull()
@@ -148,7 +153,8 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.installerType).isNotEmpty() //OS specific default values
       assertThat(project.version).isNullOrEmpty()
       assertThat(project.copyright).isNullOrEmpty()
-
+      assertThat(project.applicationLogo).isNull()
+      
       assertThat(project.inputDirectory?.path).isEqualTo(inputDir)
       assertThat(project.imageBuildDirectory?.path).isEqualTo(imageBuildDir)
       assertThat(project.installerDirectory?.path).isEqualTo(installerDir)
@@ -192,7 +198,8 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.installerType).isNotEmpty() //OS specific default values
       assertThat(project.version).isNullOrEmpty()
       assertThat(project.copyright).isNullOrEmpty()
-
+      assertThat(project.applicationLogo).isNull()
+      
       assertThat(project.installJDK).isEqualTo(installJDK)
       assertThat(project.jpackageJDK).isEqualTo(jpackageJDK)
       assertThat(project.javaFXLib).isEqualTo(moduleDir)
@@ -228,7 +235,8 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.installerType).isNotEmpty() //OS specific default values
       assertThat(project.version).isNullOrEmpty()
       assertThat(project.copyright).isNullOrEmpty()
-
+      assertThat(project.applicationLogo).isNull()
+      
       assertThat(project.mainClass).isEqualTo(mainClass)
       assertThat(project.mainJar?.path).isEqualTo(mainJar)
 
@@ -263,6 +271,7 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.installerType).isNotEmpty() //OS specific default values
       assertThat(project.version).isNullOrEmpty()
       assertThat(project.copyright).isNullOrEmpty()
+      assertThat(project.applicationLogo).isNull()
 
       assertThat(project.classPath).hasSize(1)
       assertThat(project.classPath).contains(File(classPathItem))

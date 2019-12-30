@@ -26,7 +26,7 @@ mainClassName = 'org.installmation.InstallmationApplication'
 
 javafx {
     version = JFX_VERSION
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
 }
 
 dependencies {
@@ -77,7 +77,7 @@ task runApp(type: JavaExec) {
     doFirst {
         jvmArgs = [
                 '--module-path', "${JFX}/lib",
-                '--add-modules', 'javafx.fxml,javafx.controls'
+                '--add-modules', 'javafx.fxml,javafx.controls,javafx.swing'
         ]
     }
 }

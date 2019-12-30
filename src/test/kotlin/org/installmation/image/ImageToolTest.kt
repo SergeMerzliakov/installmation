@@ -26,8 +26,10 @@ class ImageToolTest {
 
    companion object {
       val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
-      val IMAGE = File("src/test/resources/image/green16.png")
-      val RED_IMAGE = File("src/test/resources/image/red32.jpg")
+      val PNG_FILE = File("src/test/resources/image/green16.PNG")
+      val ICNS_FILE = File("src/test/resources/image/green16.icNS")
+      val ICNS_PLACEHOLDER_FILE = File("src/test/resources/image/placeholder_icns.png")
+      val JPG_FILE = File("src/test/resources/image/red32.jpg")
       const val TEST_IMAGE_SIZE = 16
    }
 
@@ -43,7 +45,7 @@ class ImageToolTest {
 
    @Test
    fun shouldReadDimensionsOfValidImage() {
-      val dim = ImageTool.imageDimensions(IMAGE)
+      val dim = ImageTool.imageDimensions(PNG_FILE)
       assertThat(dim.width).isEqualTo(TEST_IMAGE_SIZE)
       assertThat(dim.height).isEqualTo(TEST_IMAGE_SIZE)
    }
@@ -59,7 +61,7 @@ class ImageToolTest {
    fun shouldEnlargeImage() {
       val newSize = TEST_IMAGE_SIZE * 4
       val outputFile = "green$newSize.png"
-      ImageTool.newImageWithSize(ImageTool.ImageType.Png, IMAGE, outputFile, OUTPUT_DIR, newSize, newSize)
+      ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
       val resizedImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
       assertThat(resizedImage).exists()
 
@@ -72,7 +74,7 @@ class ImageToolTest {
    fun shouldShrinkImage() {
       val newSize = TEST_IMAGE_SIZE - 4
       val outputFile = "green$newSize.png"
-      ImageTool.newImageWithSize(ImageTool.ImageType.Png, IMAGE, outputFile, OUTPUT_DIR, newSize, newSize)
+      ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
       val resizedImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
       assertThat(resizedImage).exists()
 
@@ -83,9 +85,9 @@ class ImageToolTest {
 
    @Test
    fun shouldDuplicateImageWithSameSize() {
-      val newSize = ImageTool.imageDimensions(IMAGE).width
+      val newSize = ImageTool.imageDimensions(PNG_FILE).width
       val outputFile = "green$newSize.png"
-      ImageTool.newImageWithSize(ImageTool.ImageType.Png, IMAGE, outputFile, OUTPUT_DIR, newSize, newSize)
+      ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
       val duplicateImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
       assertThat(duplicateImage).exists()
       //TODO duplicate image is much smaller, so this test fails  - need to find out why
@@ -111,12 +113,12 @@ class ImageToolTest {
    
    @Test
    fun shouldRecognizeValidPNGFile(){
-      assertThat(ImageTool.isValidImageFile(IMAGE)).isTrue()
+      assertThat(ImageTool.isValidImageFile(PNG_FILE)).isTrue()
    }
 
    @Test
    fun shouldRecognizeValidJPEGFile(){
-      assertThat(ImageTool.isValidImageFile(RED_IMAGE)).isTrue()
+      assertThat(ImageTool.isValidImageFile(JPG_FILE)).isTrue()
    }
 
    @Test
@@ -129,4 +131,16 @@ class ImageToolTest {
       assertThat(ImageTool.isValidImageFile(File("does/not/exist.jpeg"))).isFalse()
    }
 
+   /**
+    * return placeholder image - ICNS image processing in Java/Kotlin too messy for
+    * now. Will revisit when I have the strength.
+    */
+   @Test
+   fun shouldGetIcnsImage(){
+      val image = ImageTool.createImage(ICNS_FILE)
+      assertThat(image).isNotNull
+      val dim = ImageTool.imageDimensions(ICNS_PLACEHOLDER_FILE)
+      assertThat(image.height).isEqualTo(dim.height.toDouble())
+      assertThat(image.width).isEqualTo(dim.width.toDouble())
+   }
 }

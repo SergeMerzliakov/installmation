@@ -38,6 +38,12 @@ class OSXImageProcessor : ImageProcessor {
 
    // need to call iconutil tool with result of this call
    override fun createApplicationLogo(imageFile: File, destination: File): File {
+      if (imageFile.exists() && imageFile.extension == "icns"){
+         val moved = File(destination, imageFile.name)
+         imageFile.copyTo(moved, true)
+         return moved
+      }
+      
       try {
          val iconsetDir = File(destination, ICONSET_DIR)
          iconsetDir.deleteRecursively()

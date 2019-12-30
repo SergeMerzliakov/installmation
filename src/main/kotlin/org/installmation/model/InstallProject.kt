@@ -41,6 +41,7 @@ class InstallProject {
    var installerType: String? = null
    var copyright: String? = null
    var jpackageJDK: JDK? = null
+   var applicationLogo: File? = null
    // for JavaFX only - TODO
    var javaFXLib: NamedDirectory? = null
    var javaFXMods: NamedDirectory? = null
@@ -62,6 +63,7 @@ class InstallProject {
       val result = ValidationResult(true)
       validateStringField("Project Name", name, result)
       validateStringField("Project Version", version, result)
+      validateExistingFileField("Application Logo", applicationLogo, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)

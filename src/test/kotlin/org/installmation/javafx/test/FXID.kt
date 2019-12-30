@@ -60,6 +60,8 @@ object FXID {
    const val TEXT_APP_VERSION = "#applicationVersionField"
    const val TEXT_COPYRIGHT = "#copyrightField"
    const val COMBO_INSTALLER_TYPE = "#installerTypeCombo"
+   const val BUTTON_CHOOSE_LOGO = "#chooseLogoButton"
+   const val TEXT_LOGO_PATH = "#logoPathField"
 
    // INSTALL LOCATION TAB
    const val TEXT_INPUT_DIR = "#inputDirectoryText"

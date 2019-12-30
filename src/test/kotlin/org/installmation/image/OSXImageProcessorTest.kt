@@ -30,6 +30,7 @@ class OSXImageProcessorTest {
    companion object {
       val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
       val IMAGE = File("src/test/resources/image/green16.png")
+      val ICNS_IMAGE = File("src/test/resources/image/green16.icns")
    }
 
    @Before
@@ -46,6 +47,15 @@ class OSXImageProcessorTest {
    fun shouldCreateICNSFile() {
       val osx = OSXImageProcessor()
       val icns = osx.createApplicationLogo(IMAGE, OUTPUT_DIR)
+      assertThat(icns).exists().isFile()
+      assertThat(icns.length()).isNotZero()
+   }
+   
+   @Test
+   fun shouldHandleExistingICNSFile() {
+      val osx = OSXImageProcessor()
+      val icns = osx.createApplicationLogo(ICNS_IMAGE, OUTPUT_DIR)
+      // icns file should just be moved to output directory
       assertThat(icns).exists().isFile()
       assertThat(icns.length()).isNotZero()
    }
