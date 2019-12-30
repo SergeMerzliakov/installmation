@@ -81,15 +81,9 @@ class InstallmationController(private val configuration: Configuration,
     private lateinit var generateInstallerTooltip: Tooltip
 
     private var dependenciesController = DependenciesController(configuration, userHistory, workspace)
-
-    private var locationController = LocationController(configuration,
-            userHistory,
-            workspace)
-
+    private var locationController = LocationController(configuration, userHistory, workspace)
     private var binariesController = BinariesController(configuration, userHistory, workspace)
-
-    private var generalInfoController = GeneralInfoController(configuration, workspace)
-
+    private var generalInfoController = GeneralInfoController(configuration, userHistory, workspace)
     private var executeController = ExecutableController(configuration, userHistory, workspace)
 
     // models
