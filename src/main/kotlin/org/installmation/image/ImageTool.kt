@@ -15,6 +15,7 @@
  */
 package org.installmation.image
 
+import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
 import net.sf.image4j.codec.ico.ICODecoder
 import java.awt.image.BufferedImage
@@ -22,15 +23,18 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileInputStream
 import javax.imageio.ImageIO
-import javafx.embed.swing.SwingFXUtils
 
 /**
  * Useful Image functions
  */
 object ImageTool {
 
-   enum class ImageType {
-      Png
+   enum class ImageType(val value: String) {
+      Png("png"),
+      Jpeg("jpeg"),
+      Jpg("jpg"),
+      Icns("icns"),
+      Ico("ico")
    }
 
    class Dimension(val width: Int, val height: Int)
@@ -70,18 +74,29 @@ object ImageTool {
    }
 
    /**
+    * Return a regex for matching supported image types
+    */
+   fun imageExtensionsRegex(): Regex {
+      val regex = StringBuilder()
+      for (t in ImageType.values()){
+         regex.append(t.value).append('|')
+      }
+      regex.setLength(regex.length - 1)
+      return Regex(regex.toString(), RegexOption.IGNORE_CASE)
+   }
+
+   /**
     * return true if the file is a real, non-empty image file
     */
    fun isValidImageFile(f: File): Boolean {
-      val validExtensions = Regex("png|jpeg|jpg|ico|icns")
-      return f.exists() && f.isFile && f.extension.toLowerCase().matches(validExtensions) && f.length() > 0
+      return f.exists() && f.isFile && f.extension.matches(imageExtensionsRegex()) && f.length() > 0
    }
 
    fun createImage(f: File): Image {
       return when (f.extension.toLowerCase()) {
-         "png", "jpeg", "jpg" -> Image(FileInputStream(f))
-         "icns" -> icnsDefaultImage()
-         "ico" -> extractICOImage(f)
+         ImageType.Png.value, ImageType.Jpeg.value, ImageType.Jpg.value -> Image(FileInputStream(f))
+         ImageType.Icns.value -> icnsDefaultImage()
+         ImageType.Ico.value -> extractICOImage(f)
          else -> Image(FileInputStream(f))
       }
    }
