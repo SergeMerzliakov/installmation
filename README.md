@@ -54,7 +54,7 @@ Just to reiterate, JFX variable path should contain both jars and jmod files:
 The unit tests run lots of Testfx tests, some of which tests dialogs which run JDK tools like jdeps. These tests require various binaries
 like JDK, JavaFX libraries as input parameters, which cannot versioned inside the repo. 
 
-So on first startup for these unit tests, the object org.installmation.TestingBootstrap checks gradle.properties to make JavaFX, and optinally 
-JDK is setup. 
+So on first startup for these unit tests, the object org.installmation.TestingBootstrap checks gradle.properties
+to make sure JavaFX and JDK are setup.
  
     <repo>/gradle.properties
