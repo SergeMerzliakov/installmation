@@ -74,11 +74,23 @@ object ImageTool {
    }
 
    /**
+    * return comma delimited list of supported image types
+    */
+   fun validImageTypes(): String {
+      val images = StringBuilder()
+      for (t in ImageType.values()) {
+         images.append(t.value).append(',')
+      }
+      images.setLength(images.length - 1)
+      return images.toString()
+   }
+
+   /**
     * Return a regex for matching supported image types
     */
    fun imageExtensionsRegex(): Regex {
       val regex = StringBuilder()
-      for (t in ImageType.values()){
+      for (t in ImageType.values()) {
          regex.append(t.value).append('|')
       }
       regex.setLength(regex.length - 1)
