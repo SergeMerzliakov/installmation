@@ -22,6 +22,10 @@ import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.CollectionUtils
 import org.installmation.core.OperatingSystem
 import org.installmation.core.UserMessageEvent
+import org.installmation.image.ImageProcessor
+import org.installmation.image.LinuxImageProcessor
+import org.installmation.image.OSXImageProcessor
+import org.installmation.image.WindowsImageProcessor
 import org.installmation.io.FileFilters
 import org.installmation.model.*
 import org.installmation.model.binary.JDepsExecutable
@@ -161,15 +165,15 @@ class InstallCreator(private val configuration: Configuration) {
      * This is called by installer creation process and returns the command output
      */
     private fun initializeImagePackager(prj: InstallProject): JPackageExecutable {
-        checkNotNull(prj.inputDirectory)
-        checkNotNull(prj.mainJar)
-        checkNotNull(prj.mainClass)
+       checkNotNull(prj.inputDirectory)
+       checkNotNull(prj.mainJar)
+       checkNotNull(prj.mainClass)
 
-        // STEP 1 - make sure lib/ and main jar in imageContentDirectory
-        createImageContent(prj)
+       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
+       createImageContent(prj)
 
-        // Step 2 - Generate Image in imageBuildDirectory
-        progressMessage("Deleting old image content....")
+       // Step 2 - Generate Image in imageBuildDirectory
+       progressMessage("Deleting old image content....")
        deleteDirectories(prj.imageBuildDirectory)
        prj.imageBuildDirectory!!.mkdir()
 
@@ -178,7 +182,9 @@ class InstallCreator(private val configuration: Configuration) {
        packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
        packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
-       //packager.parameters.addArgument(ValueArgument("--icon", File("/Users/loyaltyuser/Downloads/green.icns").path))
+       val logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
+       if (logo != null)
+          packager.parameters.addArgument(ValueArgument("--icon", logo.path))
        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
@@ -196,27 +202,39 @@ class InstallCreator(private val configuration: Configuration) {
        return packager
     }
 
-    /**
-     * Run jdeps tool to get a list of JDK modules used by the target application
-     */
-    private fun generateModuleDependencies(prj: InstallProject): String {
-       if (prj.classPath.isEmpty())
-          return ""
+   private fun createApplicationIcon(rawImage: File?, destination: File): File? {
+      if (rawImage == null)
+         return null
 
-       checkNotNull(prj.jpackageJDK)
-       checkNotNull(prj.javaFXLib)
-       checkNotNull(prj.mainJar)
+      val processor: ImageProcessor = when (OperatingSystem.os()) {
+         OperatingSystem.Type.OSX -> OSXImageProcessor()
+         OperatingSystem.Type.Windows -> WindowsImageProcessor()
+         OperatingSystem.Type.Linux -> LinuxImageProcessor()
+      }
+      return processor.createApplicationLogo(rawImage, destination)
+   }
 
-       val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
-       val jdeps = JDepsExecutable(prj.jpackageJDK!!)
-       val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
+   /**
+    * Run jdeps tool to get a list of JDK modules used by the target application
+    */
+   private fun generateModuleDependencies(prj: InstallProject): String {
+      if (prj.classPath.isEmpty())
+         return ""
 
-       // combine modules discovered plus custom modules specified by user
-       val total = mutableSetOf<String>()
-       total.addAll(prj.customModules)
-       total.addAll(mm.generate())
-       return total.joinToString(",")
-    }
+      checkNotNull(prj.jpackageJDK)
+      checkNotNull(prj.javaFXLib)
+      checkNotNull(prj.mainJar)
+
+      val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
+      val jdeps = JDepsExecutable(prj.jpackageJDK!!)
+      val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
+
+      // combine modules discovered plus custom modules specified by user
+      val total = mutableSetOf<String>()
+      total.addAll(prj.customModules)
+      total.addAll(mm.generate())
+      return total.joinToString(",")
+   }
 
     private fun createImageContent(prj: InstallProject) {
         val destination = prj.inputDirectory!!

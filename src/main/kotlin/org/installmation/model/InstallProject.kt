@@ -17,6 +17,7 @@
 package org.installmation.model
 
 import org.installmation.configuration.Constant
+import org.installmation.image.ImageTool
 import org.installmation.io.PathValidator
 import org.installmation.model.binary.JDK
 import java.io.File
@@ -63,7 +64,7 @@ class InstallProject {
       val result = ValidationResult(true)
       validateStringField("Project Name", name, result)
       validateStringField("Project Version", version, result)
-      validateExistingFileField("Application Logo", applicationLogo, result)
+      validateExistingImageFileField("Application Logo", applicationLogo, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
@@ -108,14 +109,29 @@ class InstallProject {
       }
    }
 
-   private fun validateExistingFileField(fieldName: String, field: File?, result: ValidationResult) {
+   private fun validateExistingImageFileField(fieldName: String, field: File?, result: ValidationResult) {
+      if (!validateExistingFileField(fieldName, field, result))
+         return //file does not exist - nothing more to do
+
+      val validImage = ImageTool.isValidImageFile(field!!)
+
+      if (!validImage) {
+         result.success = false
+         result.errors.add("$fieldName Error - Image File '${field.path}' is not supported. Supported image types: ${ImageTool.validImageTypes()}")
+      }
+   }
+
+   private fun validateExistingFileField(fieldName: String, field: File?, result: ValidationResult): Boolean {
+      var success = true
       if (field == null || !field.exists()) {
+         success = false
          result.success = false
          if (field == null)
             result.errors.add("$fieldName Error - File path empty")
          else
             result.errors.add("$fieldName Error - File path not found '${field.path}'")
       }
+      return success
    }
 
    override fun equals(other: Any?): Boolean {
