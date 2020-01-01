@@ -97,7 +97,7 @@ class InstallProjectUITest : ApplicationTest() {
       val originalProjectName = "otherName"
       val version = "1"
       val copyrightMessage = "copyright"
-      val logoImagePath = "/image/logo.png"
+      val logoImagePath = File("image","logo.png").path //cross platform
 
       createProject(originalProjectName)
 
