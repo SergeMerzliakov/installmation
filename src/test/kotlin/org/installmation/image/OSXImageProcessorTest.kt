@@ -48,6 +48,7 @@ class OSXImageProcessorTest {
       val osx = OSXImageProcessor()
       val icns = osx.createApplicationLogo(IMAGE, OUTPUT_DIR)
       assertThat(icns).exists().isFile()
+      assertThat(icns.extension).isEqualTo(ImageTool.ImageType.Icns.value)
       assertThat(icns.length()).isNotZero()
    }
    
