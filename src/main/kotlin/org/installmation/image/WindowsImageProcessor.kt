@@ -29,7 +29,7 @@ class WindowsImageProcessor : ImageProcessor {
          val bufferedImage = ImageIO.read(imageFile)
          val icoFile = File(destination, imageFile.nameWithoutExtension + ".ico")
          ICOEncoder.write(bufferedImage, icoFile)
-         return destination
+         return icoFile
       } catch (e: IOException) {
          throw ImageProcessingException("Error creating .ico file ${destination.path}", e)
       }
