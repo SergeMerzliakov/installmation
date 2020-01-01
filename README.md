@@ -14,8 +14,15 @@ The tool will provide the following:
 No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
 to complement those approaches.
 
-### Current State of Master Branch ###
+### Release 0.1.31 ###
 
+##### What's New
+
+* Application icons/logos can be added. Image files (png and jpeg) are automatically converted, if required, to ICNS or ICO files, 
+depending on the operating system.
+
+
+### Running from the Command Line
 You can run the latest version (rudimentary so far) with the gradle command (under Java 11 or later)
  
     gradlew runApp
@@ -35,8 +42,8 @@ are use cases which I have not covered.
 
 Update gradle.properties file with JavaFX details. JavaFX is a separate download (https://gluonhq.com/products/javafx/)
 
-1. Download JavaFX SDK
-2. Download JavaFX jmods
+1. Download JavaFX SDK 13.0.1 or later
+2. Download JavaFX jmods 13.0.1 or later
 3. Install them together in the same root dir e.g. /somewhere/JavaFX/13.0
 4. (Windows) Download WiX toolset from https://github.com/wixtoolset/wix3/releases and add to PATH
 5. Update gradle.properties with JFX version and path to root dir. Here is a sample
@@ -58,3 +65,5 @@ So on first startup for these unit tests, the object org.installmation.TestingBo
 to make sure JavaFX and JDK are setup.
  
     <repo>/gradle.properties
+
+

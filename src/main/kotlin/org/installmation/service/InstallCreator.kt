@@ -22,10 +22,7 @@ import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.CollectionUtils
 import org.installmation.core.OperatingSystem
 import org.installmation.core.UserMessageEvent
-import org.installmation.image.ImageProcessor
-import org.installmation.image.LinuxImageProcessor
-import org.installmation.image.OSXImageProcessor
-import org.installmation.image.WindowsImageProcessor
+import org.installmation.image.*
 import org.installmation.io.FileFilters
 import org.installmation.model.*
 import org.installmation.model.binary.JDepsExecutable
@@ -137,104 +134,123 @@ class InstallCreator(private val configuration: Configuration) {
             progressMessage("Installer creation failed with errors:")
             result = GenerateResult(false, processOutput.errors)
             for (line in processOutput.errors) {
-               log.error(line)
-               progressErrorMessage(line)
+                log.error(line)
+                progressErrorMessage(line)
             }
         }
-       return result
+        return result
     }
 
-   /**
-    * Create Installer
-    */
-   private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
-      deleteDirectories(prj.installerDirectory)
-      prj.installerDirectory?.mkdirs()
+    /**
+     * Create Installer
+     */
+    private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
+        deleteDirectories(prj.installerDirectory)
+        prj.installerDirectory?.mkdirs()
 
-      val packager = JPackageExecutable(prj.jpackageJDK!!)
-      packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
-      packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
-      packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
-      packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
-      packager.parameters.addArgument(ValueArgument("-n", prj.name))
-      packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
-      return packager
-   }
+        val packager = JPackageExecutable(prj.jpackageJDK!!)
+        packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
+        packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
+        packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
+        packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+        packager.parameters.addArgument(ValueArgument("-n", prj.name))
+        packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
+        return packager
+    }
 
     /**
      * This is called by installer creation process and returns the command output
      */
     private fun initializeImagePackager(prj: InstallProject): JPackageExecutable {
-       checkNotNull(prj.inputDirectory)
-       checkNotNull(prj.mainJar)
-       checkNotNull(prj.mainClass)
+        checkNotNull(prj.inputDirectory)
+        checkNotNull(prj.mainJar)
+        checkNotNull(prj.mainClass)
 
-       // STEP 1 - make sure lib/ and main jar in imageContentDirectory
-       createImageContent(prj)
+        // STEP 1 - make sure lib/ and main jar in imageContentDirectory
+        createImageContent(prj)
 
-       // Step 2 - Generate Image in imageBuildDirectory
-       progressMessage("Deleting old image content....")
-       deleteDirectories(prj.imageBuildDirectory)
-       prj.imageBuildDirectory!!.mkdir()
+        // Step 2 - Generate Image in imageBuildDirectory
+        progressMessage("Deleting old image content....")
+        deleteDirectories(prj.imageBuildDirectory)
+        prj.imageBuildDirectory!!.mkdir()
 
-       val packager = JPackageExecutable(prj.jpackageJDK!!)
-       packager.parameters.addArgument(packager.createImageParameter())
-       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
-       packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
-       packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
-       val logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
-       if (logo != null)
-          packager.parameters.addArgument(ValueArgument("--icon", logo.path))
-       packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
-       packager.parameters.addArgument(ValueArgument("-n", prj.name))
+        val packager = JPackageExecutable(prj.jpackageJDK!!)
+        packager.parameters.addArgument(packager.createImageParameter())
+        packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
+        packager.parameters.addArgument(ValueArgument("--app-version", prj.version ?: "1.0"))
+        packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+        val logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
+        if (logo != null)
+            packager.parameters.addArgument(ValueArgument("--icon", logo.path))
+        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
+        packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-       if (prj.javaFXMods?.path?.path != null) {
-          packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
-       }
+        if (prj.javaFXMods?.path?.path != null) {
+            packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
+        }
 
-       // check if modular application
-       val modules = generateModuleDependencies(prj)
-       if (modules.isNotEmpty())
-          packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+        // check if modular application
+        val modules = generateModuleDependencies(prj)
+        if (modules.isNotEmpty())
+            packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
-       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
-       packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
-       return packager
+        packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
+        packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
+        return packager
     }
 
-   private fun createApplicationIcon(rawImage: File?, destination: File): File? {
-      if (rawImage == null)
-         return null
+    private fun createApplicationIcon(rawImage: File?, destination: File): File? {
+        if (rawImage == null)
+            return null
 
-      val processor: ImageProcessor = when (OperatingSystem.os()) {
-         OperatingSystem.Type.OSX -> OSXImageProcessor()
-         OperatingSystem.Type.Windows -> WindowsImageProcessor()
-         OperatingSystem.Type.Linux -> LinuxImageProcessor()
-      }
-      return processor.createApplicationLogo(rawImage, destination)
-   }
+        return when (OperatingSystem.os()) {
+            OperatingSystem.Type.OSX -> createOSXApplicationIcon(rawImage, destination)
+            OperatingSystem.Type.Windows -> createWindowsApplicationIcon(rawImage, destination)
+            OperatingSystem.Type.Linux -> createLinuxApplicationIcon(rawImage, destination)
+        }
+    }
 
-   /**
-    * Run jdeps tool to get a list of JDK modules used by the target application
-    */
-   private fun generateModuleDependencies(prj: InstallProject): String {
-      if (prj.classPath.isEmpty())
-         return ""
+    private fun createOSXApplicationIcon(rawImage: File, destination: File): File {
+        if (rawImage.extension == ImageTool.ImageType.Icns.value)
+            return rawImage.copyTo(File(destination, rawImage.name), true)
+        val processor: ImageProcessor = OSXImageProcessor()
+        return processor.createApplicationLogo(rawImage, destination)
+    }
 
-      checkNotNull(prj.jpackageJDK)
-      checkNotNull(prj.javaFXLib)
-      checkNotNull(prj.mainJar)
+    private fun createWindowsApplicationIcon(rawImage: File, destination: File): File {
+        if (rawImage.extension == ImageTool.ImageType.Ico.value)
+            return rawImage.copyTo(File(destination, rawImage.name), true)
+        val processor: ImageProcessor = WindowsImageProcessor()
+        return processor.createApplicationLogo(rawImage, destination)
+    }
 
-      val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
-      val jdeps = JDepsExecutable(prj.jpackageJDK!!)
-      val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
+    private fun createLinuxApplicationIcon(rawImage: File, destination: File): File {
+        // TODO CHECK for image type like other OS
+        val processor: ImageProcessor = LinuxImageProcessor()
+        return processor.createApplicationLogo(rawImage, destination)
+    }
 
-      // combine modules discovered plus custom modules specified by user
-      val total = mutableSetOf<String>()
-      total.addAll(prj.customModules)
-      total.addAll(mm.generate())
-      return total.joinToString(",")
-   }
+    /**
+     * Run jdeps tool to get a list of JDK modules used by the target application
+     */
+    private fun generateModuleDependencies(prj: InstallProject): String {
+        if (prj.classPath.isEmpty())
+            return ""
+
+        checkNotNull(prj.jpackageJDK)
+        checkNotNull(prj.javaFXLib)
+        checkNotNull(prj.mainJar)
+
+        val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
+        val jdeps = JDepsExecutable(prj.jpackageJDK!!)
+        val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
+
+        // combine modules discovered plus custom modules specified by user
+        val total = mutableSetOf<String>()
+        total.addAll(prj.customModules)
+        total.addAll(mm.generate())
+        return total.joinToString(",")
+    }
 
     private fun createImageContent(prj: InstallProject) {
         val destination = prj.inputDirectory!!
