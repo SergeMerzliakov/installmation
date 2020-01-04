@@ -14,7 +14,7 @@ The tool will provide the following:
 No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
 to complement those approaches.
 
-### Release 0.1.31 ###
+### Release 0.1.30 ###
 
 ##### What's New
 
