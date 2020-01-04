@@ -6,6 +6,7 @@ plugins {
 def KOTLIN_VERSION = "1.3.61"
 def MAJOR_VERSION = 0
 def MINOR_VERSION = 1
+def BUILD_NUMBER = 30 // from build.number file
 
 group 'org.epistatic'
 version  = 'undefined'
@@ -56,7 +57,7 @@ compileTestKotlin {
 jar {
     manifest.attributes('Multi-Release': 'false')
     doFirst {
-        version  = "$MAJOR_VERSION.$MINOR_VERSION." + ant.antProject.properties['build.number']
+        version = "$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER"
     }
 }
 
