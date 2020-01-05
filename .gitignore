@@ -2,12 +2,12 @@
 .gradle/
 build/
 out/
+
 # application configuration for local testing
-$configuration/
-*.class
+local.properties
 
 # testing temp files
 testrun/
 
-# Log file
+# Log files
 *.log
