@@ -19,19 +19,25 @@ package org.installmation.ui.dialog
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
+import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
+import org.installmation.core.InstallmationVersion
 
 /**
  * Simple about dialog. Still needs proper setting of build and version
  */
 class AboutDialog(parentStage: Stage) : CustomDialog<String>(parentStage, "About Installmation") {
 
+   @FXML private lateinit var versionLabel: Label
+
    init {
       val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/aboutDialog.fxml"))
       loader.setController(this)
       val root = loader.load<Pane>()
+      versionLabel.text = InstallmationVersion.version()
       stage.scene = Scene(root)
+      stage.isResizable = false
    }
 
    override fun result(): DialogResult<String> {

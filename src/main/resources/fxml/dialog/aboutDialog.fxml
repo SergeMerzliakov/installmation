@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import java.net.URL?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
 <AnchorPane fx:id="aboutDialog" prefWidth="260.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -18,9 +22,9 @@
           <RowConstraints maxHeight="50.0" minHeight="40.0" prefHeight="50.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Installmation Version - 0.1.30" GridPane.columnSpan="3">
+            <Label fx:id="versionLabel" text="Installmation Version" GridPane.columnSpan="3">
                 <GridPane.margin>
-                    <Insets right="5.0"/>
+                    <Insets right="5.0" />
                 </GridPane.margin>
             </Label>
             <Button fx:id="okButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#close" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="1">

@@ -62,7 +62,7 @@ compileTestKotlin {
 jar {
     manifest.attributes('Multi-Release': 'false')
     doFirst {
-        version = "$majorVersion.$minorVersion.$buildNumber"
+        version = "$majorVersion.$minorVersion.${ant.antProject.properties['build.number']}"
     }
 }
 
@@ -87,3 +87,16 @@ task runApp(type: JavaExec) {
         ]
     }
 }
+
+// Before release update version and build
+task prepareVersionNumber() {
+    def antBuildProperties = new Properties()
+    file("build.number").withInputStream { antBuildProperties.load(it) }
+    def buildNumber = antBuildProperties["build.number"]
+    new File("src/main/resources/version.properties").text = "# automatically generated\n" +
+            "majorVersion=$majorVersion\n" +
+            "minorVersion=$minorVersion\n" +
+            "buildNumber=$buildNumber\n"
+}
+
+
