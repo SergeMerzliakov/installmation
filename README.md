@@ -16,7 +16,11 @@ to complement those approaches.
 
 ### Release 0.1.30 ###
 
-##### What's New
+Full installers for Mac and Windows can be found at https://github.com/SergeMerzliakov/installmation/releases
+
+These installers are created by Installmation itself.
+
+#### What's New
 
 * Application icons/logos can be added. Image files (png and jpeg) are automatically converted, if required, to ICNS or ICO files, 
 depending on the operating system.
@@ -40,17 +44,15 @@ are use cases which I have not covered.
 
 ### Setup
 
-Update gradle.properties file with JavaFX details. JavaFX is a separate download (https://gluonhq.com/products/javafx/)
-
-1. Download JavaFX SDK 13.0.1 or later
-2. Download JavaFX jmods 13.0.1 or later
-3. Install them together in the same root dir e.g. /somewhere/JavaFX/13.0
+1. Download JavaFX SDK 13.0.1 or later (https://gluonhq.com/products/javafx/)
+2. Download JavaFX jmods 13.0.1 or later (https://gluonhq.com/products/javafx/)
+3. Install them together in the same root dir e.g. /somewhere/JavaFX/13
 4. (Windows) Download WiX toolset from https://github.com/wixtoolset/wix3/releases and add to PATH
-5. Update gradle.properties with JFX version and path to root dir. Here is a sample
+5. Create local.properties with JFX version and path to root dir. Here is an OSX sample:
 
         JFX_VERSION=13
-        JFX=/Library/Java/javafx/13.0
-
+        JFX=/somewhere/JavaFX/13
+        JDK=/Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk  # this is for unit testing and must be v11+
 
 Just to reiterate, JFX variable path should contain both jars and jmod files:
 
@@ -61,9 +63,9 @@ Just to reiterate, JFX variable path should contain both jars and jmod files:
 The unit tests run lots of Testfx tests, some of which tests dialogs which run JDK tools like jdeps. These tests require various binaries
 like JDK, JavaFX libraries as input parameters, which cannot versioned inside the repo. 
 
-So on first startup for these unit tests, the object org.installmation.TestingBootstrap checks gradle.properties
-to make sure JavaFX and JDK are setup.
+So on first startup for these unit tests, the object org.installmation.TestingBootstrap checks for local configuration 
+in **local.properties**, to make sure JavaFX and JDK are setup.
  
-    <repo>/gradle.properties
+    <repo>/local.properties
 
 

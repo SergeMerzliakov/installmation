@@ -73,7 +73,7 @@ object TestingBootstrap {
    }
 
    private fun getTestConfiguration(): Properties {
-      val configFile = File("gradle.properties")
+      val configFile = File("local.properties")
       val iss = FileReader(configFile)
       val props = Properties()
       props.load(iss)

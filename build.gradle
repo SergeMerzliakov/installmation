@@ -4,18 +4,23 @@ plugins {
 }
 
 def KOTLIN_VERSION = "1.3.61"
-def MAJOR_VERSION = 0
-def MINOR_VERSION = 1
-def BUILD_NUMBER = 30 // from build.number file
 
 group 'org.epistatic'
-version  = 'undefined'
+
+// make sure local.properties exist and load them
+def localProperties = new Properties()
+if (!file(localConfig).exists()) {
+    throw new GradleException("Local configuration file $localConfig not found. Please create this file " +
+            "and add these properties (detailed in README.md) -\n" +
+            "JFX_VERSION, JFX, JDK")
+}
+file(localConfig).withInputStream { localProperties.load(it) }
 
 repositories {
     mavenCentral()
     jcenter()
     flatDir {
-        dirs "${JFX}/lib"
+        dirs "${localProperties.JFX}/lib"
     }
     maven {
         url "https://repository.mulesoft.org/nexus/content/repositories/public/"
@@ -26,7 +31,7 @@ apply plugin: 'application'
 mainClassName = 'org.installmation.InstallmationApplication'
 
 javafx {
-    version = JFX_VERSION
+    version = localProperties.JFX_VERSION
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
 }
 
@@ -57,7 +62,7 @@ compileTestKotlin {
 jar {
     manifest.attributes('Multi-Release': 'false')
     doFirst {
-        version = "$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER"
+        version = "$majorVersion.$minorVersion.$buildNumber"
     }
 }
 
@@ -77,7 +82,7 @@ task runApp(type: JavaExec) {
     main = mainClassName
     doFirst {
         jvmArgs = [
-                '--module-path', "${JFX}/lib",
+                '--module-path', "${localProperties.JFX}/lib",
                 '--add-modules', 'javafx.fxml,javafx.controls,javafx.swing'
         ]
     }
