@@ -34,7 +34,7 @@ You can run the latest version (rudimentary so far) with the gradle command (und
 These will build installers, but testing has been limited, so feedback would be welcome, as I am sure there 
 are use cases which I have not covered.
 
-### Prequisites
+### Prerequisites
 
     1. JDK 11+
     2. OpenJFX 11+
