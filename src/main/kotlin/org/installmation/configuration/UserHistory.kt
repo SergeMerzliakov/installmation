@@ -23,5 +23,5 @@ import java.io.File
  * Stores users last action history for convenience
  */
 class UserHistory {
-   var lastPath: File = File(Constant.USER_HOME_DIR)
+   var lastPath: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)
 }
