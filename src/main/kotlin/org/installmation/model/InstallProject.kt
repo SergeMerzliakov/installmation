@@ -27,15 +27,13 @@ import java.io.File
  * The simplest model is used - to create a project and 
  * then set all it's properties.
  */
-class InstallProject {
+class InstallProject(var name: String? = null) {
    
    companion object{
         fun projectFileName(name: String): String {
          return "$name.json"
       }
    }
-
-   var name: String? = null
    var version: String? = null
    var mainClass: String? = null
    var mainJar: File? = null
@@ -54,21 +52,27 @@ class InstallProject {
    var customModules = mutableSetOf<String>()
    var classPath = mutableSetOf<File>()
 
-   fun projectFile(baseDirectory:File): File {
+   fun projectFile(baseDirectory: File): File {
       checkNotNull(name)
       val baseDir = File(baseDirectory, Constant.PROJECT_DIR)
       return File(baseDir, projectFileName(name!!))
+   }
+
+   fun hasValidName(): Boolean {
+      return name != null && !name.isNullOrEmpty()
    }
 
    fun validateConfiguration(): ValidationResult {
       val result = ValidationResult(true)
       validateStringField("Project Name", name, result)
       validateStringField("Project Version", version, result)
-      validateExistingImageFileField("Application Logo", applicationLogo, result)
+      validateOptionalImageFileField("Application Logo", applicationLogo, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
       validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
       validateFutureFileField("Installer Directory", installerDirectory, result)
+      validateExistingFileField("Main Jar File", mainJar, result)
+      validateStringField("Main Class", mainClass, result)
       for (cp in classPath)
          validateExistingFileField("Class Path Item ", cp, result)
 
@@ -109,16 +113,19 @@ class InstallProject {
       }
    }
 
-   private fun validateExistingImageFileField(fieldName: String, field: File?, result: ValidationResult) {
+   private fun validateOptionalImageFileField(fieldName: String, field: File?, result: ValidationResult) {
+      if (field == null)
+         return
       if (!validateExistingFileField(fieldName, field, result))
-         return //file does not exist - nothing more to do
-
-      val validImage = ImageTool.isValidImageFile(field!!)
+         return
+      // file exists
+      val validImage = ImageTool.isValidImageFile(field)
 
       if (!validImage) {
          result.success = false
          result.errors.add("$fieldName Error - Image File '${field.path}' is not supported. Supported image types: ${ImageTool.validImageTypes()}")
       }
+      // file is a valid image
    }
 
    private fun validateExistingFileField(fieldName: String, field: File?, result: ValidationResult): Boolean {

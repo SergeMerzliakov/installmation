@@ -40,11 +40,23 @@ class InstallProjectModelTest {
    }
 
    @Test
-   fun shouldSerializeMinimalProject() {
-      val name = "project"
+   fun hasValidName() {
+      assertThat(InstallProject("project").hasValidName()).isTrue()
+   }
 
-      val p1 = InstallProject()
-      p1.name = name
+   @Test
+   fun hasInvalidEmptyName() {
+      assertThat(InstallProject("").hasValidName()).isFalse()
+   }
+
+   @Test
+   fun hasInvalidNullName() {
+      assertThat(InstallProject().hasValidName()).isFalse()
+   }
+
+   @Test
+   fun shouldSerializeMinimalProject() {
+      val p1 = InstallProject("project")
 
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p1)
@@ -58,10 +70,8 @@ class InstallProjectModelTest {
 
    @Test
    fun shouldSerializeProject() {
-      val name = "project"
       val version = "1.0"
-      val p1 = InstallProject()
-      p1.name = name
+      val p1 = InstallProject("project")
       p1.version = version
       p1.customModules = mutableSetOf("java.sql", "java.management")
       p1.imageBuildDirectory = File("image")
