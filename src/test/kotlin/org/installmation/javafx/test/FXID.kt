@@ -36,6 +36,8 @@ object FXID {
    // PROJECT MENU
    const val MENUITEM_SAVE_PROJECT = "#saveProjectMenuItem"
    const val MENUITEM_NEW_PROJECT = "#newProjectMenuItem"
+   const val MENUITEM_OPEN_PROJECT = "#openProjectMenuItem"
+   const val MENUITEM_CLOSE_PROJECT = "#closeProjectMenuItem"
 
    // ABOUT MENU
    const val MENUITEM_ABOUT = "#aboutMenuItem"
