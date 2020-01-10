@@ -122,9 +122,10 @@ class InstallmationController(private val configuration: Configuration,
 
     @FXML
     fun shutdown() {
-        applicationStage().close()
-        configuration.save()
-        workspace.save()
+       applicationStage().close()
+       configuration.save()
+       if (workspace.currentProject != null)
+          workspace.save()
     }
 
     @FXML

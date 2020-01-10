@@ -89,7 +89,8 @@ class InstallmationApplication : Application() {
 
    private fun setupEventHandlers(stage: Stage, workspace: Workspace, configuration: Configuration) {
       stage.setOnCloseRequest {
-         workspace.save()
+         if (workspace.currentProject != null)
+            workspace.save()
          configuration.save()
          log.info("Installmation Application has shutdown")
       }
