@@ -115,7 +115,7 @@ class LocationController(private val configuration: Configuration,
 
    @FXML
    fun updateProject() {
-      workspace.saveProject()
+      workspace.save()
    }
 
    //-------------------------------------------------------

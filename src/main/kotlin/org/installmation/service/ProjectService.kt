@@ -28,7 +28,6 @@ import org.installmation.model.InstallProject
 import org.installmation.model.LoadDataException
 import org.installmation.model.SaveDataException
 import org.installmation.ui.dialog.ErrorDialog
-import org.installmation.ui.dialog.ItemListDialog
 import java.io.File
 
 /**
@@ -99,16 +98,16 @@ class ProjectService(val configuration: Configuration) {
      * Write to file
      */
     fun save(p: InstallProject) {
-        check(p.name != null && p.name!!.isNotEmpty())
-
-        try {
-            val projectFile = File(projectBaseDirectory(), InstallProject.projectFileName(p.name!!))
-            val writer = ApplicationJsonWriter<InstallProject>(projectFile, JsonParserFactory.configurationParser())
-            writer.save(p)
-            log.debug("Saved project ${p.name} to file")
-        } catch (e: Exception) {
-            throw SaveDataException("Error writing project ${p.name} to file", e)
-        }
+       try {
+          collectUpdates(p)
+          val projectFile = File(projectBaseDirectory(), InstallProject.projectFileName(p.name!!))
+          val writer = ApplicationJsonWriter<InstallProject>(projectFile, JsonParserFactory.configurationParser())
+          writer.save(p)
+          log.debug("Saved project ${p.name} to file")
+       } catch (e: Exception) {
+          log.error("Error writing project ${p.name} to file", e)
+          throw SaveDataException("Error writing project ${p.name} to file", e)
+       }
     }
 
     /**

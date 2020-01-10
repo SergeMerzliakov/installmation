@@ -34,6 +34,7 @@ import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.io.ApplicationJsonReader
+import org.installmation.javafx.setPrimaryStage
 import org.installmation.service.*
 
 
@@ -42,7 +43,7 @@ class InstallmationApplication : Application() {
    companion object {
       val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
       const val WINDOW_TITLE = "Installmation"
-      
+
       @JvmStatic
       fun main(args: Array<String>) {
          launch(InstallmationApplication::class.java, *args)
@@ -53,6 +54,7 @@ class InstallmationApplication : Application() {
    private val eventBus = EventBus("installmationApp")
    
    override fun start(primaryStage: Stage) {
+      primaryStage.setPrimaryStage()
       val configuration = loadConfiguration(eventBus)
       startApplication(primaryStage, configuration, eventBus)
    }

@@ -109,7 +109,7 @@ class BinariesController(private val configuration: Configuration,
 
    @FXML
    fun updateProject() {
-      workspace.saveProject()
+      workspace.save()
    }
 
    @FXML

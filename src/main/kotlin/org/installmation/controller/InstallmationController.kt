@@ -157,8 +157,7 @@ class InstallmationController(private val configuration: Configuration,
 
     @FXML
     fun saveProject() {
-        workspace.saveProject()
-        workspace.writeToFile()
+       workspace.save()
     }
 
     @FXML
@@ -220,11 +219,11 @@ class InstallmationController(private val configuration: Configuration,
             if (scripts.result.successful) {
                 val result = ChooseDirectoryDialog.showAndWait(applicationStage(), "Script Destination", userHistory)
                 if (result.ok) {
-                    val imagePath = File(result.data, scripts.imageScript?.fileName)
+                    val imagePath = File(result.data, scripts.imageScript?.fileName!!)
                     imagePath.parentFile.mkdirs()
                     imagePath.writeText(scripts.imageScript.toString())
 
-                    val installerPath = File(result.data, scripts.installerScript?.fileName)
+                    val installerPath = File(result.data, scripts.installerScript?.fileName!!)
                     installerPath.parentFile.mkdirs()
                     installerPath.writeText(scripts.installerScript.toString())
                     HelpDialog.showAndWait("Scripts Created", "All scripts created at ${result.data?.path}")
@@ -266,7 +265,6 @@ class InstallmationController(private val configuration: Configuration,
             }
         }
     }
-
 
     @FXML
     fun showAllJavaFXJmods() {
@@ -311,7 +309,6 @@ class InstallmationController(private val configuration: Configuration,
         val items = configuration.javafxLibEntries.values.map { NamedDirectory(it.name, it) }
         return BinaryArtefactDialog(applicationStage(), "JavaFX Library Directories", items, userHistory)
     }
-
 
     private fun applicationStage(): Stage {
         return applicationMenuBar.scene.window as Stage

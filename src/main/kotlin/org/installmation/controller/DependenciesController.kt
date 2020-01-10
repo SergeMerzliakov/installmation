@@ -71,7 +71,7 @@ class DependenciesController(private val configuration: Configuration,
       val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory)
       if (result.ok) {
          classpathItems.add(result.data!!.path)
-         workspace.saveProject()
+         workspace.save()
          log.debug("Added ${result.data.path} to classpath")
       }
    }
@@ -84,7 +84,7 @@ class DependenciesController(private val configuration: Configuration,
 
    @FXML
    fun updateProject() {
-      workspace.saveProject()
+      workspace.save()
    }
 
    @FXML

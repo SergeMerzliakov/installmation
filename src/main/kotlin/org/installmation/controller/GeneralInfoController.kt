@@ -20,6 +20,7 @@ import com.google.common.eventbus.Subscribe
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.scene.control.ComboBox
+import javafx.scene.control.Control
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
@@ -29,13 +30,14 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
 import org.installmation.image.ImageTool
+import org.installmation.javafx.EventUtils
 import org.installmation.javafx.FileFieldUtils
+import org.installmation.model.InstallProject
 import org.installmation.service.*
 import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.ErrorDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import java.io.File
-
 
 class GeneralInfoController(configuration: Configuration,
                             private val userHistory: UserHistory,
@@ -60,11 +62,17 @@ class GeneralInfoController(configuration: Configuration,
    @FXML
    fun initialize() {
       installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
+
+      // project name is special - we need to update model as soon as user is finished with it
+      // so that project saves get the latest value
+      EventUtils.focusLostHandler(projectNameField) { 
+         workspace.currentProject?.name = projectNameField.text
+      }
    }
 
    @FXML
    fun updateProject() {
-      workspace.saveProject()
+      workspace.save()
       updateLogoPreview(logoPathField.text)
    }
 
@@ -93,6 +101,15 @@ class GeneralInfoController(configuration: Configuration,
       }
    }
 
+   private fun updateUIFromProject(proj: InstallProject) {
+      projectNameField.text = proj.name
+      applicationVersionField.text = proj.version
+      copyrightField.text = proj.copyright
+      installerTypeCombo.selectionModel.select(proj.installerType)
+      logoPathField.text = proj.applicationLogo?.path
+      updateLogoPreview(proj.applicationLogo?.path)
+   }
+
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
@@ -105,7 +122,6 @@ class GeneralInfoController(configuration: Configuration,
 
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
-      checkNotNull(e.project)
       e.project.name = projectNameField.text
       e.project.version = applicationVersionField.text ?: "1.0"
       e.project.copyright = copyrightField.text
@@ -114,16 +130,15 @@ class GeneralInfoController(configuration: Configuration,
    }
 
    @Subscribe
-   fun handleProjectLoaded(e: ProjectLoadedEvent) {
-      checkNotNull(e.project)
-      projectNameField.text = e.project.name
-      applicationVersionField.text = e.project.version
-      copyrightField.text = e.project.copyright
-      installerTypeCombo.selectionModel.select(e.project.installerType)
-      logoPathField.text = e.project.applicationLogo?.path
-      updateLogoPreview(e.project.applicationLogo?.path)
+   fun handleProjectUpdated(e: ProjectUpdatedEvent) {
+      updateUIFromProject(e.project)
    }
-   
+
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
+      updateUIFromProject(e.project)
+   }
+
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
       projectNameField.text = null
@@ -133,6 +148,7 @@ class GeneralInfoController(configuration: Configuration,
       logoView.image = null
       //do not clear installer type for now
    }
+
 }
 
 

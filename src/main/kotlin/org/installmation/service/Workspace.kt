@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
+import org.installmation.controller.Validator
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
 import java.io.File
@@ -68,28 +69,12 @@ class Workspace(@Transient var configuration: Configuration,
    }
 
    fun save() {
-      val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
-      workspaceWriter.save(this)
-   }
+      if (currentProject == null)
+         setCurrentProject(InstallProject())
 
-   /*
-    * Save to project model in memory only
-    */
-   fun saveProject() {
-      if (currentProject != null) {
-         projectService?.collectUpdates(currentProject!!)
-      } else {
-         // TODO - prompt to create project possibly
-      }
-   }
-
-   /**
-    * Save current project to file
-    */
-   fun writeToFile() {
-      if (currentProject != null) {
+      if (Validator.ensureProjectName(currentProject!!, configuration)) {
          projectService?.save(currentProject!!)
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.configurationParser())
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
          workspaceWriter.save(this)
       }
    }

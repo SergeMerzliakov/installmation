@@ -24,11 +24,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.javafx.FileFieldUtils
 import org.installmation.service.*
 import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
-import java.io.File
-import java.util.*
 
 
 class ExecutableController(configuration: Configuration,
@@ -60,7 +59,7 @@ class ExecutableController(configuration: Configuration,
 
    @FXML
    fun updateProject() {
-      workspace.saveProject()
+      workspace.save()
    }
 
    //-------------------------------------------------------
@@ -75,10 +74,8 @@ class ExecutableController(configuration: Configuration,
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
 
-      if (!mainJarField.text.isNullOrEmpty())
-         e.project.mainJar = File(mainJarField.text)
-      if (!mainClassField.text.isNullOrEmpty())
-         e.project.mainClass = mainClassField.text
+      e.project.mainJar = FileFieldUtils.getPath(mainJarField)
+      e.project.mainClass = mainClassField.text
    }
 
    @Subscribe
