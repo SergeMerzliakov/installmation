@@ -32,6 +32,9 @@ object FXID {
    const val TOOLBAR_BUTTON_JPACKAGE = "#jpackageButton"
    const val TOOLBAR_BUTTON_JAVAFX_JMOD = "#javafxJmodButton"
    const val TOOLBAR_BUTTON_JAVAFX_JAR = "#javafxJarButton"
+   const val TOOLBAR_BUTTON_GENERATE_SCRIPTS = "#generateScriptsButton"
+   const val TOOLBAR_BUTTON_GENERATE_IMAGE = "#generateImageButton"
+   const val TOOLBAR_BUTTON_GENERATE_INSTALLER = "#generateInstallerButton"
 
    // PROJECT MENU
    const val MENUITEM_SAVE_PROJECT = "#saveProjectMenuItem"
