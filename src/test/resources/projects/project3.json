@@ -11,6 +11,9 @@
     "jdk-path": "/Users/foo/tools/jpackage49",
     "operating-system": "OSX"
   },
+  "applicationLogo": {
+    "path": "/Users/foo/image/logo.png"
+  },
   "javaFXLib": {
     "name": "jfx13",
     "path": {
