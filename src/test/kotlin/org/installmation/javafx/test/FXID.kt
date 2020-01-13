@@ -106,6 +106,7 @@ object FXID {
    const val BUTTON_ABOUT_DLG_OK = "#okButton"
 
    // ITEM LIST DIALOG
+   const val DIALOG_ITEMLIST = "#itemListDialog"
    const val BUTTON_ITEMLIST_DLG_OK = "#okButton"
    const val LISTVIEW_ITEMLIST_DLG = "#itemListView"
    const val LABEL_ITEMLIST_DLG = "#listLabel"
