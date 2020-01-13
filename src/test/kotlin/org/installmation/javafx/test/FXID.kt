@@ -68,12 +68,12 @@ object FXID {
    const val BUTTON_CHOOSE_LOGO = "#chooseLogoButton"
    const val TEXT_LOGO_PATH = "#logoPathField"
 
-   // INSTALL LOCATION TAB
+   // INSTALL TAB
    const val TEXT_INPUT_DIR = "#inputDirectoryText"
    const val TEXT_IMAGE_BUILD_DIR = "#imageBuildDirectoryText"
    const val TEXT_INSTALLER_DIR = "#installerDirectoryText"
    const val BUTTON_INPUT_DIR = "#inputDirectoryButton"
-   const val BUTTON_IMAGE_BUILD = "#imageBuildDirectoryButton"
+   const val BUTTON_IMAGE_BUILD_DIR = "#imageBuildDirectoryButton"
    const val BUTTON_INSTALLER_DIR = "#installerDirectoryButton"
 
    // JAVA BINARIES TAB
