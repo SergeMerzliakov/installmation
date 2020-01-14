@@ -54,7 +54,6 @@ class LoadProjectTest : ApplicationTest() {
       // load project from JSON to check data in UI
       val gson = JsonParserFactory.configurationParser()
       val project: InstallProject = gson.fromJson(FileReader("src/test/resources/projects/project3.json"), InstallProject::class.java)
-
       MockHelper.mockChooseFileDialog("src/test/resources/projects/project3.json")
       clickOn(FXID.MENU_PROJECT).clickOn(FXID.MENUITEM_OPEN_PROJECT)
 
@@ -79,8 +78,12 @@ class LoadProjectTest : ApplicationTest() {
 
    @Test
    fun shouldDetectMissingProjectName() {
-      clickOn(FXID.TAB_INFO)
+      // load project from JSON
+      MockHelper.mockChooseFileDialog("src/test/resources/projects/project3.json")
+      clickOn(FXID.MENU_PROJECT).clickOn(FXID.MENUITEM_OPEN_PROJECT)
 
+      clickOn(FXID.TAB_INFO)
+      
       // clear project name
       val field = lookup(FXID.TEXT_PROJECT_NAME).queryTextInputControl()
       field.text = ""
@@ -90,7 +93,7 @@ class LoadProjectTest : ApplicationTest() {
       clickOn(generateButton)
 
       // should show error window
-      FxAssert.verifyThat(FXID.DIALOG_ITEM_LIST, NodeMatchers.isVisible())
+      FxAssert.verifyThat(FXID.DIALOG_ITEMLIST, NodeMatchers.isVisible())
       val ok = lookup(FXID.BUTTON_ITEMLIST_DLG_OK).queryButton()
       clickOn(ok)
    }
