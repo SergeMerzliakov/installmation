@@ -63,7 +63,7 @@ class ApplicationDialogTest : ApplicationTest() {
       FxAssert.verifyThat(FXID.DIALOG_BINARTEFACT_ID, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_BINARTEFACT_CANCEL)
    }
-
+   
    @Test
    fun shouldOpenJavaFXJarDialogFromMenu() {
       clickOn(FXID.MENU_LIBRARY).clickOn(FXID.MENUITEM_JFX_JAR)

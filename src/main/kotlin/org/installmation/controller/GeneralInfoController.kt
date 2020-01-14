@@ -20,7 +20,6 @@ import com.google.common.eventbus.Subscribe
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.scene.control.ComboBox
-import javafx.scene.control.Control
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.stage.Stage
@@ -47,6 +46,10 @@ class GeneralInfoController(configuration: Configuration,
       val log: Logger = LogManager.getLogger(GeneralInfoController::class.java)
    }
 
+   // workaround/hack because we cannot easily disable change listeners when
+   // updating UI from model
+   private var updatingFromModel = false
+   
    @FXML private lateinit var projectNameField: TextField
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
@@ -63,6 +66,7 @@ class GeneralInfoController(configuration: Configuration,
    fun initialize() {
       installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
 
+      EventUtils.selectionChangedHandler(installerTypeCombo) { updateProject() }
       // project name is special - we need to update model as soon as user is finished with it
       // so that project saves get the latest value
       EventUtils.focusLostHandler(projectNameField) { 
@@ -72,8 +76,10 @@ class GeneralInfoController(configuration: Configuration,
 
    @FXML
    fun updateProject() {
-      workspace.save()
-      updateLogoPreview(logoPathField.text)
+      if (!updatingFromModel) {
+         workspace.save()
+         updateLogoPreview(logoPathField.text)
+      }
    }
 
    @FXML
@@ -101,13 +107,21 @@ class GeneralInfoController(configuration: Configuration,
       }
    }
 
+   /**
+    * setting updatingFromModel to true prevents UI changes from
+    * update model, which will call this method - endless loop.
+    * Ideally, we disable change listeners on controls when we run
+    * this method, but that is messier.
+    */
    private fun updateUIFromProject(proj: InstallProject) {
+      updatingFromModel = true
       projectNameField.text = proj.name
       applicationVersionField.text = proj.version
       copyrightField.text = proj.copyright
-      installerTypeCombo.selectionModel.select(proj.installerType)
       logoPathField.text = proj.applicationLogo?.path
       updateLogoPreview(proj.applicationLogo?.path)
+      installerTypeCombo.selectionModel.select(proj.installerType)
+      updatingFromModel = false
    }
 
    //-------------------------------------------------------

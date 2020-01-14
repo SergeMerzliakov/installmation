@@ -29,6 +29,7 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
 import org.installmation.javafx.ComboUtils
+import org.installmation.javafx.EventUtils
 import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.ModuleJmodUpdatedEvent
 import org.installmation.model.ModuleLibUpdatedEvent
@@ -86,6 +87,11 @@ class BinariesController(private val configuration: Configuration,
    @FXML
    fun initialize() {
       initializeConfiguredBinaries()
+
+      EventUtils.selectionChangedHandler(moduleJmodComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(moduleLibComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(installJDKComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(jpackageComboBox) { updateProject() }
    }
 
    /**
@@ -107,6 +113,11 @@ class BinariesController(private val configuration: Configuration,
       moduleJmodComboBox.converter = StringConverterFactory.namedItemConverter(moduleJmodComboBox.items)
    }
 
+   /**
+    * Only fire this on true selection updates, rather than on action occurring the combo
+    * boxes, otherwise his gets fires on project load unnecessarily (loads fire on action
+    * events)
+    */
    @FXML
    fun updateProject() {
       workspace.save()

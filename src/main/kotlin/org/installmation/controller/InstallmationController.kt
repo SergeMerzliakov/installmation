@@ -144,9 +144,8 @@ class InstallmationController(private val configuration: Configuration,
     @FXML
     fun openProject() {
         val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
-
         if (result.ok) {
-            val p = projectService.load(result.data!!.nameWithoutExtension)
+            val p = projectService.load(result.data!!)
             workspace.setCurrentProject(p)
         }
     }

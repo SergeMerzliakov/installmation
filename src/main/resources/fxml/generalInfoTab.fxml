@@ -48,7 +48,7 @@
             </GridPane.margin>
         </TextField>
       <Label text="Installer Type" GridPane.rowIndex="4" />
-        <ComboBox fx:id="installerTypeCombo" onAction="#updateProject" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <ComboBox fx:id="installerTypeCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>

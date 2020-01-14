@@ -64,7 +64,7 @@ class ProjectServiceTest {
       service.save(p)
 
       // load and check 
-      val loaded = service.load(p.name!!)
+      val loaded = service.loadFromDefaultDirectory(p.name!!)
       assertThat(loaded).isEqualToComparingFieldByField(p)
    }
 

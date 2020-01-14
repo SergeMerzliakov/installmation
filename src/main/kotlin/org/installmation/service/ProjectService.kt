@@ -41,32 +41,40 @@ class ProjectService(val configuration: Configuration) {
 
     }
 
-    fun newProject(name: String): InstallProject {
-        val p = InstallProject()
-        p.name = name
-        return p
-    }
+   fun newProject(name: String): InstallProject {
+      val p = InstallProject()
+      p.name = name
+      return p
+   }
 
-    /**
-     * Load from file
-     */
-    fun load(projectName: String): InstallProject {
-        val projectFileName = InstallProject.projectFileName(projectName)
-        val baseDir = projectBaseDirectory()
-        val matches = baseDir.listFiles { pathName -> pathName.name == projectFileName }
-        if (matches == null || matches.isEmpty())
-            throw LoadDataException("Error loading project '${projectName}' from file. Project not found at ${baseDir.canonicalPath}")
+   /**
+    * Load from file
+    */
+   fun load(projectFile: File): InstallProject {
+      try {
+         val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, projectFile, JsonParserFactory.configurationParser())
+         val project = reader.load()
+         log.info("Project ${project.name} loaded successfully")
+         configuration.eventBus.post(ProjectLoadedEvent(project))
+         return project
+      } catch (e: Exception) {
+         throw LoadDataException("Error loading project '${projectFile.nameWithoutExtension}' from file. Deserialization error.", e)
+      }
+   }
+
+   /**
+    * Load from USER.HOME/.installmation/projects
+    * Not sure how useful this really is
+    */
+   fun loadFromDefaultDirectory(projectName: String): InstallProject {
+      val projectFileName = InstallProject.projectFileName(projectName)
+      val baseDir = projectBaseDirectory()
+      val matches = baseDir.listFiles { pathName -> pathName.name == projectFileName }
+      if (matches == null || matches.isEmpty())
+         throw LoadDataException("Error loading project '${projectName}' from file. Project not found at ${baseDir.canonicalPath}")
 
         val file = matches[0]
-        try {
-            val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, file, JsonParserFactory.configurationParser())
-            val project = reader.load()
-            log.info("Project ${project.name} loaded successfully")
-            configuration.eventBus.post(ProjectLoadedEvent(project))
-            return project
-        } catch (e: Exception) {
-            throw LoadDataException("Error loading project '${projectName}' from file. Deserialization error.", e)
-        }
+      return load(file)
     }
 
     fun close(p: InstallProject?) {
