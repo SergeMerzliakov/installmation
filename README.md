@@ -1,3 +1,5 @@
+![](src/main/resources/image/logo_small.png)
+
 #### Overview
 
 Installmation is a GUI tool, similar to exe4j, which generates installers for Mac and Windows using Java 11+ JDK jpackage tool.
