@@ -15,7 +15,7 @@ The tool will provide the following:
 No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
 to complement those approaches.
 
-### Release 0.1.30 ###
+### Release 0.1.47 ###
 
 Full installers for Mac and Windows can be found at https://github.com/SergeMerzliakov/installmation/releases
 
