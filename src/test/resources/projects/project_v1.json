@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "mainClass": "org.epistatic.app1.Main",
+  "mainJar": {
+    "path": "/Users/someone/javafx-app-1/build/libs/javafx-app-1-2.2.1.jar"
+  },
+  "installerType": "pkg",
+  "copyright": "do not steal this application",
+  "jpackageJDK": {
+    "jdk-name": "packager49",
+    "jdk-path": "/Users/someone/tools/jpackage49",
+    "operating-system": "OSX"
+  },
+  "javaFXLib": {
+    "name": "jfx13",
+    "path": {
+      "path": "/Library/Java/javafx/13.0/lib"
+    }
+  },
+  "javaFXMods": {
+    "name": "jfx13-mods",
+    "path": {
+      "path": "/Library/Java/javafx/13.0/jmods"
+    }
+  },
+  "installJDK": {
+    "jdk-name": "java12",
+    "jdk-path": "/Library/Java/JavaVirtualMachines/jdk-12.jdk",
+    "operating-system": "OSX"
+  },
+  "inputDirectory": {
+    "path": "/Users/someone/junk/installInput"
+  },
+  "imageBuildDirectory": {
+    "path": "/Users/someone/junk/installBuild"
+  },
+  "installerDirectory": {
+    "path": "/Users/someone/junk/installInstaller"
+  },
+  "customModules": [],
+  "classPath": [],
+  "name": "someProject"
+}

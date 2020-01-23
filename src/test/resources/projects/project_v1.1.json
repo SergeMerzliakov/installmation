@@ -1,0 +1,24 @@
+{
+  "version": "1.1",
+  "vendor": "acme",
+  "jpackageJDK": {
+    "jdk-name": "package49",
+    "jdk-path": "/java11/bin/jpackage",
+    "operating-system": "OSX"
+  },
+  "applicationLogo": {
+    "path": "logo.png"
+  },
+  "imageBuildDirectory": {
+    "path": "image"
+  },
+  "installerDirectory": {
+    "path": "installer"
+  },
+  "customModules": [
+    "java.sql",
+    "java.management"
+  ],
+  "classPath": [],
+  "name": "project"
+}

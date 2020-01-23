@@ -31,6 +31,7 @@ class InstallProjectModelTest {
 
    companion object {
       val SAVED_FILE = File(TestConstants.TEST_TEMP_DIR, "project.json")
+      val PROJECTS_DIR = File(TestConstants.TEST_RESOURCES, "projects")
 
       @AfterClass
       @JvmStatic
@@ -70,9 +71,7 @@ class InstallProjectModelTest {
 
    @Test
    fun shouldSerializeProject() {
-      val version = "1.0"
       val p1 = InstallProject("project")
-      p1.version = version
       p1.vendor = "acme"
       p1.customModules = mutableSetOf("java.sql", "java.management")
       p1.imageBuildDirectory = File("image")
@@ -87,5 +86,19 @@ class InstallProjectModelTest {
       val p2 = reader.load()
 
       assertThat(p2).isEqualToComparingFieldByField(p1)
+   }
+
+   @Test
+   fun shouldLoadVersion1Projects() {
+      val projectFile = File(PROJECTS_DIR, "project_v1.json")
+      val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, projectFile, JsonParserFactory.configurationParser())
+      reader.load()
+   }
+
+   @Test
+   fun shouldLoadVersion1_1Projects() {
+      val projectFile = File(PROJECTS_DIR, "project_v1.1.json")
+      val reader = ApplicationJsonReader<InstallProject>(InstallProject::class, projectFile, JsonParserFactory.configurationParser())
+      reader.load()
    }
 }
