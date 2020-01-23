@@ -73,6 +73,7 @@ class InstallProjectModelTest {
       val version = "1.0"
       val p1 = InstallProject("project")
       p1.version = version
+      p1.vendor = "acme"
       p1.customModules = mutableSetOf("java.sql", "java.management")
       p1.imageBuildDirectory = File("image")
       p1.installerDirectory = File("installer")

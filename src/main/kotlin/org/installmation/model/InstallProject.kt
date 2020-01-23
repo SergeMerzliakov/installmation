@@ -34,8 +34,9 @@ class InstallProject(var name: String? = null) {
          return "$name.json"
       }
    }
-   var version: String? = null
+   var version: String = "1.1"
    var mainClass: String? = null
+   var vendor: String? = null
    var mainJar: File? = null
    var installerType: String? = null
    var copyright: String? = null
@@ -156,7 +157,7 @@ class InstallProject(var name: String? = null) {
 
    override fun hashCode(): Int {
       var result = name?.hashCode() ?: 0
-      result = 31 * result + (version?.hashCode() ?: 0)
+      result = 31 * result + (version.hashCode())
       result = 31 * result + (jpackageJDK?.hashCode() ?: 0)
       result = 31 * result + customModules.hashCode()
       result = 31 * result + (imageBuildDirectory?.hashCode() ?: 0)

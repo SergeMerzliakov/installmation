@@ -23,6 +23,7 @@
         <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="22.0" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
@@ -36,32 +37,38 @@
                 <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="applicationVersionField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="applicationVersionField" onAction="#updateProject" promptText="1.0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
         <Label text="Copyright Message" GridPane.rowIndex="2" />
-        <TextField fx:id="copyrightField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
+        <TextField fx:id="copyrightField" onAction="#updateProject" promptText="Copyright 2020" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </TextField>
-      <Label text="Installer Type" GridPane.rowIndex="4" />
-        <ComboBox fx:id="installerTypeCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Label text="Installer Type" GridPane.rowIndex="5" />
+        <ComboBox fx:id="installerTypeCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </ComboBox>
-      <Label text="Application Logo" GridPane.rowIndex="5" />
-      <TextField fx:id="logoPathField" onAction="#updateProject" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-      <Button fx:id="chooseLogoButton" mnemonicParsing="false" onAction="#chooseLogo" text="..." GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <Label text="Logo Preview" GridPane.rowIndex="6" />
-      <ImageView fx:id="logoView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <Label text="Application Logo" GridPane.rowIndex="6" />
+      <TextField fx:id="logoPathField" onAction="#updateProject" promptText="Full path to an image file" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+      <Button fx:id="chooseLogoButton" mnemonicParsing="false" onAction="#chooseLogo" text="..." GridPane.columnIndex="3" GridPane.rowIndex="6" />
+      <Label text="Logo Preview" GridPane.rowIndex="7" />
+      <ImageView fx:id="logoView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </ImageView>
+      <Label text="Application Vendor" GridPane.rowIndex="3" />
+      <TextField fx:id="vendorField" onAction="#updateProject" promptText="Your company name here" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets right="5.0" />
+         </GridPane.margin>
+      </TextField>
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />

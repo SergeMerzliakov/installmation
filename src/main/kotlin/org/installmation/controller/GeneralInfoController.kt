@@ -53,6 +53,7 @@ class GeneralInfoController(configuration: Configuration,
    @FXML private lateinit var projectNameField: TextField
    @FXML private lateinit var applicationVersionField: TextField
    @FXML private lateinit var copyrightField: TextField
+   @FXML private lateinit var vendorField: TextField
    @FXML private lateinit var installerTypeCombo: ComboBox<String>
    //path to simple image file like png or jpeg, or os specific like ico or icns file
    @FXML private lateinit var logoPathField: TextField
@@ -118,6 +119,7 @@ class GeneralInfoController(configuration: Configuration,
       projectNameField.text = proj.name
       applicationVersionField.text = proj.version
       copyrightField.text = proj.copyright
+      vendorField.text = proj.vendor
       logoPathField.text = proj.applicationLogo?.path
       updateLogoPreview(proj.applicationLogo?.path)
       installerTypeCombo.selectionModel.select(proj.installerType)
@@ -141,6 +143,7 @@ class GeneralInfoController(configuration: Configuration,
       e.project.copyright = copyrightField.text
       e.project.installerType = installerTypeCombo.selectionModel.selectedItem
       e.project.applicationLogo = FileFieldUtils.getPath(logoPathField)
+      e.project.vendor = vendorField.text
    }
 
    @Subscribe
@@ -160,6 +163,7 @@ class GeneralInfoController(configuration: Configuration,
       applicationVersionField.text = null
       logoPathField.text = null
       logoView.image = null
+      vendorField.text = null
       //do not clear installer type for now
    }
 
