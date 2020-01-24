@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane hgap="5.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="135.0" minWidth="135.0" prefWidth="135.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="42.0" minWidth="42.0" prefWidth="42.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="44.0" minWidth="44.0" prefWidth="44.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="44.0" minHeight="44.0" prefHeight="44.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <Label text="Package Identifier" />
+        <Label text="Package Name" GridPane.rowIndex="1" />
+        <TextField fx:id="packageIdentifierField" onAction="#updateProject" promptText="Uniquely identifies the application in OSX" GridPane.columnIndex="1" GridPane.columnSpan="2">
+            <GridPane.margin>
+                <Insets right="5.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="packageNameField" onAction="#updateProject" promptText="Name of application in Menu Bar" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets right="5.0" />
+            </GridPane.margin>
+        </TextField>
+        <Label text="Signing Prefix" GridPane.rowIndex="4" />
+        <TextField fx:id="signPrefixField" onAction="#updateProject" promptText="This value is prefixed to all signed components" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+            <GridPane.margin>
+                <Insets right="5.0" />
+            </GridPane.margin>
+        </TextField>
+      <Label text="Signing Keychain" GridPane.rowIndex="5" />
+      <Label text="Sign Key User Name" GridPane.rowIndex="6" />
+      <TextField fx:id="signKeyUserField" onAction="#updateProject" promptText="Team name portion in Apple signing identities' names" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+      <Button fx:id="chooseKeyChainButton" mnemonicParsing="false" onAction="#chooseKeychain" text="..." GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+      <Label text="Sign Package" GridPane.rowIndex="3" />
+      <CheckBox fx:id="signCheckBox" mnemonicParsing="false" onAction="#updateProject" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label styleClass="title-2" text="Package Signing" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="10.0" top="8.0" />
+         </GridPane.margin>
+      </Label>
+      <TextField fx:id="signKeyChainField" onAction="#updateProject" promptText="File path to keychain containing signing identity" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+      <Button fx:id="helpSignKeychainButton" mnemonicParsing="false" onAction="#helpSignKeychain" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+      <Button fx:id="helpPackageIdentifierButton" mnemonicParsing="false" onAction="#helpPackageIdentifier" styleClass="help-button" text="?" GridPane.columnIndex="3" />
+      <Button fx:id="helpPackageNameButton" mnemonicParsing="false" onAction="#helpPackageName" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Button fx:id="helpSignPrefixButton" mnemonicParsing="false" onAction="#helpSignPrefix" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <Button fx:id="helpSignUserButton" mnemonicParsing="false" onAction="#helpSignUser" styleClass="help-button" text="?" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+    </children>
+   <stylesheets>
+      <URL value="@../css/bootstrap3.css" />
+      <URL value="@../css/installmation.css" />
+   </stylesheets>
+</GridPane>

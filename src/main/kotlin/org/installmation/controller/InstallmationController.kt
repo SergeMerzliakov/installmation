@@ -21,10 +21,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.scene.control.ListView
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuBar
-import javafx.scene.control.Tooltip
+import javafx.scene.control.*
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
@@ -49,114 +46,113 @@ class InstallmationController(private val configuration: Configuration,
                               private val workspace: Workspace,
                               private val projectService: ProjectService) {
 
-    companion object {
-        val log: Logger = LogManager.getLogger(InstallmationController::class.java)
-        const val PROPERTY_HELP_GENERATE_SCRIPTS = "help.generate.scripts"
-        const val PROPERTY_HELP_GENERATE_IMAGE = "help.generate.image"
-        const val PROPERTY_HELP_GENERATE_INSTALLER = "help.generate.installer"
-    }
+   companion object {
+      val log: Logger = LogManager.getLogger(InstallmationController::class.java)
+      const val PROPERTY_HELP_GENERATE_SCRIPTS = "help.generate.scripts"
+      const val PROPERTY_HELP_GENERATE_IMAGE = "help.generate.image"
+      const val PROPERTY_HELP_GENERATE_INSTALLER = "help.generate.installer"
+   }
 
-    @FXML
-    private lateinit var applicationMenuBar: MenuBar
-    @FXML
-    private lateinit var dependenciesPane: AnchorPane
-    @FXML
-    private lateinit var locationPane: AnchorPane
-    @FXML
-    private lateinit var binariesPane: AnchorPane
-    @FXML
-    private lateinit var generalInfoPane: AnchorPane
-    @FXML
-    private lateinit var executablePane: AnchorPane
-    @FXML
-    private lateinit var shutdownMenu: Menu
-    @FXML
-    private lateinit var messageListView: ListView<String>
+   @FXML private lateinit var applicationMenuBar: MenuBar
+   @FXML private lateinit var tabPane: TabPane
+   @FXML private lateinit var dependenciesPane: AnchorPane
+   @FXML private lateinit var locationPane: AnchorPane
+   @FXML private lateinit var binariesPane: AnchorPane
+   @FXML private lateinit var generalInfoPane: AnchorPane
+   @FXML private lateinit var osxPane: AnchorPane
+   @FXML private lateinit var osxTab: Tab
+   @FXML private lateinit var executablePane: AnchorPane
+   @FXML private lateinit var shutdownMenu: Menu
+   @FXML private lateinit var messageListView: ListView<String>
+   @FXML private lateinit var generateScriptTooltip: Tooltip
+   @FXML private lateinit var generateImageTooltip: Tooltip
+   @FXML private lateinit var generateInstallerTooltip: Tooltip
 
-    @FXML
-    private lateinit var generateScriptTooltip: Tooltip
-    @FXML
-    private lateinit var generateImageTooltip: Tooltip
-    @FXML
-    private lateinit var generateInstallerTooltip: Tooltip
+   private var dependenciesController = DependenciesController(configuration, userHistory, workspace)
+   private var locationController = LocationController(configuration, userHistory, workspace)
+   private var binariesController = BinariesController(configuration, userHistory, workspace)
+   private var generalInfoController = GeneralInfoController(configuration, userHistory, workspace)
+   private lateinit var osxController: OSXController
+   private var executeController = ExecutableController(configuration, userHistory, workspace)
 
-    private var dependenciesController = DependenciesController(configuration, userHistory, workspace)
-    private var locationController = LocationController(configuration, userHistory, workspace)
-    private var binariesController = BinariesController(configuration, userHistory, workspace)
-    private var generalInfoController = GeneralInfoController(configuration, userHistory, workspace)
-    private var executeController = ExecutableController(configuration, userHistory, workspace)
+   // models
+   private val userMessages: ObservableList<String> = FXCollections.observableArrayList<String>()
 
-    // models
-    private val userMessages: ObservableList<String> = FXCollections.observableArrayList<String>()
+   init {
+      configuration.eventBus.register(this)
+   }
 
-    init {
-        configuration.eventBus.register(this)
-    }
+   @FXML
+   fun initialize() {
+      if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
+         shutdownMenu.isDisable = true
+         shutdownMenu.isVisible = false
+         applicationMenuBar.useSystemMenuBarProperty().set(true)
+      }
+      initializeChildControllers()
+      initializeTooltips()
+      messageListView.items = userMessages
+   }
 
-    @FXML
-    fun initialize() {
-        if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
-            shutdownMenu.isDisable = true
-            shutdownMenu.isVisible = false
-            applicationMenuBar.useSystemMenuBarProperty().set(true)
-        }
-        initializeChildControllers()
-        initializeTooltips()
-        messageListView.items = userMessages
-    }
+   private fun initializeTooltips() {
+      generateScriptTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_SCRIPTS)
+      generateImageTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_IMAGE)
+      generateInstallerTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_INSTALLER)
+   }
 
-    private fun initializeTooltips() {
-        generateScriptTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_SCRIPTS)
-        generateImageTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_IMAGE)
-        generateInstallerTooltip.text = configuration.resourceBundle.getString(PROPERTY_HELP_GENERATE_INSTALLER)
-    }
+   private fun initializeChildControllers() {
+      // load file list UI and insert into it's pane in the application
+      setupChildController("/fxml/dependenciesTab.fxml", dependenciesController, dependenciesPane)
+      setupChildController("/fxml/locationTab.fxml", locationController, locationPane)
+      setupChildController("/fxml/binariesTab.fxml", binariesController, binariesPane)
+      setupChildController("/fxml/generalInfoTab.fxml", generalInfoController, generalInfoPane)
+      if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
+         osxController = OSXController(configuration, userHistory, workspace)
+         setupChildController("/fxml/osxTab.fxml", osxController, osxPane)
+      } else {
+         tabPane.tabs.remove(osxTab)
+      }
 
-    private fun initializeChildControllers() {
-        // load file list UI and insert into it's pane in the application
-        setupChildController("/fxml/dependenciesTab.fxml", dependenciesController, dependenciesPane)
-        setupChildController("/fxml/locationTab.fxml", locationController, locationPane)
-        setupChildController("/fxml/binariesTab.fxml", binariesController, binariesPane)
-        setupChildController("/fxml/generalInfoTab.fxml", generalInfoController, generalInfoPane)
-        setupChildController("/fxml/executableTab.fxml", executeController, executablePane)
-    }
+      setupChildController("/fxml/executableTab.fxml", executeController, executablePane)
+   }
 
-    @FXML
-    fun shutdown() {
-       applicationStage().close()
-       configuration.save()
-       if (workspace.currentProject != null)
-          workspace.save()
-    }
+   @FXML
+   fun shutdown() {
+      applicationStage().close()
+      configuration.save()
+      if (workspace.currentProject != null)
+         workspace.save()
+   }
 
-    @FXML
-    fun newProject() {
-        // get a name first
-        val sd = SingleValueDialog(applicationStage(), "Choose Project Name", "Project Name", "myProject")
-        val result = sd.showAndWait()
-        if (result.ok) {
-            val project = projectService.newProject(result.data!!)
-            log.debug("Created project ${project.name}")
-            workspace.setCurrentProject(project)
-            configuration.eventBus.post(ProjectCreatedEvent(project))
-        }
-    }
+   @FXML
+   fun newProject() {
+      // get a name first
+      val sd = SingleValueDialog(applicationStage(), "Choose Project Name", "Project Name", "myProject")
+      val result = sd.showAndWait()
+      if (result.ok) {
+         val project = projectService.newProject(result.data!!)
+         log.debug("Created project ${project.name}")
+         workspace.setCurrentProject(project)
+         configuration.eventBus.post(ProjectCreatedEvent(project))
+      }
+   }
 
-    @FXML
-    fun openProject() {
-        val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
-        if (result.ok) {
-            val p = projectService.load(result.data!!)
-            workspace.setCurrentProject(p)
-        }
-    }
+   @FXML
+   fun openProject() {
+      val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
+      if (result.ok) {
+         val p = projectService.load(result.data!!)
+         workspace.setCurrentProject(p)
+      }
+   }
 
-    @FXML
-    fun closeProject() {
-        projectService.close(workspace.currentProject)
-    }
+   @FXML
+   fun closeProject() {
+      projectService.close(workspace.currentProject)
+   }
 
-    @FXML
-    fun saveProject() {
+   @FXML
+   fun saveProject() {
        workspace.save()
     }
 

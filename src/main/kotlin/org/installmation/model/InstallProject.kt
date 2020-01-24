@@ -53,6 +53,14 @@ class InstallProject(var name: String? = null) {
    var customModules = mutableSetOf<String>()
    var classPath = mutableSetOf<File>()
 
+   // OSX - put these here for now rather than subclassing
+   var packageIdentifier: String? = null
+   var packageName: String? = null
+   var signPrefix: String? = null
+   var signKeyUser: String? = null
+   var signKeyChain: File? = null
+   var signPackage: Boolean = false
+
    fun projectFile(baseDirectory: File): File {
       checkNotNull(name)
       val baseDir = File(baseDirectory, Constant.PROJECT_DIR)

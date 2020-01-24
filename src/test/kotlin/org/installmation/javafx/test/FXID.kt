@@ -55,6 +55,7 @@ object FXID {
 
    // ALL TABS
    const val TAB_INFO = "#infoTab"
+   const val TAB_OSX = "#osxTab"
    const val TAB_INSTALL = "#installTab"
    const val TAB_BINARIES = "#binariesTab"
    const val TAB_EXECUTABLE = "#executableTab"
@@ -68,6 +69,20 @@ object FXID {
    const val COMBO_INSTALLER_TYPE = "#installerTypeCombo"
    const val BUTTON_CHOOSE_LOGO = "#chooseLogoButton"
    const val TEXT_LOGO_PATH = "#logoPathField"
+
+   // OSX TAB
+   const val TEXT_OSX_PACKAGE_IDENTIFIER = "#packageIdentifierField"
+   const val TEXT_OSX_PACKAGE_NAME = "#packageNameField"
+   const val TEXT_OSX_SIGN_PREFIX = "#signPrefixField"
+   const val TEXT_OSX_SIGN_USER = "#signKeyUserField"
+   const val TEXT_OSX_SIGN_KEYCHAIN = "#signKeyChainField"
+   const val CHECKBOX_OSX_SIGN = "#signCheckBox"
+   const val BUTTON_OSX_KEY_CHAIN = "#chooseKeyChainButton"
+   const val BUTTON_OSX_HELP_SIGN_KEYCHAIN = "#helpSignKeychainButton"
+   const val BUTTON_OSX_HELP_PACKAGE_ = "#helpPackageIdentifierButton"
+   const val BUTTON_OSX_HELP_IDENTIFIER = "#helpPackageNameButton"
+   const val BUTTON_OSX_HELP_SIGN_PREFIX = "#helpSignPrefixButton"
+   const val BUTTON_OSX_HELP_SIGN_USER = "#helpSignUserButton"
 
    // INSTALL TAB
    const val TEXT_INPUT_DIR = "#inputDirectoryText"
