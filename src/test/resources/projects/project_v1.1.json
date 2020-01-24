@@ -20,5 +20,6 @@
     "java.management"
   ],
   "classPath": [],
-  "name": "project"
+  "name": "project",
+  "signPackage" : false
 }
