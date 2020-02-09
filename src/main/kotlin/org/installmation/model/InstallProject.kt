@@ -82,6 +82,8 @@ class InstallProject(var name: String? = null) {
       validateFutureFileField("Installer Directory", installerDirectory, result)
       validateExistingFileField("Main Jar File", mainJar, result)
       validateStringField("Main Class", mainClass, result)
+      validateStringField("Installer Type", installerType, result)
+      
       for (cp in classPath)
          validateExistingFileField("Class Path Item ", cp, result)
 

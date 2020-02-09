@@ -112,7 +112,6 @@ class InstallmationController(private val configuration: Configuration,
       } else {
          tabPane.tabs.remove(osxTab)
       }
-
       setupChildController("/fxml/executableTab.fxml", executeController, executablePane)
    }
 

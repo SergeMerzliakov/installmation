@@ -155,6 +155,7 @@ class InstallCreator(private val configuration: Configuration) {
         packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
         packager.parameters.addArgument(ValueArgument("-n", prj.name))
         packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
+        processOSXParameters(packager, prj)
         return packager
     }
 
@@ -178,72 +179,81 @@ class InstallCreator(private val configuration: Configuration) {
        packager.parameters.addArgument(packager.createImageParameter())
        packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
-       if (prj.vendor != null)
-          packager.parameters.addArgument(ValueArgument("--vendor", prj.vendor))
-       packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+       packager.parameters.addArgument(ValueArgument("--vendor", prj.vendor))
+       packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2020"))
        val logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
-       if (logo != null)
-          packager.parameters.addArgument(ValueArgument("--icon", logo.path))
+       packager.parameters.addArgument(ValueArgument("--icon", logo?.path))
        packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
        packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-       if (prj.javaFXMods?.path?.path != null) {
-          packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
-       }
+       packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
 
-        // check if modular application
-        val modules = generateModuleDependencies(prj)
-        if (modules.isNotEmpty())
-            packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+       // check if modular application
+       val modules = generateModuleDependencies(prj)
+       packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
-        packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
-        packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
-        return packager
+       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
+       packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
+       return packager
     }
 
-    private fun createApplicationIcon(rawImage: File?, destination: File): File? {
-        if (rawImage == null)
-            return null
+   private fun processOSXParameters(packager: JPackageExecutable, prj: InstallProject) {
+      if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
+         packager.parameters.addArgument(ValueArgument("--mac-package-identifier", prj.packageIdentifier))
+         packager.parameters.addArgument(ValueArgument("--mac-package-name", prj.packageName))
 
-        return when (OperatingSystem.os()) {
-            OperatingSystem.Type.OSX -> createOSXApplicationIcon(rawImage, destination)
-            OperatingSystem.Type.Windows -> createWindowsApplicationIcon(rawImage, destination)
-            OperatingSystem.Type.Linux -> createLinuxApplicationIcon(rawImage, destination)
-        }
-    }
+         if (prj.signPackage) {
+            packager.parameters.addArgument(FlagArgument("--mac-sign"))
+            packager.parameters.addArgument(ValueArgument("--mac-package-signing-prefix", prj.signPrefix))
+            packager.parameters.addArgument(ValueArgument("--mac-signing-keychain", prj.signKeyChain?.path))
+            packager.parameters.addArgument(ValueArgument("--mac-signing-key-user-name", "${prj.signKeyUser}"))
+         }
+      }
+   }
 
-    private fun createOSXApplicationIcon(rawImage: File, destination: File): File {
-        if (rawImage.extension == ImageTool.ImageType.Icns.value)
-            return rawImage.copyTo(File(destination, rawImage.name), true)
-        val processor: ImageProcessor = OSXImageProcessor()
-        return processor.createApplicationLogo(rawImage, destination)
-    }
+   private fun createApplicationIcon(rawImage: File?, destination: File): File? {
+      if (rawImage == null)
+         return null
 
-    private fun createWindowsApplicationIcon(rawImage: File, destination: File): File {
-        if (rawImage.extension == ImageTool.ImageType.Ico.value)
-            return rawImage.copyTo(File(destination, rawImage.name), true)
-        val processor: ImageProcessor = WindowsImageProcessor()
-        return processor.createApplicationLogo(rawImage, destination)
-    }
+      return when (OperatingSystem.os()) {
+         OperatingSystem.Type.OSX -> createOSXApplicationIcon(rawImage, destination)
+         OperatingSystem.Type.Windows -> createWindowsApplicationIcon(rawImage, destination)
+         OperatingSystem.Type.Linux -> createLinuxApplicationIcon(rawImage, destination)
+      }
+   }
 
-    private fun createLinuxApplicationIcon(rawImage: File, destination: File): File {
-        // TODO CHECK for image type like other OS
-        val processor: ImageProcessor = LinuxImageProcessor()
-        return processor.createApplicationLogo(rawImage, destination)
-    }
+   private fun createOSXApplicationIcon(rawImage: File, destination: File): File {
+      if (rawImage.extension == ImageTool.ImageType.Icns.value)
+         return rawImage.copyTo(File(destination, rawImage.name), true)
+      val processor: ImageProcessor = OSXImageProcessor()
+      return processor.createApplicationLogo(rawImage, destination)
+   }
 
-    /**
-     * Run jdeps tool to get a list of JDK modules used by the target application
-     */
-    private fun generateModuleDependencies(prj: InstallProject): String {
-        if (prj.classPath.isEmpty())
-            return ""
+   private fun createWindowsApplicationIcon(rawImage: File, destination: File): File {
+      if (rawImage.extension == ImageTool.ImageType.Ico.value)
+         return rawImage.copyTo(File(destination, rawImage.name), true)
+      val processor: ImageProcessor = WindowsImageProcessor()
+      return processor.createApplicationLogo(rawImage, destination)
+   }
 
-        checkNotNull(prj.jpackageJDK)
-        checkNotNull(prj.javaFXLib)
-        checkNotNull(prj.mainJar)
+   private fun createLinuxApplicationIcon(rawImage: File, destination: File): File {
+      // TODO CHECK for image type like other OS
+      val processor: ImageProcessor = LinuxImageProcessor()
+      return processor.createApplicationLogo(rawImage, destination)
+   }
 
-        val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
+   /**
+    * Run jdeps tool to get a list of JDK modules used by the target application
+    */
+   private fun generateModuleDependencies(prj: InstallProject): String {
+      if (prj.classPath.isEmpty())
+         return ""
+
+      checkNotNull(prj.jpackageJDK)
+      checkNotNull(prj.javaFXLib)
+      checkNotNull(prj.mainJar)
+
+      val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
         val jdeps = JDepsExecutable(prj.jpackageJDK!!)
         val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
 
@@ -251,7 +261,9 @@ class InstallCreator(private val configuration: Configuration) {
         val total = mutableSetOf<String>()
         total.addAll(prj.customModules)
         total.addAll(mm.generate())
-        return total.joinToString(",")
+        val dependencies =  total.joinToString(",")
+      log.debug("Module dependencies: $dependencies")
+      return dependencies
     }
 
     private fun createImageContent(prj: InstallProject) {

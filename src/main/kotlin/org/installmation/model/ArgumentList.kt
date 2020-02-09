@@ -27,6 +27,14 @@ class ArgumentList {
    }
 
    /**
+    * overwrites previous value if not empty
+    */
+   fun addArgument(arg: ValueArgument) {
+      if (arg.value.isNotEmpty())
+         arguments[arg.name] = arg
+   }
+
+   /**
     * for use in shell script execution
     * each flag and its value are distinct item in the list
     */
