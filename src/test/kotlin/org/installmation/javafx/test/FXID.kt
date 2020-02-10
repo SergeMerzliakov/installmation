@@ -85,7 +85,9 @@ object FXID {
    const val BUTTON_INPUT_DIR = "#inputDirectoryButton"
    const val BUTTON_IMAGE_BUILD_DIR = "#imageBuildDirectoryButton"
    const val BUTTON_INSTALLER_DIR = "#installerDirectoryButton"
-
+   const val BUTTON_HELP_INPUT_DIR = "#helpInputDirectoryButton"
+   const val BUTTON_HELP_IMAGE_BUILD_DIR = "#helpImageBuildDirectoryButton"
+   const val BUTTON_HELP_INSTALLER_DIR = "#helpInstallerDirectoryButton"
    // JAVA BINARIES TAB
    const val COMBO_JPACKAGE = "#jpackageComboBox"
    const val BUTTON_JPACKAGE = "#configureJPackageButton"
@@ -95,8 +97,8 @@ object FXID {
    const val BUTTON_INSTALL_JDK = "#configureInstallJDKButton"
    const val COMBO_MODULE_JMOD = "#moduleJmodComboBox"
    const val BUTTON_MODULE_JMOD = "#configureModuleJmodButton"
-   const val BUTTON_FX_LIBRARIES = "#helpFXLibrariesButton"
-   const val BUTTON_FX_MODULES = "#helpFXModulesButton"
+   const val BUTTON_HELP_FX_LIBRARIES = "#helpFXLibrariesButton"
+   const val BUTTON_HELP_FX_MODULES = "#helpFXModulesButton"
    const val BUTTON_HELP_JPACKAGE = "#helpJpackageButton"
    const val BUTTON_HELP_JDK = "#helpJDKButton"
 

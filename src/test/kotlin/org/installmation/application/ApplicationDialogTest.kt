@@ -20,6 +20,9 @@ import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
+import org.installmation.controller.BinariesController
+import org.installmation.controller.DependenciesController
+import org.installmation.controller.LocationController
 import org.installmation.controller.OSXController
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.javafx.test.FXID
@@ -121,4 +124,47 @@ class ApplicationDialogTest : ApplicationTest() {
       WindowHelper.closeWindow(helpDialog)
    }
 
+   @Test
+   fun shouldOpenDependenciesHelpDialogs() {
+      clickOn(FXID.TAB_DEPENDENCIES)
+      clickOn(FXID.BUTTON_HELP_EXTRA_MODULES)
+      val helpDialog = WindowHelper.verifyWindowVisible(DependenciesController.TITLE_HELP_EXTRA_MODULE)
+      WindowHelper.closeWindow(helpDialog)
+   }
+
+   @Test
+   fun shouldOpenLocationHelpDialogs() {
+      clickOn(FXID.TAB_INSTALL)
+      clickOn(FXID.BUTTON_HELP_INPUT_DIR)
+      var helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_INPUT_DIR)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_HELP_IMAGE_BUILD_DIR)
+      helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_IMAGE_BUILD_DIR)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_HELP_INSTALLER_DIR)
+      helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_INSTALLER_DIR)
+      WindowHelper.closeWindow(helpDialog)
+   }
+
+   @Test
+   fun shouldOpenBinariesHelpDialogs() {
+      clickOn(FXID.TAB_BINARIES)
+      clickOn(FXID.BUTTON_HELP_FX_LIBRARIES)
+      var helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_FX_LIBRARIES)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_HELP_FX_MODULES)
+      helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_FX_MODULES)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_HELP_JPACKAGE)
+      helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_JPACKAGE)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_HELP_JDK)
+      helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_JDK)
+      WindowHelper.closeWindow(helpDialog)
+   }
 }

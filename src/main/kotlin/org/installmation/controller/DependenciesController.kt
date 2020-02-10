@@ -46,6 +46,7 @@ class DependenciesController(private val configuration: Configuration,
    companion object {
       val log: Logger = LogManager.getLogger(DependenciesController::class.java)
       const val PROPERTY_HELP_EXTRA_MODULES = "help.extra.modules"
+      const val TITLE_HELP_EXTRA_MODULE = "Extra Modules"
    }
 
    @FXML lateinit var classPathListView: ListView<String>
@@ -89,7 +90,7 @@ class DependenciesController(private val configuration: Configuration,
 
    @FXML
    fun helpModules() {
-      HelpDialog.showAndWait("Extra Modules", configuration.resourceBundle.getString(PROPERTY_HELP_EXTRA_MODULES))
+      HelpDialog.showAndWait(TITLE_HELP_EXTRA_MODULE, configuration.resourceBundle.getString(PROPERTY_HELP_EXTRA_MODULES))
    }
    
    //-------------------------------------------------------

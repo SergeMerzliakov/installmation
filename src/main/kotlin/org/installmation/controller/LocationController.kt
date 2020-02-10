@@ -43,6 +43,10 @@ class LocationController(private val configuration: Configuration,
       const val PROPERTY_HELP_INPUT_DIR = "help.input.directory"
       const val PROPERTY_HELP_IMAGE_BUILD_DIR = "help.image.build.directory"
       const val PROPERTY_HELP_INSTALLER_DIR = "help.installer.directory"
+
+      const val TITLE_HELP_INPUT_DIR = "Input Directory"
+      const val TITLE_HELP_IMAGE_BUILD_DIR = "Image Build Directory"
+      const val TITLE_HELP_INSTALLER_DIR = "Installer Directory"
    }
 
    @FXML lateinit var inputDirectoryText: TextField
@@ -100,17 +104,17 @@ class LocationController(private val configuration: Configuration,
 
    @FXML
    fun helpInputDirectory() {
-      HelpDialog.showAndWait("Input Directory", configuration.resourceBundle.getString(PROPERTY_HELP_INPUT_DIR))
+      HelpDialog.showAndWait(TITLE_HELP_INPUT_DIR, configuration.resourceBundle.getString(PROPERTY_HELP_INPUT_DIR))
    }
 
    @FXML
    fun helpImageBuildDirectory() {
-      HelpDialog.showAndWait("Image Build Directory", configuration.resourceBundle.getString(PROPERTY_HELP_IMAGE_BUILD_DIR))
+      HelpDialog.showAndWait(TITLE_HELP_IMAGE_BUILD_DIR, configuration.resourceBundle.getString(PROPERTY_HELP_IMAGE_BUILD_DIR))
    }
 
    @FXML
    fun helpInstallerDirectory() {
-      HelpDialog.showAndWait("Installer Directory", configuration.resourceBundle.getString(PROPERTY_HELP_INSTALLER_DIR))
+      HelpDialog.showAndWait(TITLE_HELP_INSTALLER_DIR, configuration.resourceBundle.getString(PROPERTY_HELP_INSTALLER_DIR))
    }
 
    @FXML

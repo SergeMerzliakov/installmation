@@ -54,6 +54,10 @@ class BinariesController(private val configuration: Configuration,
       const val PROPERTY_HELP_FX_MODULES = "help.fx.modules"
       const val PROPERTY_HELP_JPACKAGE = "help.fx.jpackage"
       const val PROPERTY_HELP_JDK = "help.fx.jdk"
+      const val TITLE_HELP_FX_LIBRARIES = "JavaFX Libraries"
+      const val TITLE_HELP_FX_MODULES = "JavaFX JMod Files"
+      const val TITLE_HELP_JPACKAGE = "jpackage"
+      const val TITLE_HELP_JDK = "JDK to Deploy"
    }
 
    // combos
@@ -163,22 +167,23 @@ class BinariesController(private val configuration: Configuration,
 
    @FXML
    fun helpFXLibraries() {
-      HelpDialog.showAndWait("JavaFX Libraries", configuration.resourceBundle.getString(PROPERTY_HELP_FX_LIBS))
+      
+      HelpDialog.showAndWait(TITLE_HELP_FX_LIBRARIES, configuration.resourceBundle.getString(PROPERTY_HELP_FX_LIBS))
    }
 
    @FXML
    fun helpFXModules() {
-      HelpDialog.showAndWait("JavaFX JMod Files", configuration.resourceBundle.getString(PROPERTY_HELP_FX_MODULES))
+      HelpDialog.showAndWait(TITLE_HELP_FX_MODULES, configuration.resourceBundle.getString(PROPERTY_HELP_FX_MODULES))
    }
 
    @FXML
    fun helpJpackage() {
-      HelpDialog.showAndWait("jpackage", configuration.resourceBundle.getString(PROPERTY_HELP_JPACKAGE))
+      HelpDialog.showAndWait(TITLE_HELP_JPACKAGE, configuration.resourceBundle.getString(PROPERTY_HELP_JPACKAGE))
    }
 
    @FXML
    fun helpJDK() {
-      HelpDialog.showAndWait("jpackage", configuration.resourceBundle.getString(PROPERTY_HELP_JDK))
+      HelpDialog.showAndWait(TITLE_HELP_JDK, configuration.resourceBundle.getString(PROPERTY_HELP_JDK))
    }
 
    /**
