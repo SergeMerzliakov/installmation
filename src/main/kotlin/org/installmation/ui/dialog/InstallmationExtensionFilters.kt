@@ -30,4 +30,8 @@ object InstallmationExtensionFilters {
    fun logoImageFilter(): FileChooser.ExtensionFilter {
       return FileChooser.ExtensionFilter("Image Files (png, jpeg, ico, icns)", "*.png", "*.jpeg", "*.jpg", "*.ico", "*.icns")
    }
+
+   fun appleKeyChainFilter(): FileChooser.ExtensionFilter {
+      return FileChooser.ExtensionFilter("OSX Keychain Files (keychain-db)", "*.keychain-db")
+   }
 }

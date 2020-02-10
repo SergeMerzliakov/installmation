@@ -17,6 +17,7 @@
 package org.installmation.model
 
 import org.installmation.configuration.Constant
+import org.installmation.core.OperatingSystem
 import org.installmation.image.ImageTool
 import org.installmation.io.PathValidator
 import org.installmation.model.binary.JDK
@@ -53,13 +54,15 @@ class InstallProject(var name: String? = null) {
    var customModules = mutableSetOf<String>()
    var classPath = mutableSetOf<File>()
 
-   // OSX - put these here for now rather than subclassing
+   // OSX - sign application options - not implemented
    var packageIdentifier: String? = null
    var packageName: String? = null
    var signPrefix: String? = null
-   var signKeyUser: String? = null
-   var signKeyChain: File? = null
-   var signPackage: Boolean = false
+
+   // OSX - sign installer options
+   var signInstaller: Boolean = false
+   var appleInstallerCertName: String? = null
+   var appleInstallerKeyChain: File? = null
 
    fun projectFile(baseDirectory: File): File {
       checkNotNull(name)
@@ -83,11 +86,29 @@ class InstallProject(var name: String? = null) {
       validateExistingFileField("Main Jar File", mainJar, result)
       validateStringField("Main Class", mainClass, result)
       validateStringField("Installer Type", installerType, result)
-      
-      for (cp in classPath)
-         validateExistingFileField("Class Path Item ", cp, result)
 
+      if (classPath.isEmpty()) {
+         result.errors.add("Class path was empty - should have a least one entry for your code")
+      } else {
+         for (cp in classPath)
+            validateExistingFileField("Class Path Item ", cp, result)
+      }
+
+      validateOSXFields(result)
       return result
+   }
+
+   /**
+    * Signing fields 
+    */
+   private fun validateOSXFields(result: ValidationResult) {
+      if (OperatingSystem.os() != OperatingSystem.Type.OSX)
+         return
+      
+      if (signInstaller) {
+         validateExistingFileField("Signing Keychain", appleInstallerKeyChain, result)
+         validateStringField("Apple Installer Certificate", appleInstallerCertName, result)
+      }
    }
 
    /**

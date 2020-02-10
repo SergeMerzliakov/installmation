@@ -166,13 +166,12 @@ class InstallmationApplication : Application() {
 
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
-      applicationStage.title = "${WINDOW_TITLE} - ${e.project.name}"
+      applicationStage.title = "$WINDOW_TITLE - ${e.project.name}"
    }
-
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
-      applicationStage.title = "${WINDOW_TITLE} - ${e.project.name}"
+      applicationStage.title = "$WINDOW_TITLE - ${e.project.name}"
    }
 
    @Subscribe

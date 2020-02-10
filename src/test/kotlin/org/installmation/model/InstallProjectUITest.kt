@@ -17,6 +17,7 @@
 package org.installmation.model
 
 import com.google.common.eventbus.EventBus
+import javafx.scene.control.CheckBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.InstallmationApplication
@@ -24,6 +25,7 @@ import org.installmation.TestConstants
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
+import org.installmation.core.OperatingSystem
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.javafx.test.ComboHelper
@@ -97,6 +99,7 @@ class InstallProjectUITest : ApplicationTest() {
       val originalProjectName = "otherName"
       val version = "1"
       val copyrightMessage = "copyright"
+      val vendor = "acme muscle pills"
       val logoImagePath = File("image","logo.png").path //cross platform
 
       createProject(originalProjectName)
@@ -107,6 +110,7 @@ class InstallProjectUITest : ApplicationTest() {
       textHelper.writeText(FXID.TEXT_APP_VERSION, version)
       textHelper.writeText(FXID.TEXT_COPYRIGHT, copyrightMessage)
       textHelper.writeText(FXID.TEXT_LOGO_PATH, logoImagePath)
+      textHelper.writeText(FXID.TEXT_VENDOR, vendor)
       val installer = comboHelper.selectByIndex<String>(FXID.COMBO_INSTALLER_TYPE, 0)
       saveCurrentProject()
 
@@ -115,6 +119,7 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.name).isEqualTo(projectName)
       assertThat(project.installerType).isEqualTo(installer) //OS specific default values
       assertThat(project.version).isEqualTo(version)
+      assertThat(project.vendor).isEqualTo(vendor)
       assertThat(project.copyright).isEqualTo(copyrightMessage)
       assertThat(project.applicationLogo?.path).isEqualTo(logoImagePath)
 
@@ -129,6 +134,31 @@ class InstallProjectUITest : ApplicationTest() {
       assertThat(project.javaFXLib).isNull()
       assertThat(project.javaFXMods).isNull()
       assertThat(project.jpackageJDK).isNull()
+   }
+
+   @Test
+   fun shouldCreateAndSaveOSXInfo() {
+      if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
+         val projectName = "project1"
+         val installerCert = "acme"
+         val keychain = "/dir/my.keychain-db"
+
+         createProject(projectName)
+         
+         clickOn(FXID.TAB_OSX)
+         textHelper.writeText(FXID.TEXT_OSX_SIGN_USER,installerCert)
+         textHelper.writeText(FXID.TEXT_OSX_SIGN_KEYCHAIN, keychain)
+         val signInstaller = lookup(FXID.CHECKBOX_OSX_SIGN).query<CheckBox>()
+         signInstaller.isSelected = true
+
+         saveCurrentProject()
+
+         val project = loadCurrentProject(projectName)
+
+         assertThat(project.signInstaller).isTrue()
+         assertThat(project.appleInstallerCertName).isEqualTo(installerCert)
+         assertThat(project.appleInstallerKeyChain?.path).isEqualTo(keychain)
+      }
    }
 
    @Test

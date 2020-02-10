@@ -19,7 +19,15 @@
     "java.sql",
     "java.management"
   ],
-  "classPath": [],
+  "classPath": [
+    {
+      "path": "/Users/foo/libs/foobar-1.0.jar"
+    }
+  ],
   "name": "project",
-  "signPackage" : false
+  "signInstaller": true,
+  "appleInstallerCertName": "Acme (23HGF9L4NK)",
+  "appleInstallerKeyChain": {
+    "path": "/Users/foo/Library/Keychains/login.keychain-db"
+  }
 }

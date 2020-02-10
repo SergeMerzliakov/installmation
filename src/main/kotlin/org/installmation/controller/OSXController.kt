@@ -20,25 +20,32 @@ import com.google.common.eventbus.Subscribe
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.TextField
+import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.javafx.EventUtils
 import org.installmation.javafx.FileFieldUtils
 import org.installmation.model.InstallProject
 import org.installmation.service.*
+import org.installmation.ui.dialog.ChooseFileDialog
+import org.installmation.ui.dialog.HelpDialog
+import org.installmation.ui.dialog.InstallmationExtensionFilters
 
-class OSXController(configuration: Configuration,
+class OSXController(private val configuration: Configuration,
                     private val userHistory: UserHistory,
                     private val workspace: Workspace) {
 
    companion object {
       val log: Logger = LogManager.getLogger(OSXController::class.java)
+
+      const val PROPERTY_HELP_APPLE_KEYCHAIN = "help.apple.keychain"
+      const val PROPERTY_HELP_APPLE_INSTALL_CERT = "help.apple.cert.installer"
+      const val INSTALLER_CERT_PREFIX = "Developer ID Installer: "
+      const val APPLICATION_CERT_PREFIX = "Developer ID Application: "
    }
 
-   @FXML private lateinit var packageIdentifierField: TextField
-   @FXML private lateinit var packageNameField: TextField
-   @FXML private lateinit var signPrefixField: TextField
    @FXML private lateinit var signKeyUserField: TextField
    @FXML private lateinit var signKeyChainField: TextField
    @FXML private lateinit var signCheckBox: CheckBox
@@ -49,7 +56,13 @@ class OSXController(configuration: Configuration,
 
    @FXML
    fun initialize() {
-
+      EventUtils.focusLostHandler(signKeyUserField){field -> 
+         if (field.text.startsWith(INSTALLER_CERT_PREFIX)){
+            // strip it off - jpackager fails if its present
+            log.info("stripping off Apple Developer Certificate Name Prefix '$INSTALLER_CERT_PREFIX'. JPackager will reject it otherwise.")
+            field.text = field.text.replace(INSTALLER_CERT_PREFIX, "", true)
+         }
+      }
    }
 
    @FXML
@@ -59,31 +72,20 @@ class OSXController(configuration: Configuration,
 
    @FXML
    fun chooseKeychain() {
-//      val result = ChooseFileDialog.showAndWait(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory, InstallmationExtensionFilters.logoImageFilter())
-//      if (result.ok) {
-//         logoPathField.text = result.data?.path
-//         updateLogoPreview(logoPathField.text)
-//      }
+      val result = ChooseFileDialog.showAndWait(signKeyChainField.scene.window as Stage, "Choose Application Logo Image", userHistory, InstallmationExtensionFilters.appleKeyChainFilter())
+      if (result.ok) {
+         signKeyChainField.text = result.data?.path
+      }
    }
 
    @FXML
    fun helpSignKeychain() {
-   }
-
-   @FXML
-   fun helpPackageIdentifier() {
-   }
-
-   @FXML
-   fun helpPackageName() {
-   }
-
-   @FXML
-   fun helpSignPrefix() {
+      HelpDialog.showAndWait("Keychain With Apple Certificate", configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_KEYCHAIN))
    }
 
    @FXML
    fun helpSignUser() {
+      HelpDialog.showAndWait("Apple Installer Certificate", configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_INSTALL_CERT))
    }
 
    /**
@@ -93,12 +95,9 @@ class OSXController(configuration: Configuration,
     * this method, but that is messier.
     */
    private fun updateUIFromProject(project: InstallProject) {
-      packageIdentifierField.text = project.packageIdentifier
-      packageNameField.text = project.packageName
-      signPrefixField.text = project.signPrefix
-      signKeyUserField.text = project.signKeyUser
-      signKeyChainField.text = project.signKeyChain?.path
-      signCheckBox.isSelected = project.signPackage
+      signKeyUserField.text = project.appleInstallerCertName
+      signKeyChainField.text = project.appleInstallerKeyChain?.path
+      signCheckBox.isSelected = project.signInstaller
    }
 
    //-------------------------------------------------------
@@ -112,12 +111,9 @@ class OSXController(configuration: Configuration,
 
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
-      e.project.packageIdentifier = packageIdentifierField.text
-      e.project.packageName = packageNameField.text
-      e.project.signPrefix = signPrefixField.text
-      e.project.signKeyUser = signKeyUserField.text
-      e.project.signKeyChain = FileFieldUtils.getPath(signKeyChainField)
-      e.project.signPackage = signCheckBox.isSelected
+      e.project.appleInstallerCertName = signKeyUserField.text
+      e.project.appleInstallerKeyChain = FileFieldUtils.getPath(signKeyChainField)
+      e.project.signInstaller = signCheckBox.isSelected
    }
 
    @Subscribe
@@ -132,9 +128,6 @@ class OSXController(configuration: Configuration,
 
    @Subscribe
    fun handleProjectClosed(e: ProjectClosedEvent) {
-      packageIdentifierField.text = null
-      packageNameField.text = null
-      signPrefixField.text = null
       signKeyUserField.text = null
       signKeyChainField.text = null
       signCheckBox.isSelected = false

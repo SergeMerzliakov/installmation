@@ -71,17 +71,11 @@ object FXID {
    const val TEXT_LOGO_PATH = "#logoPathField"
 
    // OSX TAB
-   const val TEXT_OSX_PACKAGE_IDENTIFIER = "#packageIdentifierField"
-   const val TEXT_OSX_PACKAGE_NAME = "#packageNameField"
-   const val TEXT_OSX_SIGN_PREFIX = "#signPrefixField"
    const val TEXT_OSX_SIGN_USER = "#signKeyUserField"
    const val TEXT_OSX_SIGN_KEYCHAIN = "#signKeyChainField"
    const val CHECKBOX_OSX_SIGN = "#signCheckBox"
    const val BUTTON_OSX_KEY_CHAIN = "#chooseKeyChainButton"
    const val BUTTON_OSX_HELP_SIGN_KEYCHAIN = "#helpSignKeychainButton"
-   const val BUTTON_OSX_HELP_PACKAGE_ = "#helpPackageIdentifierButton"
-   const val BUTTON_OSX_HELP_IDENTIFIER = "#helpPackageNameButton"
-   const val BUTTON_OSX_HELP_SIGN_PREFIX = "#helpSignPrefixButton"
    const val BUTTON_OSX_HELP_SIGN_USER = "#helpSignUserButton"
 
    // INSTALL TAB

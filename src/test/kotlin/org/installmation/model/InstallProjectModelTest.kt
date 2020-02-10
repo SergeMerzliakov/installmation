@@ -68,7 +68,6 @@ class InstallProjectModelTest {
       assertThat(p2).isEqualToComparingFieldByField(p1)
    }
 
-
    @Test
    fun shouldSerializeProject() {
       val p1 = InstallProject("project")
@@ -79,6 +78,11 @@ class InstallProjectModelTest {
       p1.applicationLogo = File("logo.png")
       p1.jpackageJDK = JDKFactory.create(OperatingSystem.os(), "package49", File("/java11/bin/jpackage"))
 
+      // OSX specific, but should run under operating systems as well
+      p1.signInstaller = true
+      p1.appleInstallerCertName  = "Acme (23HGF9L4NK)"
+      p1.appleInstallerKeyChain = File("/Users/foo/Library/Keychains/login.keychain-db")
+      
       val writer = ApplicationJsonWriter<InstallProject>(SAVED_FILE, JsonParserFactory.configurationParser())
       writer.save(p1)
 

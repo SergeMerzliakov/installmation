@@ -202,11 +202,11 @@ class InstallCreator(private val configuration: Configuration) {
          packager.parameters.addArgument(ValueArgument("--mac-package-identifier", prj.packageIdentifier))
          packager.parameters.addArgument(ValueArgument("--mac-package-name", prj.packageName))
 
-         if (prj.signPackage) {
+         if (prj.signInstaller) {
             packager.parameters.addArgument(FlagArgument("--mac-sign"))
             packager.parameters.addArgument(ValueArgument("--mac-package-signing-prefix", prj.signPrefix))
-            packager.parameters.addArgument(ValueArgument("--mac-signing-keychain", prj.signKeyChain?.path))
-            packager.parameters.addArgument(ValueArgument("--mac-signing-key-user-name", "${prj.signKeyUser}"))
+            packager.parameters.addArgument(ValueArgument("--mac-signing-keychain", prj.appleInstallerKeyChain?.path))
+            packager.parameters.addArgument(ValueArgument("--mac-signing-key-user-name", "${prj.appleInstallerCertName}"))
          }
       }
    }
