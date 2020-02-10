@@ -20,8 +20,10 @@ import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
+import org.installmation.controller.OSXController
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.javafx.test.FXID
+import org.installmation.javafx.test.WindowHelper
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.framework.junit.ApplicationTest
@@ -106,4 +108,17 @@ class ApplicationDialogTest : ApplicationTest() {
       FxAssert.verifyThat(FXID.DIALOG_JDEPS, NodeMatchers.isVisible())
       clickOn(FXID.BUTTON_JDEPS_DLG_CLOSE)
    }
+
+   @Test
+   fun shouldOpenOSXInfoHelpDialogs() {
+      clickOn(FXID.TAB_OSX)
+      clickOn(FXID.BUTTON_OSX_HELP_SIGN_KEYCHAIN)
+      var helpDialog = WindowHelper.verifyWindowVisible(OSXController.TITLE_HELP_SIGN_KEYCHAIN)
+      WindowHelper.closeWindow(helpDialog)
+
+      clickOn(FXID.BUTTON_OSX_HELP_SIGN_INSTALL_CERT)
+      helpDialog = WindowHelper.verifyWindowVisible(OSXController.TITLE_HELP_SIGN_INSTALL_CERT)
+      WindowHelper.closeWindow(helpDialog)
+   }
+
 }

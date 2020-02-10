@@ -44,6 +44,8 @@ class OSXController(private val configuration: Configuration,
       const val PROPERTY_HELP_APPLE_INSTALL_CERT = "help.apple.cert.installer"
       const val INSTALLER_CERT_PREFIX = "Developer ID Installer: "
       const val APPLICATION_CERT_PREFIX = "Developer ID Application: "
+      const val TITLE_HELP_SIGN_INSTALL_CERT = "Apple Installer Certificate"
+      const val TITLE_HELP_SIGN_KEYCHAIN = "Keychain With Apple Certificate"
    }
 
    @FXML private lateinit var signKeyUserField: TextField
@@ -80,12 +82,12 @@ class OSXController(private val configuration: Configuration,
 
    @FXML
    fun helpSignKeychain() {
-      HelpDialog.showAndWait("Keychain With Apple Certificate", configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_KEYCHAIN))
+      HelpDialog.showAndWait(TITLE_HELP_SIGN_KEYCHAIN, configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_KEYCHAIN))
    }
 
    @FXML
    fun helpSignUser() {
-      HelpDialog.showAndWait("Apple Installer Certificate", configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_INSTALL_CERT))
+      HelpDialog.showAndWait(TITLE_HELP_SIGN_INSTALL_CERT, configuration.resourceBundle.getString(PROPERTY_HELP_APPLE_INSTALL_CERT))
    }
 
    /**

@@ -146,7 +146,7 @@ class InstallProjectUITest : ApplicationTest() {
          createProject(projectName)
          
          clickOn(FXID.TAB_OSX)
-         textHelper.writeText(FXID.TEXT_OSX_SIGN_USER,installerCert)
+         textHelper.writeText(FXID.TEXT_OSX_SIGN_INSTALL_CERT,installerCert)
          textHelper.writeText(FXID.TEXT_OSX_SIGN_KEYCHAIN, keychain)
          val signInstaller = lookup(FXID.CHECKBOX_OSX_SIGN).query<CheckBox>()
          signInstaller.isSelected = true
