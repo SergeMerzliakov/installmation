@@ -30,4 +30,8 @@ class FlagArgument(name: String) : Argument {
    override fun toCommand(): List<String> {
       return listOf(name)
    }
+
+   override fun toShellCommand(): List<String> {
+      return toCommand()
+   }
 }

@@ -46,4 +46,17 @@ class ArgumentList {
       }
       return command
    }
+
+   /**
+    * for use in shell script execution
+    * each flag and its value are distinct item in the list
+    */
+   fun toShellCommand(): List<String> {
+      val command = mutableListOf<String>()
+
+      for (a in arguments) {
+         command.addAll(a.value.toShellCommand())
+      }
+      return command
+   }
 }

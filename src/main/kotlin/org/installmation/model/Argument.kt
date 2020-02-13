@@ -23,8 +23,9 @@ package org.installmation.model
 interface Argument {
    var name: String 
    
-   /**
-    * Used in building shell commands
-    */
+   // running in UI
    fun toCommand(): List<String>
+
+   // For Scripts
+   fun toShellCommand(): List<String>
 }

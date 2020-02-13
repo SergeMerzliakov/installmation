@@ -77,7 +77,7 @@ class InstallCreator(private val configuration: Configuration) {
     // TODO error handling
     fun createImageScript(prj: InstallProject): ShellScript {
         val packager = initializeImagePackager(prj)
-        val fullCommand = packager.toString()
+        val fullCommand = packager.toShellString()
         val script = ShellScriptFactory.createScript("generate_image")
         script.addLine(fullCommand)
         return script
@@ -91,7 +91,7 @@ class InstallCreator(private val configuration: Configuration) {
         checkNotNull(prj.installerType)
 
         val packager = initializeInstallerPackager(prj)
-        val fullCommand = packager.toString()
+        val fullCommand = packager.toShellString()
         val script = ShellScriptFactory.createScript("generate_installer")
         script.addLine(fullCommand)
         return script

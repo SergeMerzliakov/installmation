@@ -33,4 +33,14 @@ class ValueArgument(short: String, value: String? = null) : Argument {
    override fun toCommand(): List<String> {
       return listOf(name, value)
    }
+
+   /**
+    * Quote parameters with spaces
+    */
+   override fun toShellCommand(): List<String> {
+      val spaceIdx = value.indexOf(' ')
+      if (spaceIdx > 0 && spaceIdx < value.length - 1)
+         value = "\"$value\""
+      return listOf(name, value)
+   }
 }

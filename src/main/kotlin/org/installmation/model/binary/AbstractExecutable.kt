@@ -84,4 +84,13 @@ abstract class AbstractExecutable(executable: File) : Executable {
          buf.append(' ').append(p)
       return buf.toString()
    }
+
+   fun toShellString(): String {
+      val buf = StringBuilder()
+      buf.append(executable)
+      for( p in parameters.toShellCommand())
+         buf.append(' ').append(p)
+      return buf.toString()
+   }
+
 }
