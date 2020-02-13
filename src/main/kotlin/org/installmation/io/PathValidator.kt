@@ -15,6 +15,8 @@
  */
 package org.installmation.io
 
+import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
@@ -33,5 +35,17 @@ object PathValidator {
          return false
       }
       return true
+   }
+
+   /**
+    * Get File in JDK
+    * Throws FileNotFoundException if not found
+    */
+    fun verifyFile(fileRelativePath: File, fileName: String): File {
+      val fullPath = File(fileRelativePath, fileName)
+      if (!fullPath.exists())
+         throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found. This may occur on JDK versions below 14 for some executables")
+
+      return fullPath
    }
 }
