@@ -16,8 +16,8 @@
 
 package org.installmation.model.binary
 
+import org.installmation.io.PathValidator
 import java.io.File
-import java.io.FileNotFoundException
 
 abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
 
@@ -34,25 +34,13 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
       get() = File(File(path, binaryDirectory), jpackageExecutableName).exists()
 
    override val javaExecutable: File
-      get() = getJDKFile(binaryDirectory, javaExecutableName)
+      get() = PathValidator.verifyFile(File(path, binaryDirectory), javaExecutableName)
 
    override val packageExecutable: File
-      get() = getJDKFile(binaryDirectory, jpackageExecutableName)
+      get() = PathValidator.verifyFile(File(path, binaryDirectory), jpackageExecutableName)
 
    override val jdepsExecutable: File
-      get() = getJDKFile(binaryDirectory, jdepsExecutableName)
-
-   /**
-    * Get File in JDK
-    * Throws FileNotFoundException if not found
-    */
-   protected fun getJDKFile(fileRelativePath: String, fileName: String): File {
-      val fullPath = File(File(path,fileRelativePath), fileName)
-      if (!fullPath.exists())
-         throw FileNotFoundException("JDK file '${fullPath.absolutePath}' not found. This may occur on JDK versions below 14 for some executables")
-
-      return fullPath
-   }
+      get() = PathValidator.verifyFile(File(path, binaryDirectory), jdepsExecutableName)
 
    override fun equals(other: Any?): Boolean {
       if (this === other) return true
@@ -73,5 +61,4 @@ abstract class AbstractJDK(usersJDKName:String, fullJDKPath: File) : JDK {
    override fun toString(): String {
       return name
    }
-
 }

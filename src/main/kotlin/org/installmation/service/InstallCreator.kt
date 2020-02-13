@@ -43,58 +43,58 @@ class InstallCreator(private val configuration: Configuration) {
      * Create image (.exe or .app file), but not the installer
      */
     fun createImage(prj: InstallProject): GenerateResult {
-        checkNotNull(prj.imageBuildDirectory)
-        checkNotNull(prj.jpackageJDK)
-        checkNotNull(prj.mainJar)
-        checkNotNull(prj.javaFXLib?.path)
+       checkNotNull(prj.imageBuildDirectory)
+       checkNotNull(prj.jpackageJDK)
+       checkNotNull(prj.mainJar)
+       checkNotNull(prj.javaFXLib?.path)
 
-        configuration.eventBus.post(ClearMessagesEvent())
-        progressMessage("Image creation started....")
+       configuration.eventBus.post(ClearMessagesEvent())
+       progressMessage("Image creation started....")
 
-        val packager = initializeImagePackager(prj)
-        val fullCommand = packager.toString()
-        log.info("command: $fullCommand")
-        progressMessage("command: $fullCommand")
-        val processOutput = packager.execute(30)
-        for (line in processOutput.output)
-            progressMessage(line)
+       val packager = initializeImagePackager(prj, false)
+       val fullCommand = packager.toString()
+       log.info("command: $fullCommand")
+       progressMessage("command: $fullCommand")
+       val processOutput = packager.execute(30)
+       for (line in processOutput.output)
+          progressMessage(line)
 
-        val result: GenerateResult
-        if (!processOutput.hasErrors()) {
-            progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
-            result = GenerateResult(true)
-        } else {
-            progressErrorMessage("Image creation failed with errors:")
-            result = GenerateResult(false, processOutput.errors)
-            for (line in processOutput.errors) {
-                log.error(line)
-                progressErrorMessage(line)
-            }
-        }
-        return result
+       val result: GenerateResult
+       if (!processOutput.hasErrors()) {
+          progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
+          result = GenerateResult(true)
+       } else {
+          progressErrorMessage("Image creation failed with errors:")
+          result = GenerateResult(false, processOutput.errors)
+          for (line in processOutput.errors) {
+             log.error(line)
+             progressErrorMessage(line)
+          }
+       }
+       return result
     }
 
     // TODO error handling
     fun createImageScript(prj: InstallProject): ShellScript {
-        val packager = initializeImagePackager(prj)
-        val fullCommand = packager.toShellString()
-        val script = ShellScriptFactory.createScript("generate_image")
-        script.addLine(fullCommand)
-        return script
+       val packager = initializeImagePackager(prj, true)
+       val fullCommand = packager.toShellString()
+       val script = ShellScriptFactory.createScript("generate_image")
+       script.addLine(fullCommand)
+       return script
     }
 
     fun createInstallerScript(prj: InstallProject): ShellScript {
-        checkNotNull(prj.installerDirectory)
-        checkNotNull(prj.jpackageJDK)
-        checkNotNull(prj.mainJar)
-        checkNotNull(prj.javaFXLib?.path)
-        checkNotNull(prj.installerType)
+       checkNotNull(prj.installerDirectory)
+       checkNotNull(prj.jpackageJDK)
+       checkNotNull(prj.mainJar)
+       checkNotNull(prj.javaFXLib?.path)
+       checkNotNull(prj.installerType)
 
-        val packager = initializeInstallerPackager(prj)
-        val fullCommand = packager.toShellString()
-        val script = ShellScriptFactory.createScript("generate_installer")
-        script.addLine(fullCommand)
-        return script
+       val packager = initializeInstallerPackager(prj, true)
+       val fullCommand = packager.toShellString()
+       val script = ShellScriptFactory.createScript("generate_installer")
+       script.addLine(fullCommand)
+       return script
     }
 
     /**
@@ -108,94 +108,104 @@ class InstallCreator(private val configuration: Configuration) {
         checkNotNull(prj.installerType)
 
         configuration.eventBus.post(ClearMessagesEvent())
-        progressMessage("Installer creation started....")
+       progressMessage("Installer creation started....")
 
-        // Step 1 create image as well
-        val imageResult = createImage(prj)
-        if (!imageResult.successful)
-            return imageResult
+       // Step 1 create image as well
+       val imageResult = createImage(prj)
+       if (!imageResult.successful)
+          return imageResult
 
-        progressMessage("*** APPLICATION IMAGE CREATED SUCCESSFULLY. STARTING INSTALLER CREATION ***")
+       progressMessage("*** APPLICATION IMAGE CREATED SUCCESSFULLY. STARTING INSTALLER CREATION ***")
 
-        // Step 2 - create installer based on image created in Step 1
-        val packager = initializeInstallerPackager(prj)
-        val fullCommand = packager.toString()
-        log.info("command: $fullCommand")
-        progressMessage("command: $fullCommand")
-        val processOutput = packager.execute(30)
-        for (line in processOutput.output)
-            progressMessage(line)
+       // Step 2 - create installer based on image created in Step 1
+       val packager = initializeInstallerPackager(prj, false)
+       val fullCommand = packager.toString()
+       log.info("command: $fullCommand")
+       progressMessage("command: $fullCommand")
+       val processOutput = packager.execute(30)
+       for (line in processOutput.output)
+          progressMessage(line)
 
-        val result: GenerateResult
-        if (!processOutput.hasErrors()) {
-            progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
-            result = GenerateResult(true)
+       val result: GenerateResult
+       if (!processOutput.hasErrors()) {
+          progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
+          result = GenerateResult(true)
         } else {
-            progressMessage("Installer creation failed with errors:")
-            result = GenerateResult(false, processOutput.errors)
-            for (line in processOutput.errors) {
-                log.error(line)
-                progressErrorMessage(line)
-            }
-        }
-        return result
+          progressMessage("Installer creation failed with errors:")
+          result = GenerateResult(false, processOutput.errors)
+          for (line in processOutput.errors) {
+             log.error(line)
+             progressErrorMessage(line)
+          }
+       }
+       return result
     }
 
-    /**
-     * Create Installer
-     */
-    private fun initializeInstallerPackager(prj: InstallProject): JPackageExecutable {
-        deleteDirectories(prj.installerDirectory)
-        prj.installerDirectory?.mkdirs()
+   /**
+    * Create Installer
+    */
+   private fun initializeInstallerPackager(prj: InstallProject, scriptOnly: Boolean): JPackageExecutable {
+      if (!scriptOnly) {
+         deleteDirectories(prj.installerDirectory)
+         prj.installerDirectory?.mkdirs()
+      }
 
-        val packager = JPackageExecutable(prj.jpackageJDK!!)
-        packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
-        packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
-        packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
-        packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
-        packager.parameters.addArgument(ValueArgument("-n", prj.name))
-        packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
-        processOSXParameters(packager, prj)
-        return packager
-    }
+      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
+      packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
+      packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2019"))
+      packager.parameters.addArgument(ValueArgument("-n", prj.name))
+      packager.parameters.addArgument(packager.createInstallerAppImageParameter(prj.name!!, prj.imageBuildDirectory!!.path))
+      processOSXParameters(packager, prj)
+      return packager
+   }
 
-    /**
-     * This is called by installer creation process and returns the command output
-     */
-    private fun initializeImagePackager(prj: InstallProject): JPackageExecutable {
-        checkNotNull(prj.inputDirectory)
-        checkNotNull(prj.mainJar)
-        checkNotNull(prj.mainClass)
+   /**
+    * This is called by installer creation process and returns the command output
+    */
+   private fun initializeImagePackager(prj: InstallProject, scriptOnly: Boolean): JPackageExecutable {
+      checkNotNull(prj.inputDirectory)
+      checkNotNull(prj.mainJar)
+      checkNotNull(prj.mainClass)
 
-        // STEP 1 - make sure lib/ and main jar in imageContentDirectory
-        createImageContent(prj)
+      // for scripts,  don't "do" anything
+      val logo: File?
+      if (scriptOnly) {
+         logo = prj.applicationLogo
+      }
+      else{
+         // STEP 1 - make sure lib/ and main jar in imageContentDirectory
+         createImageContent(prj)
 
-       // Step 2 - Generate Image in imageBuildDirectory
-       progressMessage("Deleting old image content....")
-       deleteDirectories(prj.imageBuildDirectory)
-       prj.imageBuildDirectory!!.mkdir()
+         // Step 2 - Generate Image in imageBuildDirectory
+         progressMessage("Deleting old image content....")
+         deleteDirectories(prj.imageBuildDirectory)
+         prj.imageBuildDirectory!!.mkdir()
+         logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
+      }
 
-       val packager = JPackageExecutable(prj.jpackageJDK!!)
-       packager.parameters.addArgument(packager.createImageParameter())
-       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
-       packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
-       packager.parameters.addArgument(ValueArgument("--vendor", prj.vendor))
-       packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2020"))
-       val logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
-       packager.parameters.addArgument(ValueArgument("--icon", logo?.path))
-       packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
-       packager.parameters.addArgument(ValueArgument("-n", prj.name))
+      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      packager.parameters.addArgument(packager.createImageParameter())
+      packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
+      packager.parameters.addArgument(ValueArgument("--vendor", prj.vendor))
+      packager.parameters.addArgument(ValueArgument("--copyright", prj.copyright ?: "Copyright 2020"))
 
-       packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
+      packager.parameters.addArgument(ValueArgument("--icon", logo?.path))
+      packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
+      packager.parameters.addArgument(ValueArgument("-n", prj.name))
 
-       // check if modular application
-       val modules = generateModuleDependencies(prj)
-       packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+      packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
 
-       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
-       packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
-       return packager
-    }
+      // check if modular application
+      val modules = generateModuleDependencies(prj)
+      packager.parameters.addArgument(ValueArgument("--add-modules", modules))
+
+      packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
+      packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
+      return packager
+   }
 
    private fun processOSXParameters(packager: JPackageExecutable, prj: InstallProject) {
       if (OperatingSystem.os() == OperatingSystem.Type.OSX) {

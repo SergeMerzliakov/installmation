@@ -1,0 +1,59 @@
+{
+  "version": "0.1.52",
+  "mainClass": "org.installmation.InstallmationApplication",
+  "vendor": "Serge Merzliakov",
+  "mainJar": {
+    "path": "/Users/foo/installmation-0.1.52.jar"
+  },
+  "installerType": "pkg",
+  "copyright": "Copyright Serge 2020",
+  "jpackageJDK": {
+    "jdk-name": "jpackage14",
+    "jdk-path": "/jdk14",
+    "operating-system": "OSX"
+  },
+  "applicationLogo": {
+    "path": "/Users/foo/logo.png"
+  },
+  "javaFXLib": {
+    "name": "jfx13",
+    "path": {
+      "path": "/Library/Java/javafx/13.0/lib"
+    }
+  },
+  "javaFXMods": {
+    "name": "jfx13-mods",
+    "path": {
+      "path": "/Library/Java/javafx/13.0/jmods"
+    }
+  },
+  "installJDK": {
+    "jdk-name": "java12",
+    "jdk-path": "/Library/Java/JavaVirtualMachines/jdk-12.jdk",
+    "operating-system": "OSX"
+  },
+  "inputDirectory": {
+    "path": "/Users/foo/installmationInput"
+  },
+  "imageBuildDirectory": {
+    "path": "/Users/foo/installmationBuild"
+  },
+  "installerDirectory": {
+    "path": "/Users/foo/installmationInstaller"
+  },
+  "customModules": [
+    "java.logging",
+    "java.sql",
+    "java.management"
+  ],
+  "classPath": [
+    {
+      "path": "/Users/serge/installmation/build/deplibs"
+    }
+  ],
+  "packageIdentifier": "",
+  "packageName": "",
+  "signPrefix": "",
+  "signPackage": false,
+  "name": "installmation"
+}
