@@ -138,7 +138,7 @@ class InstallProject(var name: String? = null) {
     * A File to be created  - just path is valid path and nothing else
     */
    private fun validateFutureFileField(fieldName: String, field: File?, result: ValidationResult) {
-      val valid = PathValidator.isValidPath(field?.path)
+      val valid = PathValidator.isValidPathSyntax(field?.path)
       if (!valid) {
          result.success = false
          result.errors.add("$fieldName Error - Invalid Path String '${field?.path}'")

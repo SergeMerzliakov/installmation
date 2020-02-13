@@ -17,24 +17,28 @@ package org.installmation.io
 
 import java.io.File
 import java.io.FileNotFoundException
-import java.nio.file.InvalidPathException
-import java.nio.file.Paths
+import java.io.IOException
 
 
 object PathValidator {
 
    /**
-    * Checks path syntax only
+    * Checks path syntax by creating the file. the only reliable way to
+    * check syntax (and permissions indirectly as well)
     */
-   fun isValidPath(path: String?): Boolean {
+   fun isValidPathSyntax(path: String?): Boolean {
+      if (path == null || path.trim().isEmpty())
+         return false
+      val f = File(path)
       try {
-         Paths.get(path)
-      } catch (ex: InvalidPathException) {
-         return false
+         f.createNewFile()
+         return true
+      } catch (ex: IOException) {
       } catch (ex: NullPointerException) {
-         return false
+      } finally {
+         f.delete()
       }
-      return true
+      return false
    }
 
    /**
