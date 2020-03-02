@@ -15,7 +15,7 @@ The tool will provide the following:
 No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
 to complement those approaches.
 
-### Release 0.1.47 ###
+### Release 0.1.57 ###
 
 Full installers for Mac and Windows can be found at https://github.com/SergeMerzliakov/installmation/releases
 
@@ -23,8 +23,7 @@ These installers are created by Installmation itself.
 
 #### What's New
 
-* Application icons/logos can be added. Image files (png and jpeg) are automatically converted, if required, to ICNS or ICO files, 
-depending on the operating system.
+* OSX installer signing with Developer ID Installer certificates
 
 
 ### Running from the Command Line
