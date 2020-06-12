@@ -4,12 +4,12 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
+import org.installmation.FXTest
 import org.installmation.configuration.UserHistory
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 import java.io.File
 
-class ChooseFileDialogTest : ApplicationTest() {
+class ChooseFileDialogTest : FXTest() {
    companion object {
       const val DIALOG_BUTTON = "button1"
    }
@@ -33,9 +33,9 @@ class ChooseFileDialogTest : ApplicationTest() {
    }
 
    // this does nothing TODO figure out how to test standard Dialogs
-   @Test
-   fun shouldShowDialog() {
-      clickOn("#$DIALOG_BUTTON")
-   }
+//   @Test
+//   fun shouldShowDialog() {
+//      clickOn("#$DIALOG_BUTTON")
+//   }
 
 }

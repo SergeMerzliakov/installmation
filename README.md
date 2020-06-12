@@ -69,3 +69,7 @@ in **local.properties**, to make sure JavaFX and JDK are setup.
     <repo>/local.properties
 
 
+The tests run in `headless` mode by default. To run tests and show their execution with the TestFX robot use the `showTests` environment variable
+
+    gradlew test -DshowTests=true
+

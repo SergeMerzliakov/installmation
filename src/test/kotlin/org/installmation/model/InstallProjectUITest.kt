@@ -20,6 +20,7 @@ import com.google.common.eventbus.EventBus
 import javafx.scene.control.CheckBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.FXTest
 import org.installmation.InstallmationApplication
 import org.installmation.TestConstants
 import org.installmation.configuration.Configuration
@@ -35,13 +36,12 @@ import org.installmation.javafx.test.TextInputHelper
 import org.installmation.model.binary.JDK
 import org.junit.AfterClass
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 import java.io.File
 
 /**
  * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents
  */
-class InstallProjectUITest : ApplicationTest() {
+class InstallProjectUITest : FXTest() {
 
    private val application = InstallmationApplication()
    private val textHelper = TextInputHelper(this)

@@ -23,11 +23,11 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.FXTest
 import org.installmation.javafx.test.FXID
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 
-class ItemListDialogTest : ApplicationTest() {
+class ItemListDialogTest : FXTest() {
 
    companion object {
       const val SHOW_DIALOG_BUTTON = "button1"

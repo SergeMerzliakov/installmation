@@ -21,6 +21,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.FXTest
 import org.installmation.TestingBootstrap
 import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
@@ -29,11 +30,10 @@ import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDKFactory
 import org.junit.BeforeClass
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 import org.testfx.util.WaitForAsyncUtils
 import java.io.File
 
-class JdepsDialogTest : ApplicationTest() {
+class JdepsDialogTest : FXTest() {
 
    companion object {
       const val DIALOG_BUTTON = "button1"

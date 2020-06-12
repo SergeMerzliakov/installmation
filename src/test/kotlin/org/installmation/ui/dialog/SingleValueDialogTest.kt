@@ -24,11 +24,11 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.FXTest
 import org.installmation.javafx.test.FXID
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 
-class SingleValueDialogTest : ApplicationTest() {
+class SingleValueDialogTest : FXTest() {
 
    companion object {
       const val SHOW_DIALOG_BUTTON = "button1"

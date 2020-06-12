@@ -20,11 +20,11 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
+import org.installmation.FXTest
 import org.installmation.javafx.test.FXID
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 
-class AboutDialogTest : ApplicationTest() {
+class AboutDialogTest : FXTest() {
 
    companion object {
       const val DIALOG_BUTTON = "button1"

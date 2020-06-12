@@ -22,11 +22,11 @@ import javafx.scene.control.Label
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.FXTest
 import org.junit.Test
-import org.testfx.framework.junit.ApplicationTest
 import org.testfx.matcher.control.LabeledMatchers.hasText
 
-class HelpDialogTest : ApplicationTest() {
+class HelpDialogTest : FXTest() {
 
    companion object {
       const val DIALOG_BUTTON = "button1"

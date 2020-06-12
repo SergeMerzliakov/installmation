@@ -18,6 +18,7 @@ package org.installmation.application
 
 import com.google.common.eventbus.EventBus
 import javafx.stage.Stage
+import org.installmation.FXTest
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
 import org.installmation.controller.BinariesController
@@ -30,7 +31,6 @@ import org.installmation.javafx.test.FXID
 import org.installmation.javafx.test.WindowHelper
 import org.junit.Test
 import org.testfx.api.FxAssert
-import org.testfx.framework.junit.ApplicationTest
 import org.testfx.matcher.base.NodeMatchers
 
 /** org.installmation.application.ApplicationDialogTest
@@ -38,7 +38,7 @@ import org.testfx.matcher.base.NodeMatchers
  * Note: Running tests in Windows with > 1 Intellij projects will fail on first test in this class.
  * Shut down other projects, minimize IDEA window and then it works.
  */
-class ApplicationDialogTest : ApplicationTest() {
+class ApplicationDialogTest : FXTest() {
 
     private val application = InstallmationApplication()
     override fun start(stage: Stage?) {
