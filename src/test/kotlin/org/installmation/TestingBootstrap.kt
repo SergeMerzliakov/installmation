@@ -29,7 +29,7 @@ import java.util.*
 object TestingBootstrap {
 
    private const val PROPERTY_TEST_JDK = "JDK"
-   private const val PROPERTY_TEST_JFX = "JFX"
+   private const val PROPERTY_TEST_JFX = "JFX_PATH"
    private val log: Logger = LogManager.getLogger(TestingBootstrap::class.java)
    var jdk: File? = null
    var javafx: File? = null

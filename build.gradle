@@ -12,7 +12,7 @@ def localProperties = new Properties()
 if (!file(localConfig).exists()) {
     throw new GradleException("Local configuration file $localConfig not found. Please create this file " +
             "and add these properties (detailed in README.md) -\n" +
-            "JFX_VERSION, JFX, JDK")
+            "JFX_VERSION, JFX_PATH, JDK")
 }
 file(localConfig).withInputStream { localProperties.load(it) }
 
@@ -20,7 +20,7 @@ repositories {
     mavenCentral()
     jcenter()
     flatDir {
-        dirs "${localProperties.JFX}/lib"
+        dirs "${localProperties.JFX_PATH}/lib"
     }
     maven {
         url "https://repository.mulesoft.org/nexus/content/repositories/public/"
@@ -82,7 +82,7 @@ task runApp(type: JavaExec) {
     main = mainClassName
     doFirst {
         jvmArgs = [
-                '--module-path', "${localProperties.JFX}/lib",
+                '--module-path', "${localProperties.JFX_PATH}/lib",
                 '--add-modules', 'javafx.fxml,javafx.controls,javafx.swing'
         ]
     }
