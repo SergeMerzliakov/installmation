@@ -1,0 +1,55 @@
+{
+  "version": "0.2",
+  "name": "Muscle Application",
+  "mainClass": "acme.app.SomeApplication",
+  "vendor": "Acme Muscle Pills",
+  "mainJar": {
+    "path": "/Users/coyote/dev/s3manager/install/app/application-0.2.jar"
+  },
+  "installerType": "pkg",
+  "jpackageJDK": {
+    "jdk-name": "jpackage",
+    "jdk-path": "/Users/coyote/tools/jdk14",
+    "operating-system": "OSX"
+  },
+  "applicationLogo": {
+    "path": "/Users/coyote/dev/s3manager/AppIcon.iconset/icon_32x32@2x.png"
+  },
+  "javaFXLib": {
+    "name": "JFX 14.0.1",
+    "path": {
+      "path": "/Library/Java/javafx/14.0.1/lib"
+    }
+  },
+  "javaFXMods": {
+    "name": "jmods 14.0.1",
+    "path": {
+      "path": "/Library/Java/javafx/14.0.1/jmods"
+    }
+  },
+  "installJDK": {
+    "jdk-name": "install JDK",
+    "jdk-path": "/Library/Java/JavaVirtualMachines/jdk-12.jdk",
+    "operating-system": "OSX"
+  },
+  "inputDirectory": {
+    "path": "/Users/coyote/junk/myAppInstall/input"
+  },
+  "imageBuildDirectory": {
+    "path": "/Users/coyote/junk/myAppInstall/build"
+  },
+  "installerDirectory": {
+    "path": "/Users/coyote/junk/myAppInstall/installer"
+  },
+  "customModules": [],
+  "classPath": [
+    {
+      "path": "/Users/coyote/dev/s3manager/install/app/lib"
+    }
+  ],
+  "signInstaller": true,
+  "appleInstallerCertName": "Wily Coyote (57HYU3G5NT)",
+  "appleInstallerKeyChain": {
+    "path": "/Users/coyote/Library/Keychains/coyote.keychain-db"
+  }
+}

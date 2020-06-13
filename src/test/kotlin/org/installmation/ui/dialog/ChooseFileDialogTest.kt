@@ -24,7 +24,7 @@ class ChooseFileDialogTest : FXTest() {
       buttonSingle = Button("Show Dialog")
       buttonSingle.id = DIALOG_BUTTON
       buttonSingle.setOnAction {
-         result = ChooseFileDialog.showAndWait(stage!!, "Choose Project", userHistory, InstallmationExtensionFilters.projectFilter())
+         result = ChooseFileDialog.showAndWait(stage!!, "Choose Project", userHistory.lastPath, InstallmationExtensionFilters.projectFilter())
       }
 
       stage?.scene = Scene(VBox(buttonSingle), 100.0, 100.0)

@@ -73,3 +73,7 @@ The tests run in `headless` mode by default. To run tests and show their executi
 
     gradlew test -DshowTests=true
 
+
+### Sample Configurations
+
+The `samples` directory contains sample configuration files to help with troubleshooting.

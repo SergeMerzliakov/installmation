@@ -24,4 +24,7 @@ import java.io.File
  */
 class UserHistory {
    var lastPath: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)
+
+   // store last project path used separately
+   var lastProjectPath: File = File(lastPath, Constant.PROJECT_DIR)
 }

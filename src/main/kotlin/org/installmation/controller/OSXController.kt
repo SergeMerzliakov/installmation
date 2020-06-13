@@ -74,9 +74,10 @@ class OSXController(private val configuration: Configuration,
 
    @FXML
    fun chooseKeychain() {
-      val result = ChooseFileDialog.showAndWait(signKeyChainField.scene.window as Stage, "Choose Application Logo Image", userHistory, InstallmationExtensionFilters.appleKeyChainFilter())
+      val result = ChooseFileDialog.showAndWait(signKeyChainField.scene.window as Stage, "Choose Application Logo Image", userHistory.lastPath, InstallmationExtensionFilters.appleKeyChainFilter())
       if (result.ok) {
-         signKeyChainField.text = result.data?.path
+         userHistory.lastPath = result.data!!.parentFile
+         signKeyChainField.text = result.data.path
       }
    }
 

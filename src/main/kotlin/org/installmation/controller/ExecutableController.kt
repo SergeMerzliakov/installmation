@@ -51,9 +51,10 @@ class ExecutableController(configuration: Configuration,
 
    @FXML
    fun chooseMainJar() {
-      val result = ChooseFileDialog.showAndWait(mainJarField.scene.window as Stage, "Select Main Application Jar File", userHistory, InstallmationExtensionFilters.jarFilter())
+      val result = ChooseFileDialog.showAndWait(mainJarField.scene.window as Stage, "Select Main Application Jar File", userHistory.lastPath, InstallmationExtensionFilters.jarFilter())
       if (result.ok) {
-         mainJarField.text = result.data!!.path
+         userHistory.lastPath = result.data!!.parentFile
+         mainJarField.text = result.data.path
       }
    }
 

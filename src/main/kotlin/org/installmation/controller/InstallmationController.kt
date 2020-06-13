@@ -138,9 +138,10 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun openProject() {
-      val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory, InstallmationExtensionFilters.projectFilter())
+      val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory.lastProjectPath, InstallmationExtensionFilters.projectFilter())
       if (result.ok) {
-         val p = projectService.load(result.data!!)
+         userHistory.lastProjectPath = result.data?.parentFile!!
+         val p = projectService.load(result.data)
          workspace.setCurrentProject(p)
       }
    }
@@ -153,6 +154,7 @@ class InstallmationController(private val configuration: Configuration,
    @FXML
    fun saveProject() {
        workspace.save()
+      //   userHistory.lastProjectPath = result.
     }
 
     @FXML

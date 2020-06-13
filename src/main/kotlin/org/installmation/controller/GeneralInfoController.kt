@@ -85,9 +85,10 @@ class GeneralInfoController(configuration: Configuration,
 
    @FXML
    fun chooseLogo() {
-      val result = ChooseFileDialog.showAndWait(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory, InstallmationExtensionFilters.logoImageFilter())
+      val result = ChooseFileDialog.showAndWait(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory.lastPath, InstallmationExtensionFilters.logoImageFilter())
       if (result.ok) {
-         logoPathField.text = result.data?.path
+         userHistory.lastPath = result.data!!.parentFile
+         logoPathField.text = result.data.path
          updateLogoPreview(logoPathField.text)
       }
    }

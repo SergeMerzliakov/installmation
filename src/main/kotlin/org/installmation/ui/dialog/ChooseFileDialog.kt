@@ -29,16 +29,15 @@ object ChooseFileDialog {
    /**
     * For extensionFilter parameter use InstallmationExtensionFilters methods - no need to create your own
     */
-   fun showAndWait(parent: Stage, title: String, userHistory: UserHistory, extensionFilter: FileChooser.ExtensionFilter? = null): DialogResult<File> {
+   fun showAndWait(parent: Stage, title: String, lastPath: File, extensionFilter: FileChooser.ExtensionFilter? = null): DialogResult<File> {
       val chooser = FileChooser()
       chooser.title = title
-      chooser.initialDirectory = userHistory.lastPath
+      chooser.initialDirectory = lastPath
       if (extensionFilter != null)
          chooser.extensionFilters.add(extensionFilter)
 
       val chosen = chooser.showOpenDialog(parent) //single file only
       if (chosen != null) {
-         userHistory.lastPath = chosen.parentFile
          return DialogResult(true, chosen)
       }
       return DialogResult(false, chosen)

@@ -160,9 +160,10 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
    
    @FXML
    fun configureMainJar() {
-      val result = ChooseFileDialog.showAndWait(mainJarText.scene.window as Stage, "Select Main Application Jar File", userHistory, InstallmationExtensionFilters.jarFilter())
+      val result = ChooseFileDialog.showAndWait(mainJarText.scene.window as Stage, "Select Main Application Jar File", userHistory.lastPath, InstallmationExtensionFilters.jarFilter())
       if (result.ok) {
-         mainJarText.text = result.data!!.path
+         userHistory.lastPath = result.data!!.parentFile
+         mainJarText.text = result.data.path
       }
    }
 }
