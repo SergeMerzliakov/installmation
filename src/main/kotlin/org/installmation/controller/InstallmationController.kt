@@ -159,7 +159,8 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun saveProject() {
-      workspace.save()
+      if (!workspace.save())
+         saveProjectAs()
    }
 
    @FXML

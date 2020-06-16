@@ -19,31 +19,16 @@ package org.installmation.ui.dialog
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.File
 
 
-
-object Foo{
-   fun saveFileDialog(title: String, initialFileName: String, lastPath: File, extensionFilter: FileChooser.ExtensionFilter? = InstallmationExtensionFilters.projectFilter()): DialogResult<File> {
-      val chooser = createChooser(title, lastPath, extensionFilter)
-      chooser.initialFileName = initialFileName
-      val chosen = chooser.showSaveDialog(null) // single file only
-      if (chosen != null) {
-         return DialogResult(true, chosen)
-      }
-      return DialogResult(false, chosen)
-   }
-
-
-
-}
-
+val log: Logger = LogManager.getLogger("FileDialog")
 
 /**
  * Wrapper around JavaFX FileChooser dialog. Chooses a single file for now
  */
-
-
 fun openFileDialog(parent: Stage, title: String, lastPath: File, extensionFilter: FileChooser.ExtensionFilter? = InstallmationExtensionFilters.projectFilter()): DialogResult<File> {
    val chooser = createChooser(title, lastPath, extensionFilter)
    val chosen = chooser.showOpenDialog(parent) //single file only
@@ -54,7 +39,6 @@ fun openFileDialog(parent: Stage, title: String, lastPath: File, extensionFilter
 }
 
 fun saveFileDialog(parent: Stage, title: String, initialFileName: String, lastPath: File, extensionFilter: FileChooser.ExtensionFilter? = InstallmationExtensionFilters.projectFilter()): DialogResult<File> {
-   check(lastPath.isDirectory)
    val chooser = createChooser(title, lastPath, extensionFilter)
    chooser.initialFileName = initialFileName
    val chosen = chooser.showSaveDialog(parent) // single file only
@@ -75,9 +59,13 @@ fun openDirectoryDialog(parent: Stage, title: String, initialDirectory: File): D
    return DialogResult(false, chosen)
 }
 
-
 private fun createChooser(title: String, lastPath: File, extensionFilter: FileChooser.ExtensionFilter? = null): FileChooser {
    val chooser = FileChooser()
+   if (!lastPath.exists()) {
+      log.debug("Save directory [${lastPath.absolutePath}] not found. Creating directory")
+      lastPath.mkdirs()
+   }
+
    chooser.title = title
    chooser.initialDirectory = lastPath
    if (extensionFilter != null)
