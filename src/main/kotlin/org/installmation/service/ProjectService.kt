@@ -62,30 +62,15 @@ class ProjectService(val configuration: Configuration) {
       }
    }
 
-   /**
-    * Load from USER.HOME/.installmation/projects
-    * Not sure how useful this really is
-    */
-   fun loadFromDefaultDirectory(projectName: String): InstallProject {
-      val projectFileName = InstallProject.projectFileName(projectName)
-      val baseDir = projectBaseDirectory()
-      val matches = baseDir.listFiles { pathName -> pathName.name == projectFileName }
-      if (matches == null || matches.isEmpty())
-         throw LoadDataException("Error loading project '${projectName}' from file. Project not found at ${baseDir.canonicalPath}")
-
-        val file = matches[0]
-      return load(file)
-    }
-
-    fun close(p: InstallProject?) {
-        if (p == null)
-            return
-        //save then close
-        collectUpdates(p)
-        configuration.eventBus.post(ProjectClosedEvent(p))
-        log.info("Project '${p.name}' closed")
-    }
-
+   fun close(p: InstallProject?) {
+      if (p == null)
+         return
+      //save then close
+      collectUpdates(p)
+      configuration.eventBus.post(ProjectClosedEvent(p))
+      log.info("Project '${p.name}' closed")
+   }
+   
     /**
      * Fire events for all controllers to add their updates to the current
      * project. Nothing actually done here
@@ -105,14 +90,14 @@ class ProjectService(val configuration: Configuration) {
     /**
      * Write to file
      */
-    fun save(p: InstallProject) {
+    fun save(projectFile: File, p: InstallProject) {
        try {
           collectUpdates(p)
-          val projectFile = File(projectBaseDirectory(), InstallProject.projectFileName(p.name!!))
           val writer = ApplicationJsonWriter<InstallProject>(projectFile, JsonParserFactory.configurationParser())
           writer.save(p)
           log.debug("Saved project ${p.name} to file")
-       } catch (e: Exception) {
+       }
+       catch (e: Exception) {
           log.error("Error writing project ${p.name} to file", e)
           throw SaveDataException("Error writing project ${p.name} to file", e)
        }

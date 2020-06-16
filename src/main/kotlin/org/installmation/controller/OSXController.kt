@@ -24,14 +24,15 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.HISTORY_KEYCHAIN
 import org.installmation.configuration.UserHistory
 import org.installmation.javafx.EventUtils
 import org.installmation.javafx.FileFieldUtils
 import org.installmation.model.InstallProject
 import org.installmation.service.*
-import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
+import org.installmation.ui.dialog.openFileDialog
 
 class OSXController(private val configuration: Configuration,
                     private val userHistory: UserHistory,
@@ -74,9 +75,9 @@ class OSXController(private val configuration: Configuration,
 
    @FXML
    fun chooseKeychain() {
-      val result = ChooseFileDialog.showAndWait(signKeyChainField.scene.window as Stage, "Choose Application Logo Image", userHistory.lastPath, InstallmationExtensionFilters.appleKeyChainFilter())
+      val result = openFileDialog(signKeyChainField.scene.window as Stage, "Choose Application Logo Image", userHistory.getFile(HISTORY_KEYCHAIN), InstallmationExtensionFilters.appleKeyChainFilter())
       if (result.ok) {
-         userHistory.lastPath = result.data!!.parentFile
+         userHistory.set(HISTORY_KEYCHAIN, result.data!!.parentFile)
          signKeyChainField.text = result.data.path
       }
    }

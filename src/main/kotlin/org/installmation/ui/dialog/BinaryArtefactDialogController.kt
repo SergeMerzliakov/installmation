@@ -42,6 +42,7 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.configuration.HISTORY_ARTEFACT
 import org.installmation.configuration.UserHistory
 import org.installmation.model.NamedDirectory
 import java.io.File
@@ -137,10 +138,10 @@ class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, pri
    fun addBinaryArtefact() {
       val chooser = DirectoryChooser()
       chooser.title = "Add Artefact Directory"
-      chooser.initialDirectory = userHistory.lastPath
+      chooser.initialDirectory = userHistory.getFile(HISTORY_ARTEFACT)
       val chosen = chooser.showDialog(artefactTableView.scene.window as Stage)
       if (chosen != null) {
-         userHistory.lastPath = chosen.parentFile
+         userHistory.set(HISTORY_ARTEFACT, chosen.parentFile)
          val id = "artefact-${Random.nextInt(99, 9999)}"
          val addedItem = NamedDirectory(id, chosen)
          artefacts.add(addedItem)

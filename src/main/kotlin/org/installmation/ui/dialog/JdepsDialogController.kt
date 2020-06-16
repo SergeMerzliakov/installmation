@@ -19,19 +19,18 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
-import javafx.stage.DirectoryChooser
-import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.installmation.configuration.HISTORY_CLASSPATH
+import org.installmation.configuration.HISTORY_MAIN_JAR
+import org.installmation.configuration.HISTORY_MODULEPATH
 import org.installmation.configuration.UserHistory
 import org.installmation.core.CollectionUtils
-import org.installmation.model.NamedDirectory
 import org.installmation.model.binary.JDK
 import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
-import kotlin.random.Random
 
 class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File?, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
 
@@ -118,9 +117,11 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    @FXML
    fun addClassPath() {
-      val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory)
+      val result = openDirectoryDialog(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory.getFile(HISTORY_CLASSPATH))
       if (result.ok) {
-         classPath.add(result.data!!.path)
+         val chosenDir = result.data!!
+         userHistory.set(HISTORY_CLASSPATH, chosenDir)
+         classPath.add(chosenDir.path)
          log.debug("Added ${result.data.path} to classpath")
       }
    }
@@ -132,9 +133,11 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    @FXML
    fun addModulePath() {
-      val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Module Path Item", userHistory)
+      val result = openDirectoryDialog(classPathListView.scene.window as Stage, "Add Module Path Item", userHistory.getFile(HISTORY_MODULEPATH))
       if (result.ok) {
-         modulePath.add(result.data!!.path)
+         val chosenDir = result.data!!
+         userHistory.set(HISTORY_MODULEPATH, chosenDir)
+         modulePath.add(chosenDir.path)
          log.debug("Added ${result.data.path} to module path")
       }
    }
@@ -160,10 +163,11 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
    
    @FXML
    fun configureMainJar() {
-      val result = ChooseFileDialog.showAndWait(mainJarText.scene.window as Stage, "Select Main Application Jar File", userHistory.lastPath, InstallmationExtensionFilters.jarFilter())
+      val result = openFileDialog(mainJarText.scene.window as Stage, "Select Main Application Jar File", userHistory.getFile(HISTORY_MAIN_JAR), InstallmationExtensionFilters.jarFilter())
       if (result.ok) {
-         userHistory.lastPath = result.data!!.parentFile
-         mainJarText.text = result.data.path
+         val chosenDir = result.data!!
+         userHistory.set(HISTORY_MAIN_JAR, chosenDir)
+         mainJarText.text = chosenDir.path
       }
    }
 }

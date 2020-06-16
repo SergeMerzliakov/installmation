@@ -20,6 +20,10 @@ import javafx.application.Platform
 import javafx.stage.Stage
 import javafx.stage.Window
 
+/**
+ * Used for testing System Dialogs which are hard to test with mocking
+ * libraries.
+ */
 object WindowHelper {
 
    /**
@@ -30,7 +34,7 @@ object WindowHelper {
       var retry = 50
       var windows = Window.getWindows()
       var match = windows.find { (it as Stage).title == title }
-      if (match == null && retry-- > 0) {
+      if (match == null && --retry > 0) {
          Thread.sleep(100)
          windows = Window.getWindows()
          match = windows.find { (it as Stage).title == title }

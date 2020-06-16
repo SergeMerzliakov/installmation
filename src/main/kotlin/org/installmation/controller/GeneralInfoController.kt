@@ -26,16 +26,18 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.HISTORY_LOGO
 import org.installmation.configuration.UserHistory
+import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.core.OperatingSystem
 import org.installmation.image.ImageTool
 import org.installmation.javafx.EventUtils
 import org.installmation.javafx.FileFieldUtils
 import org.installmation.model.InstallProject
 import org.installmation.service.*
-import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.ErrorDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
+import org.installmation.ui.dialog.openFileDialog
 import java.io.File
 
 class GeneralInfoController(configuration: Configuration,
@@ -67,7 +69,6 @@ class GeneralInfoController(configuration: Configuration,
    fun initialize() {
       installerTypeCombo.items = FXCollections.observableList(OperatingSystem.installerType())
 
-      EventUtils.selectionChangedHandler(installerTypeCombo) { updateProject() }
       // project name is special - we need to update model as soon as user is finished with it
       // so that project saves get the latest value
       EventUtils.focusLostHandler(projectNameField) { 
@@ -85,9 +86,9 @@ class GeneralInfoController(configuration: Configuration,
 
    @FXML
    fun chooseLogo() {
-      val result = ChooseFileDialog.showAndWait(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory.lastPath, InstallmationExtensionFilters.logoImageFilter())
+      val result = openFileDialog(logoView.scene.window as Stage, "Choose Application Logo Image", userHistory.getFile(HISTORY_LOGO), InstallmationExtensionFilters.logoImageFilter())
       if (result.ok) {
-         userHistory.lastPath = result.data!!.parentFile
+         userHistory.set(HISTORY_LOGO, result.data!!.parentFile)
          logoPathField.text = result.data.path
          updateLogoPreview(logoPathField.text)
       }
@@ -130,6 +131,11 @@ class GeneralInfoController(configuration: Configuration,
    //-------------------------------------------------------
    //  Event Subscribers
    //-------------------------------------------------------
+
+   @Subscribe
+   fun handleApplicationStartCompleteEvent(e: ApplicationStartCompleteEvent) {
+      EventUtils.selectionChangedHandler(installerTypeCombo) { updateProject() }
+   }
 
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {

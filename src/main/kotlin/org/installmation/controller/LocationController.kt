@@ -20,17 +20,16 @@ import com.google.common.eventbus.Subscribe
 import javafx.fxml.FXML
 import javafx.scene.control.TextField
 import javafx.scene.control.Tooltip
-import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.installmation.configuration.Configuration
-import org.installmation.configuration.UserHistory
+import org.installmation.configuration.*
+import org.installmation.javafx.StageUtils
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.Workspace
-import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
+import org.installmation.ui.dialog.openDirectoryDialog
 import java.io.File
 
 
@@ -80,25 +79,29 @@ class LocationController(private val configuration: Configuration,
 
    @FXML
    fun chooseInputDirectory() {
-      val result = ChooseDirectoryDialog.showAndWait(inputDirectoryText.scene.window as Stage, "Select an Input Directory", userHistory)
+      //TODO
+      val result = openDirectoryDialog(StageUtils.primaryStage(), "Select an Input Directory", userHistory.getFile(HISTORY_INPUT))
       if (result.ok) {
-         inputDirectoryText.text = result.data!!.path
+         userHistory.set(HISTORY_INPUT, result.data!!)
+         inputDirectoryText.text = result.data.path
       }
    }
 
    @FXML
    fun chooseImageBuildDirectory() {
-      val result = ChooseDirectoryDialog.showAndWait(inputDirectoryText.scene.window as Stage, "Select an Image Build Directory", userHistory)
+      val result = openDirectoryDialog(StageUtils.primaryStage(), "Select an Image Build Directory", userHistory.getFile(HISTORY_IMAGE))
       if (result.ok) {
-         imageBuildDirectoryText.text = result.data!!.path
+         userHistory.set(HISTORY_IMAGE, result.data!!)
+         imageBuildDirectoryText.text = result.data.path
       }
    }
 
    @FXML
    fun chooseInstallerDirectory() {
-      val result = ChooseDirectoryDialog.showAndWait(inputDirectoryText.scene.window as Stage, "Select an Installer Directory", userHistory)
+      val result = openDirectoryDialog(StageUtils.primaryStage(), "Select an Installer Directory", userHistory.getFile(HISTORY_INSTALLER))
       if (result.ok) {
-         installerDirectoryText.text = result.data!!.path
+         userHistory.set(HISTORY_INSTALLER, result.data!!)
+         installerDirectoryText.text = result.data.path
       }
    }
 

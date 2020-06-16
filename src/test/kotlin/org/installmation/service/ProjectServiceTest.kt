@@ -44,12 +44,13 @@ class ProjectServiceTest {
       p.version = "1.0"
       p.customModules = mutableSetOf("java.sql", "java.base")
 
+      val file = File(baseDirectory, "proj.json")
       // save
       val service = ProjectService(config)
-      service.save(p)
+      service.save(file, p)
 
-      assertThat(p.projectFile(baseDirectory)).exists()
-      assertThat(p.projectFile(baseDirectory).readText()).isNotEmpty()
+      assertThat(file).exists()
+      assertThat(file.readText()).isNotEmpty()
    }
 
    @Test
@@ -58,13 +59,14 @@ class ProjectServiceTest {
       p.name = "project2"
       p.version = "2.0"
       p.customModules = mutableSetOf("java.sql", "java.base")
+      val file = File(baseDirectory, "proj.json")
 
       // save
       val service = ProjectService(config)
-      service.save(p)
+      service.save(file, p)
 
       // load and check 
-      val loaded = service.loadFromDefaultDirectory(p.name!!)
+      val loaded = service.load(file)
       assertThat(loaded).isEqualToComparingFieldByField(p)
    }
 

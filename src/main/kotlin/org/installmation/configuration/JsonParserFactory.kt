@@ -18,9 +18,9 @@ package org.installmation.configuration
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.installmation.model.WorkspaceSerializer
 import org.installmation.model.binary.*
 import org.installmation.service.Workspace
+import org.installmation.service.WorkspaceSerializer
 
 /**
  * Functionality shared by configuration readers and writers

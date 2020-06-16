@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Serge Merzliakov
+ * Copyright 2020 Serge Merzliakov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.installmation.service
 
-package org.installmation.javafx.test
-
-import io.mockk.every
-import org.installmation.ui.dialog.DialogResult
-import org.installmation.ui.dialog.openFileDialog
 import java.io.File
 
-/**
- * Setup various mocks
- */
-object MockHelper {
-
-   /**
-    * Mock wrapper around JFX file chooser ChooseFileDialog so we can mock
-    * loading files from files system
-    */
-   fun mockOpenFileDialog(fileChosen: String) {
-      every { openFileDialog(any(), any(), any(), any()) } returns DialogResult(true, File(fileChosen))
-   }
+class ProjectLoadException : Exception {
+	constructor(projectFile: File) : super("Failed to load project from file ${projectFile.absolutePath}")
+	constructor(projectFile: File, cause: Throwable) : super("Failed to load project from file ${projectFile.absolutePath}", cause)
+	constructor(cause: Throwable) : super(cause)
 }

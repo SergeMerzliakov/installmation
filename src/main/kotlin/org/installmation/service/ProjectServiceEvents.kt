@@ -17,11 +17,16 @@
 package org.installmation.service
 
 import org.installmation.model.InstallProject
+import java.io.File
+
+
 
 
 abstract class ProjectEvent(val project: InstallProject)
 
 class ProjectCreatedEvent(p: InstallProject) : ProjectEvent(p)
+
+class ProjectLoadingEvent(val projectFile: File)
 
 class ProjectLoadedEvent(p: InstallProject) : ProjectEvent(p)
 

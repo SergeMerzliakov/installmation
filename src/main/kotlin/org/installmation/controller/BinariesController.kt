@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
+import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.core.OperatingSystem
 import org.installmation.javafx.ComboUtils
 import org.installmation.javafx.EventUtils
@@ -91,11 +92,6 @@ class BinariesController(private val configuration: Configuration,
    @FXML
    fun initialize() {
       initializeConfiguredBinaries()
-
-      EventUtils.selectionChangedHandler(moduleJmodComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(moduleLibComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(installJDKComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(jpackageComboBox) { updateProject() }
    }
 
    /**
@@ -226,6 +222,19 @@ class BinariesController(private val configuration: Configuration,
    //  Event Subscribers
    //-------------------------------------------------------
 
+   /**
+    * This is a workaround as on startup, loading a project fires of these selection changed
+    * handlers. So we delay this until the app start is FULLY complete.
+    */
+   @Subscribe
+   fun handleApplicationStartCompleteEvent(e: ApplicationStartCompleteEvent) {
+      EventUtils.selectionChangedHandler(moduleJmodComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(moduleLibComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(installJDKComboBox) { updateProject() }
+      EventUtils.selectionChangedHandler(jpackageComboBox) { updateProject() }
+   }
+
+
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
@@ -240,6 +249,7 @@ class BinariesController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
       checkNotNull(e.project)
+
       jpackageComboBox.selectionModel.select(e.project.jpackageJDK)
       installJDKComboBox.selectionModel.select(e.project.installJDK)
       moduleJmodComboBox.selectionModel.select(e.project.javaFXMods)

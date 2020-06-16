@@ -33,26 +33,28 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
+import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.javafx.setPrimaryStage
 import org.installmation.service.*
 
+private val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
+private const val WINDOW_TITLE = "Installmation"
+
 
 class InstallmationApplication : Application() {
 
-   companion object {
-      val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
-      const val WINDOW_TITLE = "Installmation"
+   lateinit var workspace: Workspace
+   private lateinit var applicationStage: Stage
+   private val eventBus = EventBus("installmationApp")
 
+   companion object {
       @JvmStatic
       fun main(args: Array<String>) {
          launch(InstallmationApplication::class.java, *args)
       }
    }
 
-   private lateinit var applicationStage: Stage
-   private val eventBus = EventBus("installmationApp")
-   
    override fun start(primaryStage: Stage) {
       primaryStage.setPrimaryStage()
       val configuration = loadConfiguration(eventBus)
@@ -69,13 +71,13 @@ class InstallmationApplication : Application() {
          eventBus.register(this)
 
          val projectService = ProjectService(configuration)
-         val workspace = loadWorkspace(configuration, projectService)
-         val controller = InstallmationController(configuration, UserHistory(), workspace, projectService)
+         workspace = loadWorkspace(configuration, projectService)
+         val controller = InstallmationController(configuration, workspace.userHistory, workspace, projectService)
 
          val loader = FXMLLoader(javaClass.getResource("/fxml/installmation.fxml"))
          loader.setController(controller)
          val root = loader.load<Pane>()
-         setupEventHandlers(primaryStage, workspace, configuration)
+         setupEventHandlers(primaryStage, configuration)
          primaryStage.title = WINDOW_TITLE
          primaryStage.scene = Scene(root)
          primaryStage.show()
@@ -87,10 +89,8 @@ class InstallmationApplication : Application() {
       }
    }
 
-   private fun setupEventHandlers(stage: Stage, workspace: Workspace, configuration: Configuration) {
+   private fun setupEventHandlers(stage: Stage, configuration: Configuration) {
       stage.setOnCloseRequest {
-         if (workspace.currentProject != null)
-            workspace.save()
          configuration.save()
          log.info("Installmation Application has shutdown")
       }
@@ -102,6 +102,7 @@ class InstallmationApplication : Application() {
    private fun fireStartupEvents(workspace: Workspace) {
       if (workspace.currentProject != null)
          eventBus.post(ProjectLoadedEvent(workspace.currentProject!!))
+      eventBus.post(ApplicationStartCompleteEvent())
    }
 
    /**
@@ -127,7 +128,7 @@ class InstallmationApplication : Application() {
 
    private fun loadWorkspace(configuration: Configuration, projectService: ProjectService): Workspace {
       log.debug("Started loading workspace...")
-      val location = Workspace.workspaceFile(configuration.baseDirectory)
+      val location = workspaceFileName(configuration.baseDirectory)
       if (location.exists()) {
          log.debug("Workspace file found. Loading from ${location.canonicalPath}")
 
@@ -139,7 +140,7 @@ class InstallmationApplication : Application() {
          return workspace
       } else {
          log.info("No workspace file found - may be first startup. Creating default workspace")
-         return Workspace(configuration, projectService)
+         return Workspace(UserHistory(), configuration, projectService)
       }
    }
 

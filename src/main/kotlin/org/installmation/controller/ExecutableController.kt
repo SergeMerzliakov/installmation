@@ -23,11 +23,12 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.HISTORY_MAIN_JAR
 import org.installmation.configuration.UserHistory
 import org.installmation.javafx.FileFieldUtils
 import org.installmation.service.*
-import org.installmation.ui.dialog.ChooseFileDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
+import org.installmation.ui.dialog.openFileDialog
 
 
 class ExecutableController(configuration: Configuration,
@@ -51,9 +52,9 @@ class ExecutableController(configuration: Configuration,
 
    @FXML
    fun chooseMainJar() {
-      val result = ChooseFileDialog.showAndWait(mainJarField.scene.window as Stage, "Select Main Application Jar File", userHistory.lastPath, InstallmationExtensionFilters.jarFilter())
+      val result = openFileDialog(mainJarField.scene.window as Stage, "Select Main Application Jar File", userHistory.getFile(HISTORY_MAIN_JAR), InstallmationExtensionFilters.jarFilter())
       if (result.ok) {
-         userHistory.lastPath = result.data!!.parentFile
+         userHistory.set(HISTORY_MAIN_JAR, result.data!!.parentFile)
          mainJarField.text = result.data.path
       }
    }

@@ -30,3 +30,11 @@ class UserMessageEvent(val message: String, val isError: Boolean = false)
  * Clear all user messages
  */
 class ClearMessagesEvent()
+
+
+/**
+ * Fired after application startup and all initial data loading is complete
+ * Useful for setting up control change listeners after initial data load to avoid
+ * spurious change events getting fired.
+ */
+class ApplicationStartCompleteEvent()

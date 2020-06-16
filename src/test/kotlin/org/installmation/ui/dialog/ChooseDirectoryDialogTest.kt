@@ -6,13 +6,12 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.installmation.FXTest
 import org.installmation.configuration.UserHistory
-import org.junit.Test
 import java.io.File
 
+private const val DIALOG_BUTTON = "button1"
+private const val HISTORY_RESOURCES = "resourcesPath"
+
 class ChooseDirectoryDialogTest : FXTest() {
-   companion object {
-      const val DIALOG_BUTTON = "button1"
-   }
 
    private lateinit var buttonSingle: Button
    private lateinit var result: DialogResult<File>
@@ -20,11 +19,11 @@ class ChooseDirectoryDialogTest : FXTest() {
 
    override fun start(stage: Stage?) {
       super.start(stage)
-      userHistory.lastPath = File("src/test/resources")
+      userHistory.set(HISTORY_RESOURCES, File("src/test/resources"))
       buttonSingle = Button("Show Dialog")
       buttonSingle.id = DIALOG_BUTTON
       buttonSingle.setOnAction {
-         result = ChooseDirectoryDialog.showAndWait(stage!!, "Choose Folder", userHistory)
+         result = openDirectoryDialog(stage!!, "Choose Folder", userHistory.getFile(HISTORY_RESOURCES))
       }
 
       stage?.scene = Scene(VBox(buttonSingle), 100.0, 100.0)

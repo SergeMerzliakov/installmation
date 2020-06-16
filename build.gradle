@@ -92,7 +92,7 @@ task runApp(type: JavaExec) {
     doFirst {
         jvmArgs = [
                 '--module-path', "${localProperties.JFX_PATH}/lib",
-                '--add-modules', 'javafx.fxml,javafx.controls,javafx.swing'
+                '--add-modules', 'javafx.fxml,javafx.controls'
         ]
     }
 }

@@ -28,12 +28,11 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.HISTORY_PROJECT
+import org.installmation.configuration.HISTORY_SCRIPT
 import org.installmation.configuration.UserHistory
 import org.installmation.core.*
-import org.installmation.model.JDKListUpdatedEvent
-import org.installmation.model.ModuleJmodUpdatedEvent
-import org.installmation.model.ModuleLibUpdatedEvent
-import org.installmation.model.NamedDirectory
+import org.installmation.model.*
 import org.installmation.service.*
 import org.installmation.ui.dialog.*
 import java.io.File
@@ -119,8 +118,8 @@ class InstallmationController(private val configuration: Configuration,
    fun shutdown() {
       applicationStage().close()
       configuration.save()
-      if (workspace.currentProject != null)
-         workspace.save()
+      // save in current location
+      workspace.save()
    }
 
    @FXML
@@ -136,13 +135,20 @@ class InstallmationController(private val configuration: Configuration,
       }
    }
 
+   /**
+    * Juts fire event, so we can easier test the logic in unit tests
+    */
    @FXML
    fun openProject() {
-      val result = ChooseFileDialog.showAndWait(applicationStage(), "Open Project", userHistory.lastProjectPath, InstallmationExtensionFilters.projectFilter())
+      val result = openFileDialog(applicationStage(), "Open Project", userHistory.getFile(HISTORY_PROJECT), InstallmationExtensionFilters.projectFilter())
       if (result.ok) {
-         userHistory.lastProjectPath = result.data?.parentFile!!
-         val p = projectService.load(result.data)
-         workspace.setCurrentProject(p)
+         try {
+            configuration.eventBus.post(ProjectLoadingEvent(result.data!!))
+         }
+         catch (e: Exception) {
+            log.error(e)
+            HelpDialog.showAndWait("Failed to load project", e.message ?: "Due to unknown error")
+         }
       }
    }
 
@@ -153,9 +159,23 @@ class InstallmationController(private val configuration: Configuration,
 
    @FXML
    fun saveProject() {
-       workspace.save()
-      //   userHistory.lastProjectPath = result.
-    }
+      workspace.save()
+   }
+
+   @FXML
+   fun saveProjectAs() {
+      if (workspace.currentProject == null) {
+         HelpDialog.showAndWait("Save Project Cancelled", "No project to save.")
+         return
+      }
+      val defaultSaveFileName = InstallProject.projectFileName(workspace.currentProject!!.name!!)
+      val result = saveFileDialog(applicationStage(), "Save Project", defaultSaveFileName, userHistory.getFile(HISTORY_PROJECT), null)
+      if (result.ok) {
+         val chosenFile = result.data!!
+         userHistory.set(HISTORY_PROJECT, chosenFile.parentFile!!)
+         workspace.saveAs(chosenFile)
+      }
+   }
 
     @FXML
     fun aboutDialog() {
@@ -214,16 +234,18 @@ class InstallmationController(private val configuration: Configuration,
         try {
             val scripts = projectService.generateScripts(workspace.currentProject!!)
             if (scripts.result.successful) {
-                val result = ChooseDirectoryDialog.showAndWait(applicationStage(), "Script Destination", userHistory)
+               val result = openDirectoryDialog(applicationStage(), "Script Destination", userHistory.getFile(HISTORY_SCRIPT))
                 if (result.ok) {
-                    val imagePath = File(result.data, scripts.imageScript?.fileName!!)
-                    imagePath.parentFile.mkdirs()
-                    imagePath.writeText(scripts.imageScript.toString())
+                   val chosenDir = result.data!!
+                   userHistory.set(HISTORY_SCRIPT, chosenDir)
+                   val imagePath = File(result.data, scripts.imageScript?.fileName!!)
+                   imagePath.parentFile.mkdirs()
+                   imagePath.writeText(scripts.imageScript.toString())
 
-                    val installerPath = File(result.data, scripts.installerScript?.fileName!!)
-                    installerPath.parentFile.mkdirs()
-                    installerPath.writeText(scripts.installerScript.toString())
-                    HelpDialog.showAndWait("Scripts Created", "All scripts created at ${result.data?.path}")
+                   val installerPath = File(chosenDir, scripts.installerScript?.fileName!!)
+                   installerPath.parentFile.mkdirs()
+                   installerPath.writeText(scripts.installerScript.toString())
+                   HelpDialog.showAndWait("Scripts Created", "All scripts created at ${chosenDir.path}")
                 }
             } else {
                 val d = ItemListDialog("Script Generation Errors", "Issues", scripts.result.errors)
@@ -312,44 +334,45 @@ class InstallmationController(private val configuration: Configuration,
     }
 
     private fun setupChildController(fxmlPath: String, controller: Any, parent: Pane) {
-        log.debug("Loading child controller from $fxmlPath")
+        log.trace("Loading child controller from $fxmlPath")
         val loader = FXMLLoader(javaClass.getResource(fxmlPath))
-        loader.setController(controller)
-        val pane = loader.load<Pane>()
-        AnchorPane.setTopAnchor(pane, 0.0)
-        AnchorPane.setLeftAnchor(pane, 0.0)
-        AnchorPane.setBottomAnchor(pane, 0.0)
-        AnchorPane.setRightAnchor(pane, 0.0)
-        parent.children.add(pane)
-        log.debug("Child controller initialized successfully - $fxmlPath")
+       loader.setController(controller)
+       val pane = loader.load<Pane>()
+       AnchorPane.setTopAnchor(pane, 0.0)
+       AnchorPane.setLeftAnchor(pane, 0.0)
+       AnchorPane.setBottomAnchor(pane, 0.0)
+       AnchorPane.setRightAnchor(pane, 0.0)
+       parent.children.add(pane)
+       log.trace("Child controller initialized successfully - $fxmlPath")
     }
 
-    //-------------------------------------------------------
-    //  Event Subscribers
-    //-------------------------------------------------------
+   //-------------------------------------------------------
+   //  Event Subscribers
+   //-------------------------------------------------------
 
-    @Subscribe
-    fun handleProjectCreated(e: ProjectCreatedEvent) {
-    }
+   @Subscribe
+   fun handleProjectCreated(e: ProjectCreatedEvent) {
+   }
 
-    @Subscribe
-    fun handleProjectLoaded(e: ProjectLoadedEvent) {
 
-    }
+   @Subscribe
+   fun handleProjectLoaded(e: ProjectLoadedEvent) {
 
-    @Subscribe
-    fun handleProjectUpdated(e: ProjectUpdatedEvent) {
-    }
+   }
 
-    @Subscribe
-    fun handleProjectDeleted(e: ProjectDeletedEvent) {
-    }
+   @Subscribe
+   fun handleProjectUpdated(e: ProjectUpdatedEvent) {
+   }
 
-    @Subscribe
-    fun handleProjectSaved(e: ProjectSavedEvent) {
-    }
+   @Subscribe
+   fun handleProjectDeleted(e: ProjectDeletedEvent) {
+   }
 
-    @Subscribe
+   @Subscribe
+   fun handleProjectSaved(e: ProjectSavedEvent) {
+   }
+
+   @Subscribe
     fun handleProjectClosed(e: ProjectClosedEvent) {
         workspace.closeCurrentProject()
     }

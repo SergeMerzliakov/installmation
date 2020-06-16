@@ -28,14 +28,15 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.HISTORY_CLASSPATH
 import org.installmation.configuration.UserHistory
 import org.installmation.service.ProjectBeginSaveEvent
 import org.installmation.service.ProjectClosedEvent
 import org.installmation.service.ProjectLoadedEvent
 import org.installmation.service.Workspace
-import org.installmation.ui.dialog.ChooseDirectoryDialog
 import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.SimpleListItemDeleter
+import org.installmation.ui.dialog.openDirectoryDialog
 import java.io.File
 
 
@@ -69,9 +70,11 @@ class DependenciesController(private val configuration: Configuration,
 
    @FXML
    fun addClasspathItem() {
-      val result = ChooseDirectoryDialog.showAndWait(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory)
+      val result = openDirectoryDialog(classPathListView.scene.window as Stage, "Add Classpath Item", userHistory.getFile(HISTORY_CLASSPATH))
       if (result.ok) {
-         classpathItems.add(result.data!!.path)
+         val chosenDir = result.data!!
+         userHistory.set(HISTORY_CLASSPATH, chosenDir)
+         classpathItems.add(chosenDir.path)
          workspace.save()
          log.debug("Added ${result.data.path} to classpath")
       }

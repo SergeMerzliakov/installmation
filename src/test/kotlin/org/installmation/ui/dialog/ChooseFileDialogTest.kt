@@ -5,8 +5,8 @@ import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.installmation.FXTest
+import org.installmation.configuration.HISTORY_PROJECT
 import org.installmation.configuration.UserHistory
-import org.junit.Test
 import java.io.File
 
 class ChooseFileDialogTest : FXTest() {
@@ -20,11 +20,11 @@ class ChooseFileDialogTest : FXTest() {
 
    override fun start(stage: Stage?) {
       super.start(stage)
-      userHistory.lastPath = File("src/test/resources/projects")
+      userHistory.set(HISTORY_PROJECT,File("src/test/resources/projects"))
       buttonSingle = Button("Show Dialog")
       buttonSingle.id = DIALOG_BUTTON
       buttonSingle.setOnAction {
-         result = ChooseFileDialog.showAndWait(stage!!, "Choose Project", userHistory.lastPath, InstallmationExtensionFilters.projectFilter())
+         result = openFileDialog(stage!!, "Choose Project", userHistory.getFile(HISTORY_PROJECT), InstallmationExtensionFilters.projectFilter())
       }
 
       stage?.scene = Scene(VBox(buttonSingle), 100.0, 100.0)

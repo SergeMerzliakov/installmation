@@ -16,15 +16,21 @@
 
 package org.installmation.service
 
+import com.google.common.eventbus.Subscribe
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.installmation.configuration.Configuration
-import org.installmation.configuration.Constant
-import org.installmation.configuration.JsonParserFactory
+import org.installmation.configuration.*
 import org.installmation.controller.Validator
 import org.installmation.io.ApplicationJsonWriter
 import org.installmation.model.InstallProject
 import java.io.File
+
+
+private val log: Logger = LogManager.getLogger(Workspace::class.java)
+
+fun workspaceFileName(baseDirectory: File): File {
+   return File(File(baseDirectory, Constant.WORKSPACE_DIR), Constant.WORKSPACE_FILE)
+}
 
 /**
  * Stores history of projects worked on, and has its own
@@ -34,30 +40,23 @@ import java.io.File
  * Not a concept that is visible to the user, so they will
  * never 'see' workspaces
  */
-class Workspace(@Transient var configuration: Configuration,
-                @Transient var projectService: ProjectService? = null) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(Workspace::class.java)
-
-      /**
-       * Full path, relative to base path
-       */
-      fun workspaceFile(baseDirectory: File): File {
-         return File(File(baseDirectory, Constant.WORKSPACE_DIR), Constant.WORKSPACE_FILE)
-      }
-   }
+class Workspace(var userHistory: UserHistory,
+                @Transient var configuration: Configuration,
+                @Transient var projectService: ProjectService ?= null) {
 
    var currentProject: InstallProject? = null
       private set
-   
+
    // project name -> location on disk
-   private var projectHistory = mutableMapOf<String, File>()
+   val projectHistory = mutableMapOf<String, File>()
+
+   init{
+      configuration.eventBus.register(this)
+   }
 
    fun setCurrentProject(p: InstallProject) {
       checkNotNull(p.name, { "Project must have a name before it can be used" })
       currentProject = p
-      projectHistory[p.name!!] = p.projectFile(configuration.baseDirectory)
       log.debug("Workspace current project is set to '${p.name}'")
    }
 
@@ -68,14 +67,56 @@ class Workspace(@Transient var configuration: Configuration,
       }
    }
 
-   fun save() {
+
+   /**
+    * For files already saved. return false if no previous file saveds
+    */
+   fun save():Boolean {
+      val file = projectHistory[currentProject?.name]
+
+      if (currentProject == null || file == null)
+         return false
+
+      if (Validator.ensureProjectName(currentProject!!, configuration)) {
+         log.debug("Saving project [${currentProject?.name}] to file")
+         projectService?.save(file, currentProject!!)
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFileName(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
+         workspaceWriter.save(this)
+         return true
+      }
+      return false
+   }
+
+   /**
+    * New location for saved file
+    */
+   fun saveAs(file: File) {
       if (currentProject == null)
          setCurrentProject(InstallProject())
 
+      val name = currentProject!!.name!!
       if (Validator.ensureProjectName(currentProject!!, configuration)) {
-         projectService?.save(currentProject!!)
-         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFile(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
+         projectService?.save(file, currentProject!!)
+         // save projects history
+         projectHistory[name] = file
+         val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFileName(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
          workspaceWriter.save(this)
       }
    }
+
+
+   //-------------------------------------------------------
+   //  Event Subscribers
+   //-------------------------------------------------------
+
+   @Subscribe
+   fun handleProjectLoading(e: ProjectLoadingEvent) {
+      userHistory.set(HISTORY_PROJECT, e.projectFile.parentFile)
+      val p = projectService?.load(e.projectFile)
+      if (p != null) {
+         setCurrentProject(p)
+      }else
+         throw ProjectLoadException(e.projectFile)
+   }
+
 }
