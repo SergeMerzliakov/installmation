@@ -30,13 +30,16 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
+import org.installmation.configuration.Constant
 import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.io.ApplicationJsonReader
+import org.installmation.io.ensureDirectory
 import org.installmation.javafx.setPrimaryStage
 import org.installmation.service.*
+import java.io.File
 
 private val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
 private const val WINDOW_TITLE = "Installmation"
@@ -68,6 +71,7 @@ class InstallmationApplication : Application() {
       applicationStage = primaryStage
       try {
          log.info("Starting Installmation from configuration root: ${configuration.baseDirectory.path}")
+         setupDirectories()
          eventBus.register(this)
 
          val projectService = ProjectService(configuration)
@@ -87,6 +91,11 @@ class InstallmationApplication : Application() {
          log.error("Fatal startup error - aborting and shutting down", e)
          primaryStage.close()
       }
+   }
+
+   private fun setupDirectories(){
+      ensureDirectory(File(Constant.DEFAULT_BASE_DIR, Constant.PROJECT_DIR))
+      // TODO move other directory stuff here
    }
 
    private fun setupEventHandlers(stage: Stage, configuration: Configuration) {
