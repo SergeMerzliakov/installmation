@@ -25,6 +25,8 @@ import org.installmation.model.binary.JDK
 import java.io.File
 import java.util.*
 
+
+private val log: Logger = LogManager.getLogger(Configuration::class.java)
 /**
  * JSON format
  * Always loaded from the same location
@@ -32,8 +34,6 @@ import java.util.*
 class Configuration(bus: EventBus? = null, val baseDirectory: File = File(Constant.USER_HOME_DIR, Constant.APP_DIR)) {
 
    companion object {
-      val log: Logger = LogManager.getLogger(Configuration::class.java)
-
       /**
        * Full path, relative to base path
        */
