@@ -38,7 +38,7 @@
                 </Menu>
                 <Menu fx:id="toolMenu" mnemonicParsing="false" text="Tools">
                     <items>
-                        <MenuItem fx:id="jdepsMenuItem" mnemonicParsing="false" onAction="#jdepsDialog" text="jdeps tool" />
+                        <MenuItem fx:id="jdepsMenuItem" mnemonicParsing="false" onAction="#jdepsDialog" text="jdeps Tool" />
                     </items>
                 </Menu>
                 <Menu fx:id="aboutMenu" mnemonicParsing="false" text="Help">
