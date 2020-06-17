@@ -5,7 +5,7 @@
       <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
 
-    <RollingFile name="LogFile" fileName="${sys:user.home}/.installmation/installmation.log" filePattern="${sys:user.home}/.installmation/installmation-%i.log">
+    <RollingFile name="LogFile" fileName="${sys:user.home}/.installmation/log/installmation-log.log" filePattern="${sys:user.home}/.installmation/installmation-%i.log">
       <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
       <Policies>
         <SizeBasedTriggeringPolicy size="2 MB"/>
