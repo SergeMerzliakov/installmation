@@ -90,6 +90,15 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
          HelpDialog.showAndWait("JavaFX Not defined", "Please set location of JavaFX jar library files.")
    }
 
+
+   @FXML
+   fun clearOutput(){
+      generatedCommandText.text = null
+      processOutput.clear()
+      moduleOutput.clear()
+      dependencyTextArea.text = null
+   }
+
    private fun displayResults(jdeps: JDepsExecutable, mdg: ModuleDependenciesGenerator, moduleDependencies: List<String>) {
       generatedCommandText.text = jdeps.toString()
       moduleOutput.clear()

@@ -16,9 +16,10 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <rowConstraints>
       <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" />
@@ -92,7 +93,6 @@
          </GridPane.margin>
       </Label>
       <Button fx:id="closeButton" cancelButton="true" mnemonicParsing="false" onAction="#close" styleClass="button-75" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-      <Button fx:id="runButton" mnemonicParsing="false" onAction="#run" styleClass="button-75" text="Run" GridPane.rowIndex="8" />
       <Label styleClass="title-2" text="Module Dependencies" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets left="10.0" top="8.0" />
@@ -148,6 +148,20 @@
            </GridPane.margin>
        </TextArea>
       <Button fx:id="configureMainJarButton" mnemonicParsing="false" onAction="#configureMainJar" text="Configure" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="8" GridPane.valignment="CENTER">
+         <children>
+            <Button fx:id="runButton" mnemonicParsing="false" onAction="#run" styleClass="button-75" text="Run">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="clearOutputButton" mnemonicParsing="false" onAction="#clearOutput" text="Clear Output">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
    </children>
    <stylesheets>
       <URL value="@../../css/bootstrap3.css" />
