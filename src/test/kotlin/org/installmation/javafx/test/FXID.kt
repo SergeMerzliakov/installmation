@@ -140,6 +140,7 @@ object FXID {
    // JDEPS DIALOG
    const val DIALOG_JDEPS = "#jdepsDialog"
    const val BUTTON_JDEPS_DLG_RUN = "#runButton"
+   const val BUTTON_JDEPS_DLG_CLEAR = "#clearOutputButton"
    const val BUTTON_JDEPS_DLG_CLOSE = "#closeButton"
    const val TEXT_JDEPS_DLG_MAINJAR = "#mainJarText"
    const val COMBO_JDEPS_DLG_JDK = "#jdkComboBox"

@@ -112,4 +112,50 @@ class JdepsDialogTest : FXTest() {
 
       clickOn(FXID.BUTTON_JDEPS_DLG_CLOSE)
    }
+
+   @Test
+   fun shouldClearOutputAfterRunCommand() {
+      clickOn("#$DIALOG_BUTTON")
+      WaitForAsyncUtils.waitForFxEvents(20) //sometimes the dialog is slow to appear
+
+      val jdk = lookup(FXID.COMBO_JDEPS_DLG_JDK).query<ComboBox<JDK>>()
+      assertThat(jdk.selectionModel.selectedItem.name).isEqualTo(JDK_NAME)
+
+      val mainJarText = lookup(FXID.TEXT_JDEPS_DLG_MAINJAR).query<TextField>()
+      assertThat(mainJarText.text).isEqualTo(MAIN_JAR.path)
+
+      val classPathListView = lookup(FXID.LISTVIEW_JDEPS_DLG_CLASSPATH).query<ListView<String>>()
+      assertThat(classPathListView.items).hasSize(2)
+      assertThat(classPathListView.items).contains(LIB1_PATH.path, LIB2_PATH.path)
+
+      val modulePathListView = lookup(FXID.LISTVIEW_JDEPS_DLG_MODULEPATH).query<ListView<String>>()
+      assertThat(modulePathListView.items).hasSize(1)
+      assertThat(modulePathListView.items).contains(TestingBootstrap.javafx!!.path)
+
+      //run jdeps
+      clickOn(FXID.BUTTON_JDEPS_DLG_RUN)
+
+      // just check something generated - this ensures that run command actually generated
+      // output to clear
+      val generatedCommandText = lookup(FXID.TEXT_JDEPS_DLG_GENERATED_CMD).query<TextArea>()
+      assertThat(generatedCommandText.text).contains("jdeps", "--multi-release 11", "-classpath")
+
+      // clear generated output
+      clickOn(FXID.BUTTON_JDEPS_DLG_CLEAR)
+
+      // ensure all relevant controls are cleared of text
+      assertThat(generatedCommandText.text).isNullOrEmpty()
+
+      clickOn(FXID.TAB_JDEPS_DLG_OUTPUT)
+      val processOutputView = lookup(FXID.LISTVIEW_JDEPS_DLG_PROCESS_OUTPUT).query<ListView<String>>()
+      assertThat(processOutputView.items).isEmpty()
+
+      clickOn(FXID.TAB_JDEPS_DLG_LIST)
+      val dependencyListView = lookup(FXID.LISTVIEW_JDEPS_DLG_DEP_LIST).query<ListView<String>>()
+      assertThat(dependencyListView.items).isEmpty()
+
+      clickOn(FXID.TAB_JDEPS_DLG_TEXT)
+      val dependencyTextArea = lookup(FXID.TEXT_JDEPS_DLG_DEPENDENCY).query<TextArea>()
+      assertThat(dependencyTextArea.text).isNullOrEmpty()
+   }
 }
