@@ -84,7 +84,7 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       if (javaFXLibs != null) {
          val mdg = ModuleDependenciesGenerator(jdeps, classPathString, javaFXLibs, mainJarText.text)
          val moduleDependencies = mdg.generate()
-         displayResults(jdeps, mdg, moduleDependencies)
+         displayResults(mdg, moduleDependencies)
       }
       else
          HelpDialog.showAndWait("JavaFX Not defined", "Please set location of JavaFX jar library files.")
@@ -99,8 +99,8 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
       dependencyTextArea.text = null
    }
 
-   private fun displayResults(jdeps: JDepsExecutable, mdg: ModuleDependenciesGenerator, moduleDependencies: List<String>) {
-      generatedCommandText.text = jdeps.toString()
+   private fun displayResults(mdg: ModuleDependenciesGenerator, moduleDependencies: List<String>) {
+      generatedCommandText.text = mdg.commands.joinToString("\n\n")
       moduleOutput.clear()
       processOutput.clear()
 

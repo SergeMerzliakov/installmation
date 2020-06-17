@@ -19,6 +19,9 @@ package org.installmation.model
 class ArgumentList {
    private val arguments = mutableMapOf<String, Argument>()
 
+
+   fun clear() = arguments.clear()
+
    /**
     * overwrites previous value
     */
