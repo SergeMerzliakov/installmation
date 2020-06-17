@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="jdepsDialog" hgap="5.0" prefHeight="440.0" prefWidth="800.0" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <rowConstraints>
       <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" />
         <RowConstraints maxHeight="36.0" minHeight="36.0" prefHeight="36.0" />
@@ -87,7 +87,7 @@
             <Button fx:id="clearModulePathButton" mnemonicParsing="false" onAction="#clearModulePath" styleClass="button-60" text="Clear" />
          </children>
       </FlowPane>
-      <Label text="Generated Command" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+      <Label text="Generated Commands" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>
