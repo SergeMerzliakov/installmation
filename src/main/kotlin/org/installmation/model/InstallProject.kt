@@ -81,8 +81,6 @@ class InstallProject(var name: String? = null) {
       validateOptionalImageFileField("Application Logo", applicationLogo, result)
       if (validateFieldNotNull("Java JDK", jpackageJDK, result))
          validateExistingFileField("Java JDK Path", jpackageJDK?.path, result)
-      validateFutureFileField("Image Build Directory", imageBuildDirectory, result)
-      validateFutureFileField("Installer Directory", installerDirectory, result)
       validateExistingFileField("Main Jar File", mainJar, result)
       validateStringField("Main Class", mainClass, result)
       validateStringField("Installer Type", installerType, result)
@@ -132,17 +130,6 @@ class InstallProject(var name: String? = null) {
          result.errors.add("$fieldName Error - Field is missing")
       }
       return result.success
-   }
-
-   /**
-    * A File to be created  - just path is valid path and nothing else
-    */
-   private fun validateFutureFileField(fieldName: String, field: File?, result: ValidationResult) {
-      val valid = PathValidator.isValidPathSyntax(field?.path)
-      if (!valid) {
-         result.success = false
-         result.errors.add("$fieldName Error - Invalid Path String '${field?.path}'")
-      }
    }
 
    private fun validateOptionalImageFileField(fieldName: String, field: File?, result: ValidationResult) {

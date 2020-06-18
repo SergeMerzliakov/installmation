@@ -181,7 +181,7 @@ class InstallCreator(private val configuration: Configuration) {
          // Step 2 - Generate Image in imageBuildDirectory
          progressMessage("Deleting old image content....")
          deleteDirectories(prj.imageBuildDirectory)
-         prj.imageBuildDirectory!!.mkdir()
+         prj.imageBuildDirectory!!.mkdirs()
          logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
       }
 

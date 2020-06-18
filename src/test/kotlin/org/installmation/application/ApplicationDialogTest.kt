@@ -32,6 +32,7 @@ import org.installmation.javafx.test.WindowHelper
 import org.junit.Test
 import org.testfx.api.FxAssert
 import org.testfx.matcher.base.NodeMatchers
+import java.io.File
 
 /** org.installmation.application.ApplicationDialogTest
  * Ensure all dialogs are at least shown in button and menu clicks. No check on dialog contents.
@@ -44,7 +45,7 @@ class ApplicationDialogTest : FXTest() {
     override fun start(stage: Stage?) {
         super.start(stage)
         val bus = EventBus()
-        val configuration = Configuration(bus)
+        val configuration = Configuration(bus, File("."))
         application.startApplication(stage!!, configuration, bus)
         bus.post(RunningAsTestEvent())
     }
