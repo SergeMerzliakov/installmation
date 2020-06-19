@@ -48,6 +48,7 @@ are use cases which I have not covered.
 2. Download JavaFX jmods 13.0.1 or later (https://gluonhq.com/products/javafx/)
 3. Install them together in the same root dir e.g. /somewhere/JavaFX/13
 4. (Windows) Download WiX toolset from https://github.com/wixtoolset/wix3/releases and add to PATH
+    * For some versions of Wix (<3.14), you will need to install .NET 3.5 (https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net35-sp1-web-installer)
 5. Create local.properties with JFX version and path to root dir. Here is an OSX sample:
 
         JFX_VERSION=13
