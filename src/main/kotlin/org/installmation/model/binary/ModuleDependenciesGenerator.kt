@@ -26,14 +26,14 @@ class ModuleDependenciesGenerator(val jdeps: JDepsExecutable, val classPath: Str
     * Only return list as it's sorted.
     */
    fun generate(): List<String> {
-      val merged = mutableListOf<String>()
+      val merged = mutableSetOf<String>()
       val applicationDependencies = generateAppDependencies()
       merged.addAll(applicationDependencies)
 
       val jarDependencies = generateJarDependencies()
       merged.addAll(jarDependencies)
 
-      return merged.sorted()
+      return merged.toList().sorted()
    }
 
    /*
