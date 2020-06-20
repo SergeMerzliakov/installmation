@@ -68,17 +68,22 @@ class Workspace(var userHistory: UserHistory,
    }
 
 
+   fun currentProjectLocation(): File? {
+      return projectHistory[currentProject?.name]
+   }
+
    /**
     * For files already saved. return false if no previous file saveds
     */
-   fun save():Boolean {
+   fun save(): Boolean {
+      val name = currentProject?.name
       val file = projectHistory[currentProject?.name]
 
       if (currentProject == null || file == null)
          return false
 
       if (Validator.ensureProjectName(currentProject!!, configuration)) {
-         log.debug("Saving project [${currentProject?.name}] to file")
+         log.debug("Saving project [$name] to file")
          projectService?.save(file, currentProject!!)
          val workspaceWriter = ApplicationJsonWriter<Workspace>(workspaceFileName(configuration.baseDirectory), JsonParserFactory.workspaceParser(configuration))
          workspaceWriter.save(this)
@@ -115,6 +120,7 @@ class Workspace(var userHistory: UserHistory,
       val p = projectService?.load(e.projectFile)
       if (p != null) {
          setCurrentProject(p)
+         projectHistory[p.name!!] = e.projectFile
       }else
          throw ProjectLoadException(e.projectFile)
    }

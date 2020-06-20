@@ -40,7 +40,7 @@ class WorkspaceSerializer(val configuration: Configuration) : JsonSerializer<Wor
 
    override fun serialize(workspace: Workspace?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
       val json = JsonObject()
-      json.addProperty(CURRENT_PROJECT_PATH, workspace?.currentProject?.projectFile(configuration.baseDirectory)?.canonicalPath)
+      json.addProperty(CURRENT_PROJECT_PATH, workspace?.currentProjectLocation()?.canonicalPath)
       json.add(USER_HISTORY, context?.serialize(workspace?.userHistory))
       return json
    }
@@ -66,8 +66,10 @@ class WorkspaceSerializer(val configuration: Configuration) : JsonSerializer<Wor
       val path = obj?.get(CURRENT_PROJECT_PATH)?.asJsonPrimitive?.asString
       if (path != null) {
          val p = deserializeProject(path)
-         if (p != null)
+         if (p != null){
             ws.setCurrentProject(p)
+            ws.projectHistory[p.name!!] = File(path)
+         }
       }
       return ws
    }

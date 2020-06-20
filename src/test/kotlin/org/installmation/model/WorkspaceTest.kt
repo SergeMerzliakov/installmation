@@ -77,20 +77,29 @@ class WorkspaceTest {
 
    @Test
    fun shouldSerializeWorkspace() {
-      val ws = Workspace(UserHistory(), configuration)
+      val userHistory = UserHistory()
+      userHistory.set("location", File("location"))
+      userHistory.set("location2", File("location2"))
+
+      val ws = Workspace(userHistory, configuration)
+
       val proj = InstallProject()
       proj.name = PROJECT_NAME
       val projWriter = ApplicationJsonWriter<InstallProject>(SAVED_PROJECT_FILE, JsonParserFactory.configurationParser())
       projWriter.save(proj)
 
       ws.setCurrentProject(proj)
+      ws.projectHistory[proj.name!!] = SAVED_PROJECT_FILE
       val writer = ApplicationJsonWriter<Workspace>(SAVED_FILE, JsonParserFactory.workspaceParser(configuration))
       writer.save(ws)
 
       val reader = ApplicationJsonReader<Workspace>(Workspace::class, SAVED_FILE, JsonParserFactory.workspaceParser(configuration))
       val ws2 = reader.load()
 
-      assertThat(ws2).isEqualToComparingFieldByField(ws)
+      assertThat(ws2).isEqualToComparingOnlyGivenFields(ws, "currentProject","userHistory")
+
+      // compare files as strings
+      assertThat(ws2.projectHistory.values.map{it.absolutePath}).isEqualTo(ws.projectHistory.values.map{it.absolutePath})
    }
 
 }
