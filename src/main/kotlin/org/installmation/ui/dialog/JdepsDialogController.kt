@@ -15,6 +15,7 @@
  */
 package org.installmation.ui.dialog
 
+import com.google.common.eventbus.EventBus
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -32,12 +33,10 @@ import org.installmation.model.binary.JDepsExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
-class JdepsDialogController(private val jdkList: Collection<JDK>, private val javaFXLibs: File?, private val mainJarFile: File?, classPathFiles: Collection<File>?, private val userHistory: UserHistory) {
+private val log: Logger = LogManager.getLogger(JdepsDialogController::class.java)
+private const val NO_DEPENDENCIES_MESSAGE = "<No module dependencies>"
 
-   companion object {
-      val log: Logger = LogManager.getLogger(JdepsDialogController::class.java)
-      const val NO_DEPENDENCIES_MESSAGE = "<No module dependencies>"
-   }
+class JdepsDialogController(private val eventBus: EventBus, private val userHistory: UserHistory, private val jdkList: Collection<JDK>, private val javaFXLibs: File?, private val mainJarFile: File?, classPathFiles: Collection<File>?) {
 
    @FXML lateinit var mainJarText: TextField
    @FXML lateinit var generatedCommandText: TextArea
@@ -78,7 +77,9 @@ class JdepsDialogController(private val jdkList: Collection<JDK>, private val ja
 
    @FXML
    fun run() {
-      val jdeps = JDepsExecutable(jdkComboBox.selectionModel.selectedItem)
+      //TODO what if selectmodel is empt???
+      checkNotNull(jdkComboBox.selectionModel.selectedItem)
+      val jdeps = JDepsExecutable(eventBus, jdkComboBox.selectionModel.selectedItem)
       val classPathString = CollectionUtils.toPathList(classPath)
 
       if (javaFXLibs != null) {

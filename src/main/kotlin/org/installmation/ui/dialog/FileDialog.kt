@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger
 import java.io.File
 
 
-val log: Logger = LogManager.getLogger("FileDialog")
+private val log: Logger = LogManager.getLogger("FileDialog")
 
 /**
  * Wrapper around JavaFX FileChooser dialog. Chooses a single file for now

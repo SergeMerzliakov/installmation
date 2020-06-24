@@ -22,16 +22,14 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 
-class ImageToolTest {
+private val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
+private val PNG_FILE = File("src/test/resources/image/green16.PNG")
+private val ICNS_FILE = File("src/test/resources/image/green16.icNS")
+private val ICNS_PLACEHOLDER_FILE = File("src/test/resources/image/placeholder_icns.png")
+private val JPG_FILE = File("src/test/resources/image/red32.jpg")
+private const val TEST_IMAGE_SIZE = 16
 
-   companion object {
-      val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
-      val PNG_FILE = File("src/test/resources/image/green16.PNG")
-      val ICNS_FILE = File("src/test/resources/image/green16.icNS")
-      val ICNS_PLACEHOLDER_FILE = File("src/test/resources/image/placeholder_icns.png")
-      val JPG_FILE = File("src/test/resources/image/red32.jpg")
-      const val TEST_IMAGE_SIZE = 16
-   }
+class ImageToolTest {
 
    @Before
    fun setup() {
@@ -62,7 +60,7 @@ class ImageToolTest {
       val newSize = TEST_IMAGE_SIZE * 4
       val outputFile = "green$newSize.png"
       ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
-      val resizedImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
+      val resizedImage = File(OUTPUT_DIR, outputFile)
       assertThat(resizedImage).exists()
 
       val dim = ImageTool.imageDimensions(resizedImage)
@@ -75,7 +73,7 @@ class ImageToolTest {
       val newSize = TEST_IMAGE_SIZE - 4
       val outputFile = "green$newSize.png"
       ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
-      val resizedImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
+      val resizedImage = File(OUTPUT_DIR, outputFile)
       assertThat(resizedImage).exists()
 
       val dim = ImageTool.imageDimensions(resizedImage)
@@ -88,7 +86,7 @@ class ImageToolTest {
       val newSize = ImageTool.imageDimensions(PNG_FILE).width
       val outputFile = "green$newSize.png"
       ImageTool.newImageWithSize(ImageTool.ImageType.Png, PNG_FILE, outputFile, OUTPUT_DIR, newSize, newSize)
-      val duplicateImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
+      val duplicateImage = File(OUTPUT_DIR, outputFile)
       assertThat(duplicateImage).exists()
       //TODO duplicate image is much smaller, so this test fails  - need to find out why
       // assertThat(resizedImage).exists()
@@ -104,7 +102,7 @@ class ImageToolTest {
       val newSize = TEST_IMAGE_SIZE * 2
       val outputFile = "green$newSize.png"
       ImageTool.newImageWithSize(ImageTool.ImageType.Png, File("wrong/image.png"), outputFile, OUTPUT_DIR, newSize, newSize)
-      val resizedImage = File(OSXImageProcessorTest.OUTPUT_DIR, outputFile)
+      val resizedImage = File(OUTPUT_DIR, outputFile)
 
       val dim = ImageTool.imageDimensions(resizedImage)
       assertThat(dim.width).isEqualTo(newSize)

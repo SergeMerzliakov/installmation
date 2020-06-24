@@ -45,21 +45,20 @@ import org.installmation.ui.dialog.BinaryArtefactDialog
 import org.installmation.ui.dialog.HelpDialog
 
 
+private val log: Logger = LogManager.getLogger(BinariesController::class.java)
+private const val PROPERTY_HELP_FX_LIBS = "help.fx.libs"
+private const val PROPERTY_HELP_FX_MODULES = "help.fx.modules"
+private const val PROPERTY_HELP_JPACKAGE = "help.fx.jpackage"
+private const val PROPERTY_HELP_JDK = "help.fx.jdk"
+
+const val TITLE_HELP_FX_LIBRARIES = "JavaFX Libraries"
+const val TITLE_HELP_FX_MODULES = "JavaFX JMod Files"
+const val TITLE_HELP_JPACKAGE = "jpackage"
+const val TITLE_HELP_JDK = "JDK to Deploy"
+
 class BinariesController(private val configuration: Configuration,
                          private val userHistory: UserHistory,
                          private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(BinariesController::class.java)
-      const val PROPERTY_HELP_FX_LIBS = "help.fx.libs"
-      const val PROPERTY_HELP_FX_MODULES = "help.fx.modules"
-      const val PROPERTY_HELP_JPACKAGE = "help.fx.jpackage"
-      const val PROPERTY_HELP_JDK = "help.fx.jdk"
-      const val TITLE_HELP_FX_LIBRARIES = "JavaFX Libraries"
-      const val TITLE_HELP_FX_MODULES = "JavaFX JMod Files"
-      const val TITLE_HELP_JPACKAGE = "jpackage"
-      const val TITLE_HELP_JDK = "JDK to Deploy"
-   }
 
    // combos
    @FXML private lateinit var moduleJmodComboBox: ComboBox<NamedDirectory>

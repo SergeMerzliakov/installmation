@@ -16,6 +16,7 @@
 
 package org.installmation.model.binary
 
+import com.google.common.eventbus.EventBus
 import org.installmation.core.OperatingSystem
 import org.installmation.model.Argument
 import org.installmation.model.ValueArgument
@@ -24,7 +25,7 @@ import java.io.File
 /**
  * runs JDK jpackage command
  */
-class JPackageExecutable(jdk: JDK) : AbstractExecutable(jdk.packageExecutable) {
+class JPackageExecutable(eventBus: EventBus, jdk: JDK) : AbstractExecutable(eventBus, jdk.packageExecutable) {
    
    override val id = "jpackage"
 

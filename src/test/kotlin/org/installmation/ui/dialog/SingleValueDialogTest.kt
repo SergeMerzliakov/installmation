@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.ui.dialog
 
 import javafx.scene.Scene
@@ -28,14 +27,12 @@ import org.installmation.FXTest
 import org.installmation.javafx.test.FXID
 import org.junit.Test
 
-class SingleValueDialogTest : FXTest() {
+private const val SHOW_DIALOG_BUTTON = "button1"
+private const val DIALOG_TITLE = "Colour Picker"
+private const val DIALOG_LABEL = "Choose Colour"
+private const val DEFAULT_VALUE = "red"
 
-   companion object {
-      const val SHOW_DIALOG_BUTTON = "button1"
-      const val DIALOG_TITLE = "Colour Picker"
-      const val DIALOG_LABEL = "Choose Colour"
-      const val DEFAULT_VALUE = "red"
-   }
+class SingleValueDialogTest : FXTest() {
 
    private lateinit var dialog: SingleValueDialog
    private lateinit var buttonSingle: Button

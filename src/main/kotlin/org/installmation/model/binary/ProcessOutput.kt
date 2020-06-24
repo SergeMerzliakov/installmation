@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.model.binary
 
 /**
  * Output and Error Streams
  */
-class ProcessOutput(val output: List<String>, val errors: List<String>) {
-
+class ProcessOutput(val success: Boolean, val output: List<String> = emptyList(), private val errorOutput: List<String> = emptyList()) {
 
    /**
-    * Some warnings are returned as errors. Sigh
+    * filter out falses positives
     */
-   fun hasErrors(): Boolean {
-      if (errors.isEmpty())
-         return false
-
-      //null|(Windows Defender)|
+   fun errors(): List<String> {
       val falseErrors = Regex("WARNING|null|Windows Defender")
-      val realErrors = errors.filter { !it.contains(falseErrors) }
-        return realErrors.isNotEmpty()
-    }
+      return errorOutput.filter { !it.contains(falseErrors) }
+   }
 }

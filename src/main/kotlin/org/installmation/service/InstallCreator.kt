@@ -30,14 +30,12 @@ import org.installmation.model.binary.JPackageExecutable
 import org.installmation.model.binary.ModuleDependenciesGenerator
 import java.io.File
 
+private val log: Logger = LogManager.getLogger(InstallCreator::class.java)
+
 /**
  * Generates images and installers
  */
 class InstallCreator(private val configuration: Configuration) {
-
-    companion object {
-        val log: Logger = LogManager.getLogger(InstallCreator::class.java)
-    }
 
     /**
      * Create image (.exe or .app file), but not the installer
@@ -55,18 +53,18 @@ class InstallCreator(private val configuration: Configuration) {
        val fullCommand = packager.toString()
        log.info("command: $fullCommand")
        progressMessage("command: $fullCommand")
-       val processOutput = packager.execute(30)
+       val processOutput = packager.execute()
        for (line in processOutput.output)
           progressMessage(line)
 
        val result: GenerateResult
-       if (!processOutput.hasErrors()) {
+       if (processOutput.success) {
           progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
           result = GenerateResult(true)
        } else {
           progressErrorMessage("Image creation failed with errors:")
-          result = GenerateResult(false, processOutput.errors)
-          for (line in processOutput.errors) {
+          result = GenerateResult(false, processOutput.errors())
+          for (line in processOutput.errors()) {
              log.error(line)
              progressErrorMessage(line)
           }
@@ -122,18 +120,18 @@ class InstallCreator(private val configuration: Configuration) {
        val fullCommand = packager.toString()
        log.info("command: $fullCommand")
        progressMessage("command: $fullCommand")
-       val processOutput = packager.execute(30)
+       val processOutput = packager.execute()
        for (line in processOutput.output)
           progressMessage(line)
 
        val result: GenerateResult
-       if (!processOutput.hasErrors()) {
+       if (processOutput.success) {
           progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
           result = GenerateResult(true)
         } else {
           progressMessage("Installer creation failed with errors:")
-          result = GenerateResult(false, processOutput.errors)
-          for (line in processOutput.errors) {
+          result = GenerateResult(false, processOutput.errors())
+          for (line in processOutput.errors()) {
              log.error(line)
              progressErrorMessage(line)
           }
@@ -150,7 +148,7 @@ class InstallCreator(private val configuration: Configuration) {
          prj.installerDirectory?.mkdirs()
       }
 
-      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      val packager = JPackageExecutable(configuration.eventBus, prj.jpackageJDK!!)
       packager.parameters.addArgument(packager.createInstallerParameter(prj.installerType!!))
       packager.parameters.addArgument(packager.createDestinationParameter(prj.installerDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
@@ -185,7 +183,7 @@ class InstallCreator(private val configuration: Configuration) {
          logo = createApplicationIcon(prj.applicationLogo, prj.inputDirectory!!)
       }
 
-      val packager = JPackageExecutable(prj.jpackageJDK!!)
+      val packager = JPackageExecutable(configuration.eventBus, prj.jpackageJDK!!)
       packager.parameters.addArgument(packager.createImageParameter())
       packager.parameters.addArgument(ValueArgument("-i", prj.inputDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("--app-version", prj.version))
@@ -235,7 +233,7 @@ class InstallCreator(private val configuration: Configuration) {
    private fun createOSXApplicationIcon(rawImage: File, destination: File): File {
       if (rawImage.extension == ImageTool.ImageType.Icns.value)
          return rawImage.copyTo(File(destination, rawImage.name), true)
-      val processor: ImageProcessor = OSXImageProcessor()
+      val processor: ImageProcessor = OSXImageProcessor(configuration.eventBus)
       return processor.createApplicationLogo(rawImage, destination)
    }
 
@@ -264,7 +262,7 @@ class InstallCreator(private val configuration: Configuration) {
       checkNotNull(prj.mainJar)
 
       val classPathString = CollectionUtils.toPathList(prj.classPath.map { it.path })
-        val jdeps = JDepsExecutable(prj.jpackageJDK!!)
+        val jdeps = JDepsExecutable(configuration.eventBus, prj.jpackageJDK!!)
         val mm = ModuleDependenciesGenerator(jdeps, classPathString, prj.javaFXLib?.path!!, prj.mainJar?.path!!)
 
         // combine modules discovered plus custom modules specified by user

@@ -39,16 +39,13 @@ import org.installmation.ui.dialog.SimpleListItemDeleter
 import org.installmation.ui.dialog.openDirectoryDialog
 import java.io.File
 
+private val log: Logger = LogManager.getLogger(DependenciesController::class.java)
+private const val PROPERTY_HELP_EXTRA_MODULES = "help.extra.modules"
+const val TITLE_HELP_EXTRA_MODULE = "Extra Modules"
 
 class DependenciesController(private val configuration: Configuration,
                              private val userHistory: UserHistory,
                              private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(DependenciesController::class.java)
-      const val PROPERTY_HELP_EXTRA_MODULES = "help.extra.modules"
-      const val TITLE_HELP_EXTRA_MODULE = "Extra Modules"
-   }
 
    @FXML lateinit var classPathListView: ListView<String>
    @FXML lateinit var classpathListContextMenu: ContextMenu

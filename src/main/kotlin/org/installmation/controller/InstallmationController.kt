@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
@@ -37,6 +36,11 @@ import org.installmation.service.*
 import org.installmation.ui.dialog.*
 import java.io.File
 
+private val log: Logger = LogManager.getLogger(InstallmationController::class.java)
+private const val PROPERTY_HELP_GENERATE_SCRIPTS = "help.generate.scripts"
+private const val PROPERTY_HELP_GENERATE_IMAGE = "help.generate.image"
+private const val PROPERTY_HELP_GENERATE_INSTALLER = "help.generate.installer"
+
 /**
  * Main Application controller, with nested controllers
  */
@@ -45,12 +49,6 @@ class InstallmationController(private val configuration: Configuration,
                               private val workspace: Workspace,
                               private val projectService: ProjectService) {
 
-   companion object {
-      val log: Logger = LogManager.getLogger(InstallmationController::class.java)
-      const val PROPERTY_HELP_GENERATE_SCRIPTS = "help.generate.scripts"
-      const val PROPERTY_HELP_GENERATE_IMAGE = "help.generate.image"
-      const val PROPERTY_HELP_GENERATE_INSTALLER = "help.generate.installer"
-   }
 
    @FXML private lateinit var applicationMenuBar: MenuBar
    @FXML private lateinit var tabPane: TabPane
@@ -309,9 +307,9 @@ class InstallmationController(private val configuration: Configuration,
         val p = workspace.currentProject
         val d: JdepsDialog
         if (p != null) {
-            d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, p.javaFXLib?.path, p.mainJar, p.classPath, userHistory)
+            d = JdepsDialog(applicationStage(), configuration, userHistory, p)
         } else
-            d = JdepsDialog(applicationStage(), configuration.jdkEntries.values, null, null, null, userHistory)
+           d = JdepsDialog(applicationStage(), configuration, userHistory, null)
         d.showAndWait()
     }
 

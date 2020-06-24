@@ -19,20 +19,20 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
+import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
-import org.installmation.model.binary.JDK
-import java.io.File
+import org.installmation.model.InstallProject
 
 /**
  * Run Jdeps utility to generate module dependencies. Only useful for modular JDK 9+ applications
  */
-class JdepsDialog(parentStage: Stage, jdkList: Collection<JDK>, javaFXLibs: File?, mainJar: File?, classpath: Collection<File>?, userHistory: UserHistory) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
+class JdepsDialog(parentStage: Stage, configuration: Configuration, userHistory: UserHistory, p: InstallProject?) : CustomDialog<Boolean>(parentStage, "Jdeps JDK Tool") {
 
    private var controller: JdepsDialogController
 
    init {
       val loader = FXMLLoader(javaClass.classLoader.getResource("fxml/dialog/jdepsDialog.fxml"))
-      controller = JdepsDialogController(jdkList, javaFXLibs, mainJar, classpath, userHistory)
+      controller = JdepsDialogController(configuration.eventBus, userHistory, configuration.jdkEntries.values, p?.javaFXLib?.path, p?.mainJar, p?.classPath)
       loader.setController(controller)
       val root = loader.load<Pane>()
       stage.scene = Scene(root)

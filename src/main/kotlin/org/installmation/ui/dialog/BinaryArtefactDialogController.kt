@@ -48,12 +48,9 @@ import org.installmation.model.NamedDirectory
 import java.io.File
 import kotlin.random.Random
 
+private val log: Logger = LogManager.getLogger(BinaryArtefactDialogController::class.java)
 
 class BinaryArtefactDialogController(currentArtefacts: List<NamedDirectory>, private val userHistory: UserHistory) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(BinaryArtefactDialogController::class.java)
-   }
 
    @FXML lateinit var nameColumn: TableColumn<NamedDirectory, String>
    @FXML lateinit var locationColumn: TableColumn<NamedDirectory, File>

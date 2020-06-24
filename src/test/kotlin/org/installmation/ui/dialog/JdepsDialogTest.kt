@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.ui.dialog
 
+import com.google.common.eventbus.EventBus
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.VBox
@@ -23,26 +23,28 @@ import javafx.stage.Stage
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.FXTest
 import org.installmation.TestingBootstrap
+import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.OperatingSystem
 import org.installmation.javafx.test.FXID
-import org.installmation.model.binary.JDK
-import org.installmation.model.binary.JDKFactory
+import org.installmation.model.InstallProject
+import org.installmation.model.NamedDirectory
+import org.installmation.model.binary.*
 import org.junit.BeforeClass
 import org.junit.Test
 import org.testfx.util.WaitForAsyncUtils
 import java.io.File
 
+private const val DIALOG_BUTTON = "button1"
+private const val JDK_NAME = "jdk1"
+private val RESOURCE_ROOT = File("src/test/resources/").absolutePath
+private val LIB1_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-core-2.12.1.jar")
+private val LIB2_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-api-2.12.1.jar")
+private val MAIN_JAR = File(RESOURCE_ROOT, "/tiny-app/tiny-java-app-1.0.jar")
+
 class JdepsDialogTest : FXTest() {
 
    companion object {
-      const val DIALOG_BUTTON = "button1"
-      const val JDK_NAME = "jdk1"
-      private val RESOURCE_ROOT = File("src/test/resources/").absolutePath
-      val LIB1_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-core-2.12.1.jar")
-      val LIB2_PATH = File(RESOURCE_ROOT, "/tiny-app/lib/log4j-api-2.12.1.jar")
-      val MAIN_JAR = File(RESOURCE_ROOT, "/tiny-app/tiny-java-app-1.0.jar")
-
       @BeforeClass
       @JvmStatic
       fun setup() {
@@ -57,9 +59,14 @@ class JdepsDialogTest : FXTest() {
       buttonSingle = Button("Show Dialog")
       buttonSingle.id = DIALOG_BUTTON
       buttonSingle.setOnAction {
-         val jdk = JDKFactory.create(OperatingSystem.os(), JDK_NAME, TestingBootstrap.jdk!!)
          val tinyClasspath = listOf(LIB1_PATH, LIB2_PATH)
-         val jd = JdepsDialog(stage!!, listOf(jdk), TestingBootstrap.javafx!!, MAIN_JAR, tinyClasspath, UserHistory())
+         val proj = InstallProject()
+         proj.javaFXLib = NamedDirectory("jfx", TestingBootstrap.javafx!!)
+         proj.mainJar = MAIN_JAR
+         proj.classPath.addAll(tinyClasspath)
+         val config = Configuration(EventBus())
+         config.jdkEntries["jdk1"] = JDKFactory.create(OperatingSystem.os(), JDK_NAME, TestingBootstrap.jdk!!)
+         val jd = JdepsDialog(stage!!, config, UserHistory(), proj)
          jd.showAndWait()
       }
 
@@ -117,9 +124,6 @@ class JdepsDialogTest : FXTest() {
    fun shouldClearOutputAfterRunCommand() {
       clickOn("#$DIALOG_BUTTON")
       WaitForAsyncUtils.waitForFxEvents(20) //sometimes the dialog is slow to appear
-
-      val jdk = lookup(FXID.COMBO_JDEPS_DLG_JDK).query<ComboBox<JDK>>()
-      assertThat(jdk.selectionModel.selectedItem.name).isEqualTo(JDK_NAME)
 
       val mainJarText = lookup(FXID.TEXT_JDEPS_DLG_MAINJAR).query<TextField>()
       assertThat(mainJarText.text).isEqualTo(MAIN_JAR.path)

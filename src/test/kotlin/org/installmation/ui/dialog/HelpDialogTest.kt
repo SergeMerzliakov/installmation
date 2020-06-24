@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.ui.dialog
 
 import javafx.scene.Scene
@@ -26,13 +25,11 @@ import org.installmation.FXTest
 import org.junit.Test
 import org.testfx.matcher.control.LabeledMatchers.hasText
 
-class HelpDialogTest : FXTest() {
+private const val DIALOG_BUTTON = "button1"
+private const val TITLE = "Title 1"
+private const val HELP_TEXT = "Some help here!"
 
-   companion object {
-      const val DIALOG_BUTTON = "button1"
-      const val TITLE = "Title 1"
-      const val HELP_TEXT = "Some help here!"
-   }
+class HelpDialogTest : FXTest() {
 
    private lateinit var buttonSingle: Button
 

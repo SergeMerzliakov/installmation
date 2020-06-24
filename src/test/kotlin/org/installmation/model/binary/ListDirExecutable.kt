@@ -17,15 +17,25 @@
 package org.installmation.model.binary
 
 import com.google.common.eventbus.EventBus
+import org.installmation.core.OperatingSystem
+import java.io.File
 
+
+fun findCommand(): File {
+   return when (OperatingSystem.os()) {
+      OperatingSystem.Type.OSX     -> File("ls")
+      OperatingSystem.Type.Windows -> File("dir")
+      OperatingSystem.Type.Linux -> File("ls")
+   }
+}
 /**
  * runs JDK jdeps command
  */
-class JDepsExecutable(eventBus: EventBus, jdk: JDK) : AbstractExecutable(eventBus, jdk.jdepsExecutable) {
+class ListDirExecutable(eventBus: EventBus) : AbstractExecutable(eventBus, findCommand()) {
    
-   override val id = "jdeps"
+   override val id = "test"
 
    override fun queryVersion(): String {
-      return fetchVersion("--version")
+      return "1.0"
    }
 }

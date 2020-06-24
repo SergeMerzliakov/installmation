@@ -15,6 +15,7 @@
  */
 package org.installmation.image
 
+import com.google.common.eventbus.EventBus
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.model.FlagArgument
@@ -23,18 +24,16 @@ import org.installmation.model.binary.IconsetExecutable
 import java.io.File
 
 
+private val log: Logger = LogManager.getLogger(OSXImageProcessor::class.java)
+const val ICONSET_DIR = "AppIcon.iconset"
+
 /**
  * Converts JPG and PNG files into correct image format for each operating system
  *
  *    OSX - > ICNS format
  *    Windows ->
  */
-class OSXImageProcessor : ImageProcessor {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(OSXImageProcessor::class.java)
-      const val ICONSET_DIR = "AppIcon.iconset"
-   }
+class OSXImageProcessor(private val eventBus: EventBus) : ImageProcessor {
 
    // need to call iconutil tool with result of this call
    override fun createApplicationLogo(imageFile: File, destination: File): File {
@@ -72,17 +71,17 @@ class OSXImageProcessor : ImageProcessor {
 
 
    private fun generateICNS(icnsName: String, destination: File, iconset: File): File {
-      val icns = IconsetExecutable()
+      val icns = IconsetExecutable(eventBus)
       val outputFile = File(destination, "$icnsName.icns")
       log.debug("Generating ICNS file ${outputFile.path}.....")
       icns.parameters.addArgument(ValueArgument("-c", "icns"))
       icns.parameters.addArgument(ValueArgument("--output", outputFile.path))
       icns.parameters.addArgument(FlagArgument(iconset.path))
-      val output = icns.execute(30)
-      if (!output.hasErrors())
+      val output = icns.execute()
+      if (output.success)
          log.info("Generated ICNS file $outputFile.path")
       else
-         throw ImageProcessingException("Errors with iconutil when generating ICNS file: ${output.errors.joinToString(".")}")
+         throw ImageProcessingException("Errors with iconutil when generating ICNS file: ${output.errors().joinToString(".")}")
       return outputFile
    }
 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
@@ -34,20 +33,21 @@ import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import org.installmation.ui.dialog.openFileDialog
 
+private val log: Logger = LogManager.getLogger(OSXController::class.java)
+
+private const val PROPERTY_HELP_APPLE_KEYCHAIN = "help.apple.keychain"
+private const val PROPERTY_HELP_APPLE_INSTALL_CERT = "help.apple.cert.installer"
+private const val INSTALLER_CERT_PREFIX = "Developer ID Installer: "
+private const val APPLICATION_CERT_PREFIX = "Developer ID Application: "
+const val TITLE_HELP_SIGN_INSTALL_CERT = "Apple Installer Certificate"
+const val TITLE_HELP_SIGN_KEYCHAIN = "Keychain With Apple Certificate"
+
+/**
+ * OSX only UI
+ */
 class OSXController(private val configuration: Configuration,
                     private val userHistory: UserHistory,
                     private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(OSXController::class.java)
-
-      const val PROPERTY_HELP_APPLE_KEYCHAIN = "help.apple.keychain"
-      const val PROPERTY_HELP_APPLE_INSTALL_CERT = "help.apple.cert.installer"
-      const val INSTALLER_CERT_PREFIX = "Developer ID Installer: "
-      const val APPLICATION_CERT_PREFIX = "Developer ID Application: "
-      const val TITLE_HELP_SIGN_INSTALL_CERT = "Apple Installer Certificate"
-      const val TITLE_HELP_SIGN_KEYCHAIN = "Keychain With Apple Certificate"
-   }
 
    @FXML private lateinit var signKeyUserField: TextField
    @FXML private lateinit var signKeyChainField: TextField

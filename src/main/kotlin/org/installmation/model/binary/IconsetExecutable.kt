@@ -15,12 +15,13 @@
  */
 package org.installmation.model.binary
 
+import com.google.common.eventbus.EventBus
 import java.io.File
 
 /**
  * Create icns files on OSX from a directory of png files
  */
-class IconsetExecutable : AbstractExecutable(File("iconutil")) {
+class IconsetExecutable(eventBus: EventBus) : AbstractExecutable(eventBus, File("iconutil")) {
 
    override val id: String
       get() = "iconutil"

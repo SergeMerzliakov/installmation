@@ -15,6 +15,7 @@
  */
 package org.installmation.image
 
+import com.google.common.eventbus.EventBus
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.OSXOnlyTest
 import org.installmation.TestConstants
@@ -24,14 +25,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
 
+private val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
+private val IMAGE = File("src/test/resources/image/green16.png")
+private val ICNS_IMAGE = File("src/test/resources/image/green16.icns")
+private val eventBus = EventBus("OSXImageProcessorTest")
+
 @RunWith(value = OSXOnlyTest::class)
 class OSXImageProcessorTest {
-
-   companion object {
-      val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
-      val IMAGE = File("src/test/resources/image/green16.png")
-      val ICNS_IMAGE = File("src/test/resources/image/green16.icns")
-   }
 
    @Before
    fun setup() {
@@ -45,25 +45,28 @@ class OSXImageProcessorTest {
 
    @Test
    fun shouldCreateICNSFile() {
-      val osx = OSXImageProcessor()
+      val osx = OSXImageProcessor(eventBus)
       val icns = osx.createApplicationLogo(IMAGE, OUTPUT_DIR)
       assertThat(icns).exists().isFile()
       assertThat(icns.extension).isEqualTo(ImageTool.ImageType.Icns.value)
       assertThat(icns.length()).isNotZero()
+      //TODO - lambdas or subscribers methods to process output?
    }
    
    @Test
    fun shouldHandleExistingICNSFile() {
-      val osx = OSXImageProcessor()
+      val osx = OSXImageProcessor(eventBus)
       val icns = osx.createApplicationLogo(ICNS_IMAGE, OUTPUT_DIR)
       // icns file should just be moved to output directory
       assertThat(icns).exists().isFile()
       assertThat(icns.length()).isNotZero()
+      //TODO - lambdas or subscribers methods to process output?
    }
 
    @Test(expected = ImageProcessingException::class)
    fun shouldFailIfImageNotFound() {
-      val osx = OSXImageProcessor()
+      val osx = OSXImageProcessor(eventBus)
       osx.createApplicationLogo(File("wrong/dir/green16.png"), OUTPUT_DIR)
+      //TODO - lambdas or subscribers methods to process output?
    }
 }

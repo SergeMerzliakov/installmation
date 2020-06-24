@@ -22,14 +22,12 @@ import org.apache.logging.log4j.Logger
 import java.io.File
 import java.nio.charset.StandardCharsets
 
+private val log: Logger = LogManager.getLogger(ApplicationJsonWriter::class.java)
+
 /**
  * Save any application related json data to file
  */
 class ApplicationJsonWriter<in T>(private val file: File, private val parser: Gson) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(ApplicationJsonWriter::class.java)
-   }
 
    fun save(data: T) {
       if (!file.parentFile.exists()) {

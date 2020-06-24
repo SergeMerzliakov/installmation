@@ -30,14 +30,9 @@ import org.installmation.service.*
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import org.installmation.ui.dialog.openFileDialog
 
-
 class ExecutableController(configuration: Configuration,
                            private val userHistory: UserHistory,
                            private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(ExecutableController::class.java)
-   }
 
    @FXML private lateinit var mainJarField: TextField
    @FXML private lateinit var mainClassField: TextField

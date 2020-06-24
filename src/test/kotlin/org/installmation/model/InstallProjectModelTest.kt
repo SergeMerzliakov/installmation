@@ -27,11 +27,12 @@ import org.junit.AfterClass
 import org.junit.Test
 import java.io.File
 
+private val SAVED_FILE = File(TestConstants.TEST_TEMP_DIR, "project.json")
+private val PROJECTS_DIR = File(TestConstants.TEST_RESOURCES, "projects")
+
 class InstallProjectModelTest {
 
    companion object {
-      val SAVED_FILE = File(TestConstants.TEST_TEMP_DIR, "project.json")
-      val PROJECTS_DIR = File(TestConstants.TEST_RESOURCES, "projects")
 
       @AfterClass
       @JvmStatic

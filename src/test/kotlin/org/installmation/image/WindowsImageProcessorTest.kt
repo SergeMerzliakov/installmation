@@ -24,13 +24,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
 
+private val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
+private val IMAGE = File("src/test/resources/image/green16.png")
+
 @RunWith(value = WindowsOnlyTest::class)
 class WindowsImageProcessorTest {
-
-   companion object {
-      val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
-      val IMAGE = File("src/test/resources/image/green16.png")
-   }
 
    @Before
    fun setup() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Serge Merzliakov
+ * Copyright 2020 Serge Merzliakov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 package org.installmation.model.binary
 
-import com.google.common.eventbus.EventBus
+/**
+ * Output fired for every line generated to STDOUT by a CLI
+ * command
+ */
+class CommandOutputEvent(val output: String)
 
 /**
- * runs JDK jdeps command
+ * Output fired for every line generated to STDERR by a CLI
+ * command
  */
-class JDepsExecutable(eventBus: EventBus, jdk: JDK) : AbstractExecutable(eventBus, jdk.jdepsExecutable) {
-   
-   override val id = "jdeps"
-
-   override fun queryVersion(): String {
-      return fetchVersion("--version")
-   }
-}
+class CommandOutputErrorEvent(val error: String)

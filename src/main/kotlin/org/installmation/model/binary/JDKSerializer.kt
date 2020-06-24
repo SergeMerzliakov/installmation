@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.model.binary
 
 import com.google.gson.*
@@ -24,18 +23,16 @@ import java.io.File
 import java.lang.reflect.Type
 import kotlin.random.Random
 
+private val log: Logger = LogManager.getLogger(JDKSerializer::class.java)
+
+private const val JDK_OS = "operating-system"
+private const val JDK_PATH = "jdk-path"
+private const val JDK_NAME = "jdk-name"
+
 /**
  * Custom serializer
  */
 class JDKSerializer : JsonSerializer<JDK>, JsonDeserializer<JDK> {
-
-   companion object {
-      const val JDK_OS = "operating-system"
-      const val JDK_PATH = "jdk-path"
-      const val JDK_NAME = "jdk-name"
-
-      val log: Logger = LogManager.getLogger(JDKSerializer::class.java)
-   }
 
    override fun serialize(jdk: JDK?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
       val json = JsonObject()

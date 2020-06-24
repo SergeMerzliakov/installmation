@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.ui.dialog
 
 import javafx.scene.Scene
@@ -24,11 +23,10 @@ import org.installmation.FXTest
 import org.installmation.javafx.test.FXID
 import org.junit.Test
 
+private const val DIALOG_BUTTON = "button1"
+
 class AboutDialogTest : FXTest() {
 
-   companion object {
-      const val DIALOG_BUTTON = "button1"
-   }
 
    private lateinit var dialog: AboutDialog
    private lateinit var buttonSingle: Button

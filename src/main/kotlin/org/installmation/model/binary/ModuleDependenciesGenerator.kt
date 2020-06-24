@@ -49,11 +49,11 @@ class ModuleDependenciesGenerator(val jdeps: JDepsExecutable, val classPath: Str
       jdeps.parameters.addArgument(FlagArgument(mainJar))
       commands.add(jdeps.toString())
 
-      val processOutput = jdeps.execute(15)
+      val processOutput = jdeps.execute()
 
       output.addAll(processOutput.output)
-      output.addAll(processOutput.errors)
-      if (processOutput.errors.isEmpty()) {
+      output.addAll(processOutput.errors())
+      if (processOutput.errors().isEmpty()) {
          val jpd = JDepsParser(processOutput.output)
          return jpd.dependencies
       }
@@ -88,11 +88,11 @@ class ModuleDependenciesGenerator(val jdeps: JDepsExecutable, val classPath: Str
       jdeps.parameters.addArgument(FlagArgument(jar.absolutePath))
       commands.add(jdeps.toString())
 
-      val processOutput = jdeps.execute(10)
+      val processOutput = jdeps.execute()
 
       output.addAll(processOutput.output)
-      output.addAll(processOutput.errors)
-      if (processOutput.errors.isEmpty()) {
+      output.addAll(processOutput.errors())
+      if (processOutput.errors().isEmpty()) {
          val jpd = JDepsParser(processOutput.output)
          return jpd.dependencies
       }

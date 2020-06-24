@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.service
 
 import org.apache.logging.log4j.LogManager
@@ -30,16 +29,12 @@ import org.installmation.model.SaveDataException
 import org.installmation.ui.dialog.ErrorDialog
 import java.io.File
 
+private val log: Logger = LogManager.getLogger(ProjectService::class.java)
+
 /**
  * Manages Project lifecycle and fires all relevant project events
  */
 class ProjectService(val configuration: Configuration) {
-
-    companion object {
-        val log: Logger = LogManager.getLogger(ProjectService::class.java)
-
-
-    }
 
    fun newProject(name: String): InstallProject {
       val p = InstallProject()

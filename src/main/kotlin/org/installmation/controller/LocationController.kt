@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.installmation.controller
 
 import com.google.common.eventbus.Subscribe
@@ -32,21 +31,18 @@ import org.installmation.ui.dialog.HelpDialog
 import org.installmation.ui.dialog.openDirectoryDialog
 import java.io.File
 
+private const val PROPERTY_HELP_INPUT_DIR = "help.input.directory"
+private const val PROPERTY_HELP_IMAGE_BUILD_DIR = "help.image.build.directory"
+private const val PROPERTY_HELP_INSTALLER_DIR = "help.installer.directory"
+
+const val TITLE_HELP_INPUT_DIR = "Input Directory"
+const val TITLE_HELP_IMAGE_BUILD_DIR = "Image Build Directory"
+const val TITLE_HELP_INSTALLER_DIR = "Installer Directory"
+
 
 class LocationController(private val configuration: Configuration,
                          private val userHistory: UserHistory,
                          private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(LocationController::class.java)
-      const val PROPERTY_HELP_INPUT_DIR = "help.input.directory"
-      const val PROPERTY_HELP_IMAGE_BUILD_DIR = "help.image.build.directory"
-      const val PROPERTY_HELP_INSTALLER_DIR = "help.installer.directory"
-
-      const val TITLE_HELP_INPUT_DIR = "Input Directory"
-      const val TITLE_HELP_IMAGE_BUILD_DIR = "Image Build Directory"
-      const val TITLE_HELP_INSTALLER_DIR = "Installer Directory"
-   }
 
    @FXML lateinit var inputDirectoryText: TextField
    @FXML lateinit var installerDirectoryText: TextField

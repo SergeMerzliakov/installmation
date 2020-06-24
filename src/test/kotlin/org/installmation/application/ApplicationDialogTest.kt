@@ -21,10 +21,7 @@ import javafx.stage.Stage
 import org.installmation.FXTest
 import org.installmation.InstallmationApplication
 import org.installmation.configuration.Configuration
-import org.installmation.controller.BinariesController
-import org.installmation.controller.DependenciesController
-import org.installmation.controller.LocationController
-import org.installmation.controller.OSXController
+import org.installmation.controller.*
 import org.installmation.core.OperatingSystem
 import org.installmation.core.RunningAsTestEvent
 import org.installmation.javafx.test.FXID
@@ -119,11 +116,11 @@ class ApplicationDialogTest : FXTest() {
         if (OperatingSystem.os() == OperatingSystem.Type.OSX) {
             clickOn(FXID.TAB_OSX)
             clickOn(FXID.BUTTON_OSX_HELP_SIGN_KEYCHAIN)
-            var helpDialog = WindowHelper.verifyWindowVisible(OSXController.TITLE_HELP_SIGN_KEYCHAIN)
+            var helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_SIGN_KEYCHAIN)
             WindowHelper.closeWindow(helpDialog)
 
             clickOn(FXID.BUTTON_OSX_HELP_SIGN_INSTALL_CERT)
-            helpDialog = WindowHelper.verifyWindowVisible(OSXController.TITLE_HELP_SIGN_INSTALL_CERT)
+            helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_SIGN_INSTALL_CERT)
             WindowHelper.closeWindow(helpDialog)
         }
     }
@@ -132,7 +129,7 @@ class ApplicationDialogTest : FXTest() {
     fun shouldOpenDependenciesHelpDialogs() {
         clickOn(FXID.TAB_DEPENDENCIES)
         clickOn(FXID.BUTTON_HELP_EXTRA_MODULES)
-        val helpDialog = WindowHelper.verifyWindowVisible(DependenciesController.TITLE_HELP_EXTRA_MODULE)
+        val helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_EXTRA_MODULE)
         WindowHelper.closeWindow(helpDialog)
     }
 
@@ -140,15 +137,15 @@ class ApplicationDialogTest : FXTest() {
     fun shouldOpenLocationHelpDialogs() {
         clickOn(FXID.TAB_INSTALL)
         clickOn(FXID.BUTTON_HELP_INPUT_DIR)
-        var helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_INPUT_DIR)
+        var helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_INPUT_DIR)
         WindowHelper.closeWindow(helpDialog)
 
         clickOn(FXID.BUTTON_HELP_IMAGE_BUILD_DIR)
-        helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_IMAGE_BUILD_DIR)
+        helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_IMAGE_BUILD_DIR)
         WindowHelper.closeWindow(helpDialog)
 
         clickOn(FXID.BUTTON_HELP_INSTALLER_DIR)
-        helpDialog = WindowHelper.verifyWindowVisible(LocationController.TITLE_HELP_INSTALLER_DIR)
+        helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_INSTALLER_DIR)
         WindowHelper.closeWindow(helpDialog)
     }
 
@@ -156,19 +153,19 @@ class ApplicationDialogTest : FXTest() {
     fun shouldOpenBinariesHelpDialogs() {
         clickOn(FXID.TAB_BINARIES)
         clickOn(FXID.BUTTON_HELP_FX_LIBRARIES)
-        var helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_FX_LIBRARIES)
+        var helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_FX_LIBRARIES)
         WindowHelper.closeWindow(helpDialog)
 
         clickOn(FXID.BUTTON_HELP_FX_MODULES)
-        helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_FX_MODULES)
+        helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_FX_MODULES)
         WindowHelper.closeWindow(helpDialog)
 
         clickOn(FXID.BUTTON_HELP_JPACKAGE)
-        helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_JPACKAGE)
+        helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_JPACKAGE)
         WindowHelper.closeWindow(helpDialog)
 
         clickOn(FXID.BUTTON_HELP_JDK)
-        helpDialog = WindowHelper.verifyWindowVisible(BinariesController.TITLE_HELP_JDK)
+        helpDialog = WindowHelper.verifyWindowVisible(TITLE_HELP_JDK)
         WindowHelper.closeWindow(helpDialog)
     }
 }

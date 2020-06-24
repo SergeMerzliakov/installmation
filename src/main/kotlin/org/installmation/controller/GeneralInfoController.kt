@@ -40,13 +40,11 @@ import org.installmation.ui.dialog.InstallmationExtensionFilters
 import org.installmation.ui.dialog.openFileDialog
 import java.io.File
 
+private val log: Logger = LogManager.getLogger(GeneralInfoController::class.java)
+
 class GeneralInfoController(configuration: Configuration,
                             private val userHistory: UserHistory,
                             private val workspace: Workspace) {
-
-   companion object {
-      val log: Logger = LogManager.getLogger(GeneralInfoController::class.java)
-   }
 
    // workaround/hack because we cannot easily disable change listeners when
    // updating UI from model
