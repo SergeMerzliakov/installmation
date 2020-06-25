@@ -24,7 +24,7 @@ class JPackageExecutableTest {
       const val JDK_14_BUILD49 = "14-jpackage"
    }
 
-   @Test
+   //@Test
    fun shouldGetVersionEarlyAccessJdk14() {
 // TODO refactor with ProcessOutput
 //      val jdk = JDKFactory.create(OperatingSystem.os(), "test", File("src/test/resources/${OperatingSystem.testDirectory()}/jpackage49"))

@@ -75,7 +75,6 @@ class LocationController(private val configuration: Configuration,
 
    @FXML
    fun chooseInputDirectory() {
-      //TODO
       val result = openDirectoryDialog(StageUtils.primaryStage(), "Select an Input Directory", userHistory.getFile(HISTORY_INPUT))
       if (result.ok) {
          userHistory.set(HISTORY_INPUT, result.data!!)

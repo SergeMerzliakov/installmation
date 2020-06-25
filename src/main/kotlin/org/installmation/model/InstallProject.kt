@@ -43,7 +43,6 @@ class InstallProject(var name: String? = null) {
    var copyright: String? = null
    var jpackageJDK: JDK? = null
    var applicationLogo: File? = null
-   // for JavaFX only - TODO
    var javaFXLib: NamedDirectory? = null
    var javaFXMods: NamedDirectory? = null
    var installJDK: JDK? = null // JDK to install with application

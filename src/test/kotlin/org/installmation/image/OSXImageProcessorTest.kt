@@ -50,7 +50,7 @@ class OSXImageProcessorTest {
       assertThat(icns).exists().isFile()
       assertThat(icns.extension).isEqualTo(ImageTool.ImageType.Icns.value)
       assertThat(icns.length()).isNotZero()
-      //TODO - lambdas or subscribers methods to process output?
+
    }
    
    @Test
@@ -60,13 +60,11 @@ class OSXImageProcessorTest {
       // icns file should just be moved to output directory
       assertThat(icns).exists().isFile()
       assertThat(icns.length()).isNotZero()
-      //TODO - lambdas or subscribers methods to process output?
    }
 
    @Test(expected = ImageProcessingException::class)
    fun shouldFailIfImageNotFound() {
       val osx = OSXImageProcessor(eventBus)
       osx.createApplicationLogo(File("wrong/dir/green16.png"), OUTPUT_DIR)
-      //TODO - lambdas or subscribers methods to process output?
    }
 }
