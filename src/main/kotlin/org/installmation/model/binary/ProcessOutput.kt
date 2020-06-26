@@ -16,9 +16,9 @@
 package org.installmation.model.binary
 
 /**
- * Output and Error Streams
+ * Output and Error Streams. Cannot trust success parameter for CLI commands
  */
-class ProcessOutput(val success: Boolean, val output: List<String> = emptyList(), private val errorOutput: List<String> = emptyList()) {
+class ProcessOutput(private val success: Boolean, val output: List<String> = emptyList(), private val errorOutput: List<String> = emptyList()) {
 
    /**
     * filter out falses positives
@@ -27,4 +27,18 @@ class ProcessOutput(val success: Boolean, val output: List<String> = emptyList()
       val falseErrors = Regex("WARNING|null|Windows Defender")
       return errorOutput.filter { !it.contains(falseErrors) }
    }
+
+   /**
+    * Some warnings are returned as errors. Sigh
+    */
+   fun success(): Boolean {
+      if (!success)
+         return false
+
+      if (errors().isEmpty())
+         return true
+
+      return errors().isEmpty()
+   }
+
 }

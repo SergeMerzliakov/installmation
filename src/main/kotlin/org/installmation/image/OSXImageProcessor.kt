@@ -78,7 +78,7 @@ class OSXImageProcessor(private val eventBus: EventBus) : ImageProcessor {
       icns.parameters.addArgument(ValueArgument("--output", outputFile.path))
       icns.parameters.addArgument(FlagArgument(iconset.path))
       val output = icns.execute()
-      if (output.success)
+      if (output.success())
          log.info("Generated ICNS file $outputFile.path")
       else
          throw ImageProcessingException("Errors with iconutil when generating ICNS file: ${output.errors().joinToString(".")}")

@@ -372,28 +372,28 @@ class InstallmationController(private val configuration: Configuration,
    }
 
    @Subscribe
-    fun handleProjectClosed(e: ProjectClosedEvent) {
-        workspace.closeCurrentProject()
-    }
+   fun handleProjectClosed(e: ProjectClosedEvent) {
+      workspace.closeCurrentProject()
+   }
 
-    @Subscribe
-    fun handleRunningAsTest(e: RunningAsTestEvent) {
-        // only for testing, as TestFX cannot cope with System Menu Bar, as of version 4.0.16-alpha
-        applicationMenuBar.isUseSystemMenuBar = false
-    }
+   @Subscribe
+   fun handleRunningAsTest(e: RunningAsTestEvent) {
+      // only for testing, as TestFX cannot cope with System Menu Bar, as of version 4.0.16-alpha
+      applicationMenuBar.isUseSystemMenuBar = false
+   }
 
-    @Subscribe
-    fun handleUserMessage(e: UserMessageEvent) {
-        if (e.isError)
-            userMessages.add("${DateUtils.now()} - ERROR - ${e.message}")
-        else
-            userMessages.add("${DateUtils.now()} - OK - ${e.message}")
-    }
+   @Subscribe
+   fun handleUserMessage(e: UserMessageEvent) {
+      if (e.isError)
+         userMessages.add("${DateUtils.now()} - ERROR - ${e.message}")
+      else
+         userMessages.add("${DateUtils.now()} - OK - ${e.message}")
+   }
 
-    @Subscribe
-    fun handleClearMessage(e: ClearMessagesEvent) {
-        userMessages.clear()
-    }
+   @Subscribe
+   fun handleClearMessage(e: ClearMessagesEvent) {
+      userMessages.clear()
+   }
 }
 
 

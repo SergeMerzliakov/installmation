@@ -35,82 +35,18 @@ abstract class AbstractExecutable(val eventBus: EventBus, executable: File) : Ex
    override val executable: File = executable
    val parameters = ArgumentList()
 
-   /**
-    * Fire event for every line of command line output
-    */
-   fun execute(): ProcessOutput {
-
-      val fullCommand = buildCommand()
-      val proc = ProcessBuilder().command(fullCommand).start()
-      val outputReader = proc.inputStream.bufferedReader()
-
-      val cmd = mutableListOf<String>()
-      val errors = mutableListOf<String>()
-
-      // handle all command line output and errors with lambdas right here
-      val catchOutput: (e: CommandOutputEvent) -> Unit = @Subscribe { e: CommandOutputEvent ->
-         cmd.add(e.output)
-      }
-      eventBus.register(catchOutput)
-
-      val catchErrors: (e: CommandOutputErrorEvent) -> Unit = @Subscribe { e: CommandOutputErrorEvent ->
-         errors.add(e.error)
-      }
-      eventBus.register(catchErrors)
-
-      try {
-         processOutput(outputReader)
-         processErrors(proc.errorStream.bufferedReader())
-         return ProcessOutput(proc.exitValue() == 0, cmd, errors)
-      }
-      catch (e: IOException) {
-         log.error("IO Error reading command line output for command:\n[${fullCommand.joinToString()}}]", e)
-      }
-      catch (e: Exception) {
-         log.error("Unexpected error reading command line output for command:\n[${fullCommand.joinToString()}}]", e)
-      }
-      finally{
-         eventBus.unregister(catchOutput)
-         eventBus.unregister(catchErrors)
-      }
-
-      return ProcessOutput(false, output = cmd)
-   }
-
-   private fun processOutput(r: BufferedReader) {
-      var line: String? = ""
-      line = r.readLine()
-      while (line != null) {
-         eventBus.post(CommandOutputEvent(line))
-         line = r.readLine()
-      }
-      r.close()
-   }
-
-
-   private fun processErrors(r: BufferedReader) {
-      var line: String? = ""
-      line = r.readLine()
-      while (line != null) {
-         eventBus.post(CommandOutputErrorEvent(line))
-         line = r.readLine()
-      }
-      r.close()
+   init {
+      eventBus.register(this)
    }
 
    /**
     * Batch up the command output before returning
     */
-   fun executeWithBatchedOutput(timeoutSeconds: Long = 5L): ProcessOutput {
+   fun execute(timeoutSeconds: Long = 5L): ProcessOutput {
       val fullCommand = buildCommand()
       val proc = ProcessBuilder().command(fullCommand).start()
-      if (timeoutSeconds > -1)
-         proc.waitFor(timeoutSeconds, TimeUnit.SECONDS)
-      else
-         proc.waitFor() // forever
-
-      // ? proc.exitValue()
-      return ProcessOutput(true, proc.inputStream.bufferedReader().readLines(), proc.errorStream.bufferedReader().readLines())
+      val success = proc.waitFor(timeoutSeconds, TimeUnit.SECONDS)
+      return ProcessOutput(success, proc.inputStream.bufferedReader().readLines(), proc.errorStream.bufferedReader().readLines())
    }
 
    private fun buildCommand(): List<String> {
@@ -143,7 +79,7 @@ abstract class AbstractExecutable(val eventBus: EventBus, executable: File) : Ex
     */
    protected fun fetchVersion(versionFlag: String): String {
       parameters.addArgument(FlagArgument(versionFlag))
-      val processOutput = executeWithBatchedOutput(3)
+      val processOutput = execute(3)
       if (processOutput.output.isEmpty())
          throw ExecutableException("No version info output from '${executable}'")
       if (processOutput.output.size == 1)

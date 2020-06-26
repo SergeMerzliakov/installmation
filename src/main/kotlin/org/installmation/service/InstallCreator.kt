@@ -15,6 +15,7 @@
  */
 package org.installmation.service
 
+import javafx.application.Platform
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
@@ -58,7 +59,7 @@ class InstallCreator(private val configuration: Configuration) {
           progressMessage(line)
 
        val result: GenerateResult
-       if (processOutput.success) {
+       if (processOutput.success()) {
           progressMessage("Image ${prj.name + OperatingSystem.imageFileExtension()} created successfully in ${prj.imageBuildDirectory!!.path}")
           result = GenerateResult(true)
        } else {
@@ -125,7 +126,7 @@ class InstallCreator(private val configuration: Configuration) {
           progressMessage(line)
 
        val result: GenerateResult
-       if (processOutput.success) {
+       if (processOutput.success()) {
           progressMessage("Installer creation completed successfully in ${prj.installerDirectory!!.path}")
           result = GenerateResult(true)
         } else {
@@ -302,7 +303,7 @@ class InstallCreator(private val configuration: Configuration) {
     }
 
     private fun progressMessage(m: String) {
-        configuration.eventBus.post(UserMessageEvent(m))
+       configuration.eventBus.post(UserMessageEvent(m))
     }
 
     private fun progressErrorMessage(m: String) {

@@ -16,6 +16,7 @@
 package org.installmation.model.binary
 
 import com.google.common.eventbus.EventBus
+import com.google.common.eventbus.Subscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.installmation.model.FlagArgument
 import org.junit.Test
@@ -28,7 +29,7 @@ class AbstractExecutableTest {
 	fun executeShouldSucceed() {
 		val ls = ListDirExecutable(eventBus)
 		val output = ls.execute() // in repo directory which always exists
-		assertThat(output.success).isTrue()
+		assertThat(output.success()).isTrue()
 		assertThat(output.output).isNotEmpty()
 		assertThat(output.errors()).isEmpty()
 	}
@@ -38,7 +39,7 @@ class AbstractExecutableTest {
 		val ls = ListDirExecutable(eventBus)
 		ls.parameters.addArgument(FlagArgument("/no/find/this/dir"))
 		val output = ls.execute()
-		assertThat(output.success).isFalse()
+		assertThat(output.success()).isFalse()
 		assertThat(output.output).isEmpty()
 		assertThat(output.errors()).isNotEmpty()
 	}
