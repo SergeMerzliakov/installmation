@@ -18,9 +18,13 @@ package org.installmation.model.binary
 import com.google.common.eventbus.EventBus
 import com.google.common.eventbus.Subscribe
 import org.assertj.core.api.Assertions.assertThat
+import org.installmation.OSXOnlyTest
 import org.installmation.model.FlagArgument
 import org.junit.Test
+import org.junit.runner.RunWith
 
+// TODO get this working with windows
+@RunWith(value = OSXOnlyTest::class)
 class AbstractExecutableTest {
 
 	private val eventBus = EventBus()
