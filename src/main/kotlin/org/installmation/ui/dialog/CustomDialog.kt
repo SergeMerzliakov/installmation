@@ -18,6 +18,8 @@ package org.installmation.ui.dialog
 
 import javafx.stage.Modality
 import javafx.stage.Stage
+import org.installmation.core.OperatingSystem
+import org.installmation.core.applicationIcon
 
 /**
  * Superclass of all non-trivial custom dialogs which are essential modal windows
@@ -41,6 +43,10 @@ abstract class CustomDialog<T>(ownerStage: Stage?, title: String) {
     */
    fun showAndWait(): DialogResult<T> {
       stage.initModality(Modality.APPLICATION_MODAL)
+      // no icons in mac dialogs - looks silly. Others need it
+      if (OperatingSystem.os() != OperatingSystem.Type.OSX)
+         stage.icons.add(applicationIcon())
+
       stage.showAndWait()
       return result()
    }

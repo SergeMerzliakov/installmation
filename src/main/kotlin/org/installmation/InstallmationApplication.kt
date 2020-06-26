@@ -24,6 +24,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.TextArea
+import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
@@ -35,6 +36,7 @@ import org.installmation.configuration.JsonParserFactory
 import org.installmation.configuration.UserHistory
 import org.installmation.controller.InstallmationController
 import org.installmation.core.ApplicationStartCompleteEvent
+import org.installmation.core.applicationIcon
 import org.installmation.io.ApplicationJsonReader
 import org.installmation.io.ensureDirectory
 import org.installmation.javafx.setPrimaryStage
@@ -82,18 +84,26 @@ class InstallmationApplication : Application() {
          loader.setController(controller)
          val root = loader.load<Pane>()
          setupEventHandlers(primaryStage, configuration)
+         setUpStage(primaryStage)
          primaryStage.title = WINDOW_TITLE
          primaryStage.scene = Scene(root)
          primaryStage.show()
          fireStartupEvents(workspace)
-      } catch (e: Throwable) {
+      }
+      catch (e: Throwable) {
          errorDialog("Fatal Startup Error", e.message ?: e.toString())
          log.error("Fatal startup error - aborting and shutting down", e)
          primaryStage.close()
       }
    }
 
-   private fun setupDirectories(){
+   private fun setUpStage(stage: Stage) {
+      // set application icon
+      val appLogo = applicationIcon()
+      stage.icons.add(appLogo)
+   }
+
+   private fun setupDirectories() {
       ensureDirectory(File(Constant.DEFAULT_BASE_DIR, Constant.PROJECT_DIR))
       // TODO move other directory stuff here
    }
@@ -176,12 +186,12 @@ class InstallmationApplication : Application() {
 
    @Subscribe
    fun handleProjectCreated(e: ProjectCreatedEvent) {
-      applicationStage.title = "$WINDOW_TITLE - ${e.project.name}"
+      applicationStage.title = "$WINDOW_TITLE - '${e.project.name}' project"
    }
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
-      applicationStage.title = "$WINDOW_TITLE - ${e.project.name}"
+      applicationStage.title = "$WINDOW_TITLE - '${e.project.name}' project"
    }
 
    @Subscribe
