@@ -26,8 +26,8 @@ class ImageToolTest {
 
    companion object {
       val OUTPUT_DIR = File(TestConstants.TEST_TEMP_DIR)
-      val PNG_FILE = File("src/test/resources/image/green16.PNG")
-      val ICNS_FILE = File("src/test/resources/image/green16.icNS")
+      val PNG_FILE = File("src/test/resources/image/green16.png")
+      val ICNS_FILE = File("src/test/resources/image/green16.icns")
       val ICNS_PLACEHOLDER_FILE = File("src/test/resources/image/placeholder_icns.png")
       val JPG_FILE = File("src/test/resources/image/red32.jpg")
       const val TEST_IMAGE_SIZE = 16
