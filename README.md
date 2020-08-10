@@ -40,9 +40,9 @@ are use cases which I have not covered.
 
     1. JDK 11+
     2. OpenJFX 11+
-    3. gradle 5+
-    4. WiX Toolkit (windows only)
+    3. WiX Toolkit (windows only)
 
+You do NOT need gradle installed - the gradlew script will automatically download the correct gradle version.
 
 ### Setup
 
