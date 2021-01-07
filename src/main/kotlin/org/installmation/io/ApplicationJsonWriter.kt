@@ -42,7 +42,7 @@ class ApplicationJsonWriter<in T>(private val file: File, private val parser: Gs
          val jsonContents = parser.toJson(data)
          file.writeText(jsonContents, StandardCharsets.UTF_8)
       } catch (e: Exception) {
-         throw RuntimeException("Configuration file '${file.canonicalPath}' could not be saved. Problem converting to JSON.")
+         throw RuntimeException("Configuration file '${file.canonicalPath}' could not be saved. Problem converting to JSON.", e)
       }
    }
 }
