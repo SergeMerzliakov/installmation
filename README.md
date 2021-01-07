@@ -1,7 +1,7 @@
 ![](src/main/resources/image/logo_small.png)
 ## Overview
 
-Installmation is a GUI tool, similar to exe4j, which generates installers for Mac and Windows using Java 11+ JDK jpackage tool.
+Installmation is a GUI tool, similar to exe4j, which generates installers for Mac and Windows using Java 11+ JDK jpackage tool. Linux version builds and runs but I have done very little testing.
 
 I am writing it in Kotlin.
 
@@ -40,9 +40,9 @@ are use cases which I have not covered.
 
     1. JDK 11+
     2. OpenJFX 11+
-    3. gradle 5+
-    4. WiX Toolkit (windows only)
+    3. WiX Toolkit (windows only)
 
+You do NOT need gradle installed - the gradlew script will automatically download the correct gradle version.
 
 ### Setup
 
@@ -54,10 +54,10 @@ are use cases which I have not covered.
 5. Create local.properties with JFX version and path to root dir. Here is an OSX sample:
 
         JFX_VERSION=13
-        JFX=/somewhere/JavaFX/13
+        JFX_PATH=/somewhere/JavaFX/13
         JDK=/Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk  # this is for unit testing and must be v11+
 
-Just to reiterate, JFX variable path should contain both jars and jmod files:
+Just to reiterate, JFX_PATH variable path should contain both jars and jmod files:
 
     <JFX>/libs
     <JFX>/jmods
