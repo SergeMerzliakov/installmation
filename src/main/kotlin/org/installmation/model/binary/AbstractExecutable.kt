@@ -42,7 +42,7 @@ abstract class AbstractExecutable(val eventBus: EventBus, executable: File) : Ex
    /**
     * Batch up the command output before returning
     */
-   fun execute(timeoutSeconds: Long = 5L): ProcessOutput {
+   fun execute(timeoutSeconds: Long = 15L): ProcessOutput {
       val fullCommand = buildCommand()
       val proc = ProcessBuilder().command(fullCommand).start()
       val success = proc.waitFor(timeoutSeconds, TimeUnit.SECONDS)
