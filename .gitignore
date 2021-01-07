@@ -6,8 +6,7 @@ out/
 # application configuration for local testing
 local.properties
 
-# testing temp files
 testrun/
 
-# Log file
 *.log
+*.pdf
