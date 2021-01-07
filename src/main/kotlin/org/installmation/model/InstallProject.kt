@@ -39,6 +39,7 @@ class InstallProject(var name: String? = null) {
    var mainClass: String? = null
    var vendor: String? = null
    var mainJar: File? = null
+   var jvmArguments:String? = null
    var installerType: String? = null
    var copyright: String? = null
    var jpackageJDK: JDK? = null

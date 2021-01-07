@@ -12,7 +12,7 @@
 
 <GridPane hgap="5.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="140.0" prefWidth="140.0" />
         <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="44.0" minWidth="44.0" prefWidth="44.0" />
     </columnConstraints>
@@ -35,6 +35,8 @@
             </GridPane.margin>
         </TextField>
       <Button fx:id="mainJarButton" mnemonicParsing="false" onAction="#chooseMainJar" text="..." GridPane.columnIndex="2" />
+      <Label text="JVM Arguments" GridPane.rowIndex="2" />
+      <TextField fx:id="jvmArgumentsField" promptText="-Xms128m -Xmx2g -Dparam1=value1 &quot;-Dparam2=some text&quot;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />

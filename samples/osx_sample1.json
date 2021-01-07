@@ -6,6 +6,7 @@
   "mainJar": {
     "path": "/Users/coyote/dev/s3manager/install/app/application-0.2.jar"
   },
+  "jvmArguments": "-Xms128m -Xmx234m -Dfoo\u003dbar",
   "installerType": "pkg",
   "jpackageJDK": {
     "jdk-name": "jpackage",

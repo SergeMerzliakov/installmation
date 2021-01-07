@@ -21,7 +21,7 @@ package org.installmation.model.binary
 class ProcessOutput(private val success: Boolean, val output: List<String> = emptyList(), private val errorOutput: List<String> = emptyList()) {
 
    /**
-    * filter out falses positives
+    * filter out false positives
     */
    fun errors(): List<String> {
       val falseErrors = Regex("WARNING|null|Windows Defender")
@@ -32,11 +32,8 @@ class ProcessOutput(private val success: Boolean, val output: List<String> = emp
     * Some warnings are returned as errors. Sigh
     */
    fun success(): Boolean {
-      if (!success)
+      if (!success || errors().isNotEmpty())
          return false
-
-      if (errors().isEmpty())
-         return true
 
       return errors().isEmpty()
    }

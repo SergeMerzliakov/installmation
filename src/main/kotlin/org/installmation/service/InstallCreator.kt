@@ -15,7 +15,6 @@
  */
 package org.installmation.service
 
-import javafx.application.Platform
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
@@ -23,7 +22,11 @@ import org.installmation.core.ClearMessagesEvent
 import org.installmation.core.CollectionUtils
 import org.installmation.core.OperatingSystem
 import org.installmation.core.UserMessageEvent
-import org.installmation.image.*
+import org.installmation.image.ImageProcessor
+import org.installmation.image.ImageTool
+import org.installmation.image.LinuxImageProcessor
+import org.installmation.image.OSXImageProcessor
+import org.installmation.image.WindowsImageProcessor
 import org.installmation.io.FileFilters
 import org.installmation.model.*
 import org.installmation.model.binary.JDepsExecutable
@@ -194,13 +197,13 @@ class InstallCreator(private val configuration: Configuration) {
       packager.parameters.addArgument(ValueArgument("--icon", logo?.path))
       packager.parameters.addArgument(packager.createDestinationParameter(prj.imageBuildDirectory!!.path))
       packager.parameters.addArgument(ValueArgument("-n", prj.name))
-
       packager.parameters.addArgument(ValueArgument("--module-path", prj.javaFXMods?.path?.path))
 
       // check if modular application
       val modules = generateModuleDependencies(prj)
       packager.parameters.addArgument(ValueArgument("--add-modules", modules))
 
+      packager.parameters.addArgument(ValueArgument("--java-options", prj.jvmArguments))
       packager.parameters.addArgument(ValueArgument("--main-jar", prj.mainJar?.name))
       packager.parameters.addArgument(packager.createMainClassParameter(prj.mainClass!!))
       return packager

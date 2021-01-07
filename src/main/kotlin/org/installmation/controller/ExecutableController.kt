@@ -20,8 +20,6 @@ import com.google.common.eventbus.Subscribe
 import javafx.fxml.FXML
 import javafx.scene.control.TextField
 import javafx.stage.Stage
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.HISTORY_MAIN_JAR
 import org.installmation.configuration.UserHistory
@@ -35,6 +33,7 @@ class ExecutableController(configuration: Configuration,
                            private val workspace: Workspace) {
 
    @FXML private lateinit var mainJarField: TextField
+   @FXML private lateinit var jvmArgumentsField: TextField
    @FXML private lateinit var mainClassField: TextField
 
    init {
@@ -73,12 +72,14 @@ class ExecutableController(configuration: Configuration,
 
       e.project.mainJar = FileFieldUtils.getPath(mainJarField)
       e.project.mainClass = mainClassField.text
+      e.project.jvmArguments = jvmArgumentsField.text
    }
 
    @Subscribe
    fun handleProjectLoaded(e: ProjectLoadedEvent) {
       checkNotNull(e.project)
       mainJarField.text = e.project.mainJar?.path
+      jvmArgumentsField.text = e.project.jvmArguments
       mainClassField.text = e.project.mainClass
    }
 
@@ -86,8 +87,8 @@ class ExecutableController(configuration: Configuration,
    fun handleProjectClosed(e: ProjectClosedEvent) {
       mainJarField.text = null
       mainClassField.text = null
+      jvmArgumentsField.text = null
    }
-
 }
 
 
