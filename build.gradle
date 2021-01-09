@@ -70,8 +70,13 @@ test {
 
 jar {
     manifest.attributes('Multi-Release': 'false')
+    // load build number as plain old props file
+    def props = new Properties()
+    def propFile = file('build.number')
+    props.load(new FileInputStream(propFile))
+    def build = props["build.number"]
     doFirst {
-        version = "$majorVersion.$minorVersion.${ant.antProject.properties['build.number']}"
+        version = "$majorVersion.$minorVersion.$build"
     }
 }
 
@@ -95,11 +100,10 @@ task runApp(type: JavaExec) {
 }
 
 // Before release update version and build
-task prepareVersionNumber() {
-    ant.buildnumber()
-    def antBuildProperties = new Properties()
-    file("build.number").withInputStream { antBuildProperties.load(it) }
-    def buildNumber = antBuildProperties["build.number"]
+task syncBuildNumber() {
+    def props = new Properties()
+    file("build.number").withInputStream { props.load(it) }
+    def buildNumber = props["build.number"]
     new File("src/main/resources/version.properties").text = "# automatically generated\n" +
             "majorVersion=$majorVersion\n" +
             "minorVersion=$minorVersion\n" +
