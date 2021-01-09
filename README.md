@@ -15,7 +15,7 @@ The tool will provide the following:
 No doubt plugins for doing this in Gradle or Maven will appear, and this is meant 
 to complement those approaches.
 
-### Release 0.1.147 ###
+### Release 0.2.5 ###
 
 Full installers for Mac and Windows can be found at https://github.com/SergeMerzliakov/installmation/releases
 
@@ -23,9 +23,7 @@ These installers are created by Installmation itself.
 
 #### What's New
 
-* Minor tweaks to enable saving projects anywhere, and not just the .installmations directory
-* improvements to the jdeps Tool UI
-* improvements to finding module dependencies in classpath jar files
+* JVM arguments (for deployed JVM) can now be added
 
 
 ### Running from the Command Line
