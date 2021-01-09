@@ -36,7 +36,7 @@
         </TextField>
       <Button fx:id="mainJarButton" mnemonicParsing="false" onAction="#chooseMainJar" text="..." GridPane.columnIndex="2" />
       <Label text="JVM Arguments" GridPane.rowIndex="2" />
-      <TextField fx:id="jvmArgumentsField" promptText="-Xms128m -Xmx2g -Dparam1=value1 &quot;-Dparam2=some text&quot;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <TextField fx:id="jvmArgumentsField" promptText="-Xms128m -Xmx2g -Dparam1=value1 &quot;-Dparam2=with spaces&quot;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
     </children>
    <stylesheets>
       <URL value="@../css/bootstrap3.css" />
