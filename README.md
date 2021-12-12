@@ -22,10 +22,11 @@ Full installers for Mac and Windows can be found at https://github.com/SergeMerz
 These installers are created by Installmation itself.
 
 #### What's New
-
 * JVM arguments (for deployed JVM) can now be added
 
-
+### Tutorial ###
+A basic walkthrough can be found at https://thickclient.blog/2019/12/23/installmation-an-installer-generator-for-java-11-apps/
+ 
 ### Running from the Command Line
 You can run the latest version (rudimentary so far) with the gradle command (under Java 11 or later)
  
