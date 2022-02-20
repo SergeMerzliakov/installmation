@@ -25,8 +25,8 @@ import org.apache.logging.log4j.Logger
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.HISTORY_KEYCHAIN
 import org.installmation.configuration.UserHistory
-import org.installmation.javafx.EventUtils
-import org.installmation.javafx.FileFieldUtils
+import org.installmation.javafx.focusLostHandler
+import org.installmation.javafx.getPath
 import org.installmation.model.InstallProject
 import org.installmation.service.*
 import org.installmation.ui.dialog.HelpDialog
@@ -59,7 +59,7 @@ class OSXController(private val configuration: Configuration,
 
    @FXML
    fun initialize() {
-      EventUtils.focusLostHandler(signKeyUserField){field -> 
+      focusLostHandler(signKeyUserField){field ->
          if (field.text.startsWith(INSTALLER_CERT_PREFIX)){
             // strip it off - jpackager fails if its present
             log.info("stripping off Apple Developer Certificate Name Prefix '$INSTALLER_CERT_PREFIX'. JPackager will reject it otherwise.")
@@ -116,7 +116,7 @@ class OSXController(private val configuration: Configuration,
    @Subscribe
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       e.project.appleInstallerCertName = signKeyUserField.text
-      e.project.appleInstallerKeyChain = FileFieldUtils.getPath(signKeyChainField)
+      e.project.appleInstallerKeyChain = getPath(signKeyChainField)
       e.project.signInstaller = signCheckBox.isSelected
    }
 

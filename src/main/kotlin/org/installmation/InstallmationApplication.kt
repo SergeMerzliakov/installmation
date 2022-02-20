@@ -24,7 +24,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.TextArea
-import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
@@ -46,19 +45,15 @@ import java.io.File
 private val log: Logger = LogManager.getLogger(InstallmationApplication::class.java)
 private const val WINDOW_TITLE = "Installmation"
 
+fun main(args: Array<String>) {
+   Application.launch(InstallmationApplication::class.java, *args)
+}
 
 class InstallmationApplication : Application() {
 
    lateinit var workspace: Workspace
    private lateinit var applicationStage: Stage
    private val eventBus = EventBus("installmationApp")
-
-   companion object {
-      @JvmStatic
-      fun main(args: Array<String>) {
-         launch(InstallmationApplication::class.java, *args)
-      }
-   }
 
    override fun start(primaryStage: Stage) {
       primaryStage.setPrimaryStage()

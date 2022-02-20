@@ -1,9 +1,9 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.4.21"
-    id 'org.openjfx.javafxplugin' version "0.0.8"
+    id 'org.jetbrains.kotlin.jvm' version "1.6.10"
+    id 'org.openjfx.javafxplugin' version "0.0.10"
 }
 
-def KOTLIN_VERSION = "1.4.21"
+def KOTLIN_VERSION = "1.6.10"
 
 group 'org.epistatic'
 
@@ -17,6 +17,7 @@ if (!file(localConfig).exists()) {
 file(localConfig).withInputStream { localProperties.load(it) }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
     flatDir {
@@ -31,33 +32,34 @@ apply plugin: 'application'
 mainClassName = 'org.installmation.InstallmationApplication'
 
 javafx {
-    version = localProperties.JFX_VERSION
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
+    //version = "17.0.2" // localProperties.JFX_VERSION
+    sdk = "/Library/Java/javafx/17.0.2"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "com.google.guava:guava:28.1-jre"
-    compile "com.google.code.gson:gson:2.8.6"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    api 'com.google.guava:guava:31.0.1-jre'
+    api 'com.google.code.gson:gson:2.9.0'
+
+    api 'org.apache.logging.log4j:log4j-api:2.17.0'
+    api 'org.apache.logging.log4j:log4j-core:2.17.0'
+    api "org.image4j:image4j:0.8.0"
     
-    compile "org.apache.logging.log4j:log4j-api:2.12.1"
-    compile "org.apache.logging.log4j:log4j-core:2.12.1"
-    compile "com.github.imcdonagh:image4j:0.7.2"
-    
-    testCompile "org.jetbrains.kotlin:kotlin-reflect:$KOTLIN_VERSION"
-    testCompile "junit:junit:4.12" // testfx does not support Junit 5
-    testCompile "org.assertj:assertj-core:3.13.2"
-    testCompile "io.mockk:mockk:1.9.3"
-    testCompile "org.testfx:testfx-core:4.0.16-alpha"
-    testCompile "org.testfx:testfx-junit:4.0.16-alpha"
-    testCompile "org.testfx:openjfx-monocle:jdk-12.0.1+2"
+    testApi "org.jetbrains.kotlin:kotlin-reflect:$KOTLIN_VERSION"
+    testApi 'junit:junit:4.13.2' // testfx does not support Junit 5
+    testApi 'org.assertj:assertj-core:3.22.0'
+    testApi 'io.mockk:mockk:1.12.2'
+    testApi "org.testfx:testfx-core:4.0.16-alpha"
+    testApi "org.testfx:testfx-junit:4.0.16-alpha"
+    testApi "org.testfx:openjfx-monocle:jdk-12.0.1+2"
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "16"
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "16"
 }
 
 // tests run in headless mode by default, to watch tests pass in -DshowTests=true on command line
@@ -82,7 +84,7 @@ jar {
 
 
 task libs(type: Sync) {
-    from configurations.runtime
+    from configurations.runtimeClasspath
     into "$buildDir/deplibs"
 }
 

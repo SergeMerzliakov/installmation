@@ -22,14 +22,12 @@ import java.io.File
  * Helpers for manipulating fields which hold file values. 
  * Helps with boundary conditions with null or empty strings.
  */
-object FileFieldUtils {
 
-   /**
-    * Convert strings to files in a sensible way.
-    */
-   fun getPath(field: TextField): File? {
-      if (field.text.isNullOrEmpty())
-         return null
-      return File(field.text.trim())
-   }
+/**
+ * Convert strings to files in a sensible way.
+ */
+fun getPath(field: TextField): File? {
+   if (field.text.isNullOrEmpty())
+      return null
+   return File(field.text.trim())
 }

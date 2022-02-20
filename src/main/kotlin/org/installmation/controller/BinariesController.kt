@@ -29,8 +29,8 @@ import org.installmation.configuration.Configuration
 import org.installmation.configuration.UserHistory
 import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.core.OperatingSystem
-import org.installmation.javafx.ComboUtils
-import org.installmation.javafx.EventUtils
+import org.installmation.javafx.comboSelect
+import org.installmation.javafx.selectionChangedHandler
 import org.installmation.model.JDKListUpdatedEvent
 import org.installmation.model.ModuleJmodUpdatedEvent
 import org.installmation.model.ModuleLibUpdatedEvent
@@ -127,7 +127,7 @@ class BinariesController(private val configuration: Configuration,
       val dialog = moduleLibraryDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
-         ComboUtils.comboSelect(moduleLibComboBox, result.data?.name)
+         comboSelect(moduleLibComboBox, result.data?.name)
          // update model
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
@@ -151,7 +151,7 @@ class BinariesController(private val configuration: Configuration,
       val dialog = moduleJmodDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
-         ComboUtils.comboSelect(moduleJmodComboBox, result.data?.name)
+         comboSelect(moduleJmodComboBox, result.data?.name)
          // update model
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
@@ -189,7 +189,7 @@ class BinariesController(private val configuration: Configuration,
       val dialog = jdkDialog()
       val result = dialog.showAndWait()
       if (result.ok) {
-         ComboUtils.comboSelect(combo, result.data?.name)
+         comboSelect(combo, result.data?.name)
 
          val updatedModel = dialog.updatedModel()
          if (updatedModel != null) {
@@ -227,10 +227,10 @@ class BinariesController(private val configuration: Configuration,
     */
    @Subscribe
    fun handleApplicationStartCompleteEvent(e: ApplicationStartCompleteEvent) {
-      EventUtils.selectionChangedHandler(moduleJmodComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(moduleLibComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(installJDKComboBox) { updateProject() }
-      EventUtils.selectionChangedHandler(jpackageComboBox) { updateProject() }
+      selectionChangedHandler(moduleJmodComboBox) { updateProject() }
+      selectionChangedHandler(moduleLibComboBox) { updateProject() }
+      selectionChangedHandler(installJDKComboBox) { updateProject() }
+      selectionChangedHandler(jpackageComboBox) { updateProject() }
    }
 
 

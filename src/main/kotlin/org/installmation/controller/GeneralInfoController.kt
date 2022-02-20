@@ -31,8 +31,9 @@ import org.installmation.configuration.UserHistory
 import org.installmation.core.ApplicationStartCompleteEvent
 import org.installmation.core.OperatingSystem
 import org.installmation.image.ImageTool
-import org.installmation.javafx.EventUtils
-import org.installmation.javafx.FileFieldUtils
+import org.installmation.javafx.focusLostHandler
+import org.installmation.javafx.getPath
+import org.installmation.javafx.selectionChangedHandler
 import org.installmation.model.InstallProject
 import org.installmation.service.*
 import org.installmation.ui.dialog.ErrorDialog
@@ -69,7 +70,7 @@ class GeneralInfoController(configuration: Configuration,
 
       // project name is special - we need to update model as soon as user is finished with it
       // so that project saves get the latest value
-      EventUtils.focusLostHandler(projectNameField) { 
+      focusLostHandler(projectNameField) {
          workspace.currentProject?.name = projectNameField.text
       }
    }
@@ -132,7 +133,7 @@ class GeneralInfoController(configuration: Configuration,
 
    @Subscribe
    fun handleApplicationStartCompleteEvent(e: ApplicationStartCompleteEvent) {
-      EventUtils.selectionChangedHandler(installerTypeCombo) { updateProject() }
+      selectionChangedHandler(installerTypeCombo) { updateProject() }
    }
 
    @Subscribe
@@ -147,7 +148,7 @@ class GeneralInfoController(configuration: Configuration,
       e.project.version = applicationVersionField.text ?: "1.0"
       e.project.copyright = copyrightField.text
       e.project.installerType = installerTypeCombo.selectionModel.selectedItem
-      e.project.applicationLogo = FileFieldUtils.getPath(logoPathField)
+      e.project.applicationLogo = getPath(logoPathField)
       e.project.vendor = vendorField.text
    }
 

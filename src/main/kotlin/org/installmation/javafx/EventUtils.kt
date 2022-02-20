@@ -20,47 +20,45 @@ import javafx.scene.control.Control
 import javafx.scene.control.ListView
 
 /**
- * Wrap clunk addListener calls into simpler function calls
+ * Wrap clunky addListener calls into simpler function calls
  */
-object EventUtils {
 
-   /*
-     Invoke given function on loss of focus
-    */
-   fun <T : Control> focusLostHandler(f: T, handler: (f: T) -> Unit) {
-      f.focusedProperty()
-            .addListener { _, _, hasFocus ->
-               if (!hasFocus)
-                  handler(f)
-            }
-   }
+/*
+  Invoke given function on loss of focus
+ */
+fun <T : Control> focusLostHandler(f: T, handler: (f: T) -> Unit) {
+   f.focusedProperty()
+         .addListener { _, _, hasFocus ->
+            if (!hasFocus)
+               handler(f)
+         }
+}
 
-   /**
-    * Invoke given function on change of selection
-    * 
-    * SelectionModel is not in any shared base class - all relevent controls just
-    * have as a member. Simpler to have a function for each rather than a generic
-    * function.
-    */
-   fun selectionChangedHandler(f: ComboBox<*>, handler: (f: ComboBox<*>) -> Unit) {
-      f.selectionModel.selectedIndexProperty()
-            .addListener { _, old, new ->
-               if (old != new)
-                  handler(f)
-            }
-   }
+/**
+ * Invoke given function on change of selection
+ *
+ * SelectionModel is not in any shared base class - all relevant controls just
+ * have as a member. Simpler to have a function for each rather than a generic
+ * function.
+ */
+fun selectionChangedHandler(f: ComboBox<*>, handler: (f: ComboBox<*>) -> Unit) {
+   f.selectionModel.selectedIndexProperty()
+         .addListener { _, old, new ->
+            if (old != new)
+               handler(f)
+         }
+}
 
-   /**
-    * SelectionModel is not in any shared base class - all relevent controls just
-    * have as a member. Simpler to have a function for each rather than a generic
-    * function.
-    */
-   fun selectionChangedHandler(f: ListView<*>, handler: (f: ListView<*>) -> Unit) {
-      f.selectionModel.selectedIndexProperty()
-            .addListener { _, old, new ->
-               if (old != new)
-                  handler(f)
-            }
-   }
+/**
+ * SelectionModel is not in any shared base class - all relevant controls just
+ * have as a member. Simpler to have a function for each rather than a generic
+ * function.
+ */
+fun selectionChangedHandler(f: ListView<*>, handler: (f: ListView<*>) -> Unit) {
+   f.selectionModel.selectedIndexProperty()
+         .addListener { _, old, new ->
+            if (old != new)
+               handler(f)
+         }
 }
 

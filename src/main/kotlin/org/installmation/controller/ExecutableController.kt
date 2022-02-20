@@ -23,7 +23,7 @@ import javafx.stage.Stage
 import org.installmation.configuration.Configuration
 import org.installmation.configuration.HISTORY_MAIN_JAR
 import org.installmation.configuration.UserHistory
-import org.installmation.javafx.FileFieldUtils
+import org.installmation.javafx.getPath
 import org.installmation.service.*
 import org.installmation.ui.dialog.InstallmationExtensionFilters
 import org.installmation.ui.dialog.openFileDialog
@@ -70,7 +70,7 @@ class ExecutableController(configuration: Configuration,
    fun handleProjectBeginSave(e: ProjectBeginSaveEvent) {
       checkNotNull(e.project)
 
-      e.project.mainJar = FileFieldUtils.getPath(mainJarField)
+      e.project.mainJar = getPath(mainJarField)
       e.project.mainClass = mainClassField.text
       e.project.jvmArguments = jvmArgumentsField.text
    }
