@@ -6,6 +6,8 @@ out/
 # application configuration for local testing
 local.properties
 
+gradle/wrapper/gradle-wrapper.jar
+
 testrun/
 
 *.log
